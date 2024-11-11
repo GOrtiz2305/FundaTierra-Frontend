@@ -31,7 +31,7 @@ import {
 import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import { IconPencil, IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconTrash } from '@tabler/icons';
-
+import { Axios } from 'axios';
 
 
 const basics = basicsTableData;
