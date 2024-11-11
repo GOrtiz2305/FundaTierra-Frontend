@@ -9,15 +9,14 @@ import { uniqueId } from 'lodash';
 const Menuitems = [
   {
     navlabel: true,
-    subheader: 'Home',
+    subheader: 'Promotores',
   },
 
   {
     id: uniqueId(),
-    title: 'Modern',
+    title: 'Actividades',
     icon: IconAperture,
-    href: '/dashboards/modern',
-    chip: 'New',
+    href: '/pages/actividades',
     chipColor: 'secondary',
   },
   {
