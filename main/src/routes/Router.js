@@ -10,7 +10,10 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 /* ****Pages***** */
 const ModernDash = Loadable(lazy(() => import('../views/dashboard/Modern')));
 const EcommerceDash = Loadable(lazy(() => import('../views/dashboard/Ecommerce')));
-
+const ActividadesEditar = Loadable(lazy(() => import('../views/pages/Actividades/actividadesEditar')));
+const ActividadesCrear = Loadable(lazy(() => import('../views/pages/Actividades/actividadesCrear')));
+const ProyectoEditar = Loadable(lazy(() => import('../views/pages/Proyectos/proyectosEditar')));
+const ProyectoCrear = Loadable(lazy(() => import('../views/pages/Proyectos/proyectosCrear')));
 /* ****Apps***** */
 const Chats = Loadable(lazy(() => import('../views/apps/chat/Chat')));
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
