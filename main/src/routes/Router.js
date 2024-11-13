@@ -2,6 +2,8 @@ import React, { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import Loadable from '../layouts/full/shared/loadable/Loadable';
+import Actividades from '../views/pages/Actividades/actividades';
+import path from 'path-browserify';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -14,6 +16,7 @@ const ActividadesEditar = Loadable(lazy(() => import('../views/pages/Actividades
 const ActividadesCrear = Loadable(lazy(() => import('../views/pages/Actividades/actividadesCrear')));
 const ProyectoEditar = Loadable(lazy(() => import('../views/pages/Proyectos/proyectosEditar')));
 const ProyectoCrear = Loadable(lazy(() => import('../views/pages/Proyectos/proyectosCrear')));
+
 /* ****Apps***** */
 const Chats = Loadable(lazy(() => import('../views/apps/chat/Chat')));
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
@@ -184,6 +187,9 @@ const Router = [
       { path: '/pages/pricing', element: <Pricing /> },
       { path: '/pages/account-settings', element: <AccountSetting /> },
       { path: '/pages/faq', element: <Faq /> },
+      { path: '/pages/actividades', element: <Actividades /> },
+      {path: '/pages/actividades/nueva', element: <ActividadesCrear />},
+      {path: '/pages/actividades/cambios', element: <ActividadesEditar />},
       { path: '/forms/form-elements/autocomplete', element: <MuiAutoComplete /> },
       { path: '/forms/form-elements/button', element: <MuiButton /> },
       { path: '/forms/form-elements/checkbox', element: <MuiCheckbox /> },
