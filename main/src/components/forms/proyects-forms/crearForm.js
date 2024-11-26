@@ -1,5 +1,5 @@
 import {
-    Button,
+  Button,
 } from '@mui/material';
 import React from 'react';
 import ParentCard from '../../shared/ParentCard';
@@ -19,7 +19,7 @@ const handleChange = (event) => {
 const [value, setValue] = React.useState(null);
 
 return (
-    <ParentCard title='Formulario de Actividades - Información general'>
+    <ParentCard title='Formulario de Actividades adasdasdas- Información general'>
     <form>
         <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
         <CustomTextField type="date" id="fecha_inicio" fullWidth />
