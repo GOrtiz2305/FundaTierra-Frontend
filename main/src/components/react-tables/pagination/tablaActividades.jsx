@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import {
     TableContainer,
@@ -17,7 +16,6 @@ import {
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import DownloadCard from 'src/components/shared/DownloadCard';
-import { basicsTableData } from './PaginationData';
 
 import {
     flexRender,
@@ -31,16 +29,15 @@ import {
 import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import { IconPencil, IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconTrash } from '@tabler/icons';
-import { Axios } from 'axios';
-
-
-const basics = basicsTableData;
+import axios from 'axios';
+import { URL } from "../../../../config";
+import { useNavigate } from 'react-router';
 
 const columnHelper = createColumnHelper();
 
 const columns = [
 
-    columnHelper.accessor('usuario', {
+    columnHelper.accessor('usuario.username', {
         header: () => 'Usuario',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
@@ -56,7 +53,7 @@ const columns = [
             </Typography>
         ),
     }),
-    columnHelper.accessor('proyecto', {
+    columnHelper.accessor('proyecto.nombre', {
         header: () => 'Proyecto',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
@@ -72,7 +69,7 @@ const columns = [
             </Typography>
         ),
     }),
-    columnHelper.accessor('estado', {
+    columnHelper.accessor('estado_actividade.nombre', {
         header: () => 'Estado',
         meta: {
             filterVariant: 'select',
@@ -81,23 +78,23 @@ const columns = [
             <Chip
                 sx={{
                     bgcolor:
-                        info.getValue() === 'active'
+                        info.getValue() === 'En Progreso'
                             ? (theme) => theme.palette.success.light
-                            : info.getValue() === 'pending'
+                            : info.getValue() === 'Pendiente'
                                 ? (theme) => theme.palette.warning.light
-                                : info.getValue() === 'completed'
+                                : info.getValue() === 'Completado'
                                     ? (theme) => theme.palette.primary.light
-                                    : info.getValue() === 'cancel'
+                                    : info.getValue() === 'Cancelado'
                                         ? (theme) => theme.palette.error.light
                                         : (theme) => theme.palette.secondary.light,
                     color:
-                        info.getValue() === 'active'
+                        info.getValue() === 'En Progreso'
                             ? (theme) => theme.palette.success.main
-                            : info.getValue() === 'pending'
+                            : info.getValue() === 'Pendiente'
                                 ? (theme) => theme.palette.warning.main
-                                : info.getValue() === 'completed'
+                                : info.getValue() === 'Completado'
                                     ? (theme) => theme.palette.primary.main
-                                    : info.getValue() === 'cancel'
+                                    : info.getValue() === 'Cancelado'
                                         ? (theme) => theme.palette.error.main
                                         : (theme) => theme.palette.secondary.main,
                     borderRadius: '8px',
@@ -114,7 +111,7 @@ const columns = [
                 <Button
                     variant="contained"
                     color="primary"
-                    href='/pages/actividades/cambios'
+                    href='/pages/actividades/cambios/${row.original.id}'
                     startIcon={<IconPencil width={18} />}
                 >
                     Editar
@@ -140,11 +137,25 @@ const columns = [
 ];
 
 const ActividadesPaginationTable = () => {
-    const [data, _setData] = React.useState(() => [...basics]);
-    const [columnFilters, setColumnFilters] = React.useState(
-        []
-    )
-    const rerender = React.useReducer(() => ({}), {})[1]
+    const [data, setData] = React.useState(() => []);
+    const [columnFilters, setColumnFilters] = React.useState([])
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        const fetchActividades = async () => {
+            try {
+                const response = await axios.get(`${URL}actividades`);
+                setData(response.data);
+            } catch (error) {
+                console.error("Error al obtener actividades:", error);
+            }
+        };
+        fetchActividades();
+    }, []);
+
+    const handleEdit = (id) => {
+        navigate(`/pages/actividades/cambios/${id}`);  // Redirige a la página de cambios con el id
+    };
 
     const table = useReactTable({
         data,
@@ -166,7 +177,6 @@ const ActividadesPaginationTable = () => {
     const handleDownload = () => {
         const headers = ["usuario", "nombre", "proyecto", "fecha_inicio", "estado"];
         const rows = data.map(item => [
-
             item.usuario,
             item.nombre,
             item.proyecto,
@@ -230,13 +240,40 @@ const ActividadesPaginationTable = () => {
                                     ))}
                                 </TableHead>
                                 <TableBody>
-                                    {table.getRowModel().rows.map((row) => (
+                                {table.getRowModel().rows.map((row) => (
                                         <TableRow key={row.id}>
                                             {row.getVisibleCells().map((cell) => (
                                                 <TableCell key={cell.id}>
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </TableCell>
                                             ))}
+                                            <TableCell>
+                                                <Stack direction="row" spacing={1}>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={() => handleEdit(row.original.id)}  // Pasar el id aquí
+                                                        startIcon={<IconPencil width={18} />}
+                                                    >
+                                                        Editar
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="info"
+                                                        onClick={() => handleViewDetails(row.original)}
+                                                    >
+                                                        Ver Detalles
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="error"
+                                                        onClick={() => handleDelete(row.original)}
+                                                        startIcon={<IconTrash width={18} />}
+                                                    >
+                                                        Borrar
+                                                    </Button>
+                                                </Stack>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
