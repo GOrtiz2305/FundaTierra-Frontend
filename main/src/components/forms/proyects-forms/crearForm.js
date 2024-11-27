@@ -19,7 +19,7 @@ const handleChange = (event) => {
 const [value, setValue] = React.useState(null);
 
 return (
-    <ParentCard title='Formulario de Actividades Hola mundo- Información general'>
+    <ParentCard title='Formulario de Actividades Hola mundo asdasd- Información general'>
     <form>
         <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
         <CustomTextField type="date" id="fecha_inicio" fullWidth />
