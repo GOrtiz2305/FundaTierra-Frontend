@@ -4,7 +4,6 @@ import {
 import React from 'react';
 import ParentCard from '../../shared/ParentCard';
 import CustomFormLabel from '../theme-elements/CustomFormLabel';
-import CustomSelect from '../theme-elements/CustomSelect';
 import CustomTextField from '../theme-elements/CustomTextField';
 
 const ProyectosOrdinaryForm = () => {
@@ -29,13 +28,18 @@ return (
           }}
           htmlFor="nombre"
         >
-          Nombre de la Actividad
+          Nombre del Proyecto
         </CustomFormLabel>
         <CustomTextField
           id="nombre"
           variant="outlined"
           fullWidth
         />
+        <CustomFormLabel htmlFor="fecha_inicio">Fecha Inicio</CustomFormLabel>
+        <CustomTextField type="date" id="fecha_inicio" fullWidth />
+        <CustomFormLabel htmlFor="fecha_fin">Fecha final</CustomFormLabel>
+        <CustomTextField type="date" id="fecha_fin" fullWidth />
+
         <CustomFormLabel htmlFor="ordinary-outlined-password-input">Descripción</CustomFormLabel>
         <CustomTextField
           id="descripcion"
@@ -44,14 +48,14 @@ return (
           variant="outlined"
           fullWidth
         />
-        <CustomFormLabel htmlFor="id_proyecto">Proyecto</CustomFormLabel>
-        <CustomSelect
-          id="id_proyecto"
-          fullWidth
-          variant="outlined"
+        <CustomFormLabel
+          sx={{
+            mt: 0,
+          }}
+          htmlFor="presupuesto"
         >
 
-        </CustomSelect>
+        </CustomFormLabel>
         <CustomFormLabel htmlFor="id_direccion">Direccíon</CustomFormLabel>
         <CustomSelect
           id="id_direccion"
@@ -72,3 +76,4 @@ return (
 };
 
 export default ProyectosOrdinaryForm;
+  
