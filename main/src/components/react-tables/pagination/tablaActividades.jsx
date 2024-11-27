@@ -108,29 +108,6 @@ const columns = [
         header: () => 'Acciones',
         cell: ({ row }) => (
             <Stack direction="row" spacing={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    href='/pages/actividades/cambios/${row.original.id}'
-                    startIcon={<IconPencil width={18} />}
-                >
-                    Editar
-                </Button>
-                <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => handleViewDetails(row.original)}
-                >
-                    Ver Detalles
-                </Button>
-                <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDelete(row.original)}
-                    startIcon={<IconTrash width={18} />}
-                >
-                    Borrar
-                </Button>
             </Stack>
         ),
     },
@@ -150,7 +127,7 @@ const ActividadesPaginationTable = () => {
                 console.error("Error al obtener actividades:", error);
             }
         };
-        fetchActividades();
+        fetchActividades(); 
     }, []);
 
     const handleEdit = (id) => {
@@ -255,7 +232,7 @@ const ActividadesPaginationTable = () => {
                                                         onClick={() => handleEdit(row.original.id)}  // Pasar el id aquí
                                                         startIcon={<IconPencil width={18} />}
                                                     >
-                                                        Editar
+                                                        EditarEEE
                                                     </Button>
                                                     <Button
                                                         variant="contained"
