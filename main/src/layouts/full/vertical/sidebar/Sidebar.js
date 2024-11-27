@@ -73,7 +73,12 @@ const Sidebar = () => {
             {/* Logo */}
             {/* ------------------------------------------- */}
             <Box px={3}>
-              <Logo />
+              {/* <Logo /> */}
+              {/* Logo png */}
+              {/* <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <img src="src/assets/images/Fundatierra.png" alt="logo" style={{width:'100px', height:'100px'}} />
+              </Box> */}
+              <h2 style={{color:'black'}}>Tierra Nuestra</h2>
             </Box>
             <Scrollbar sx={{ height: 'calc(100% - 190px)' }}>
               {/* ------------------------------------------- */}

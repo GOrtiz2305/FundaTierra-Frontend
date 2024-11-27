@@ -8,15 +8,15 @@ import CustomSelect from '../theme-elements/CustomSelect';
 import CustomTextField from '../theme-elements/CustomTextField';
 
 const ProyectosOrdinaryForm = () => {
-const [state, setState] = React.useState({
+  const [state, setState] = React.useState({
     checkedB: false,
-});
+  });
 
-const handleChange = (event) => {
+  const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
-};
+  };
 
-const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState(null);
 
 return (
     <ParentCard title='Formulario de Actividades adasdasdas- Información general'>
@@ -24,7 +24,7 @@ return (
         <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
         <CustomTextField type="date" id="fecha_inicio" fullWidth />
         <CustomFormLabel
-        sx={{
+          sx={{
             mt: 0,
           }}
           htmlFor="nombre"
@@ -50,7 +50,7 @@ return (
           fullWidth
           variant="outlined"
         >
-          
+
         </CustomSelect>
         <CustomFormLabel htmlFor="id_direccion">Direccíon</CustomFormLabel>
         <CustomSelect
@@ -58,7 +58,7 @@ return (
           fullWidth
           variant="outlined"
         >
-          
+
         </CustomSelect>
         <br /><br />
         <div>
