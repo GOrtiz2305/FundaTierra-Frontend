@@ -32,6 +32,8 @@ import { IconPencil, IconChevronLeft, IconChevronRight, IconChevronsLeft, IconCh
 import axios from 'axios';
 import { URL } from "../../../../config";
 import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const columnHelper = createColumnHelper();
 
@@ -103,22 +105,14 @@ const columns = [
             />
         ),
     }),
-    {
-        id: 'acciones',
-        header: () => 'Acciones',
-        cell: ({ row }) => (
-            <Stack direction="row" spacing={1}>
-            </Stack>
-        ),
-    },
 ];
 
 const ActividadesPaginationTable = () => {
-    const [data, setData] = React.useState(() => []);
-    const [columnFilters, setColumnFilters] = React.useState([])
+    const [data, setData] = useState(() => []);
+    const [columnFilters, setColumnFilters] = useState([])
     const navigate = useNavigate();
 
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchActividades = async () => {
             try {
                 const response = await axios.get(`${URL}actividades`);
@@ -127,11 +121,11 @@ const ActividadesPaginationTable = () => {
                 console.error("Error al obtener actividades:", error);
             }
         };
-        fetchActividades(); 
+        fetchActividades();
     }, []);
 
     const handleEdit = (id) => {
-        navigate(`/pages/actividades/cambios/${id}`);  // Redirige a la página de cambios con el id
+        navigate(`/actividades/cambios/${id}`);  // Redirige a la página de cambios con el id
     };
 
     const table = useReactTable({
@@ -213,11 +207,19 @@ const ActividadesPaginationTable = () => {
                                                     </Typography>
                                                 </TableCell>
                                             ))}
+                                            <TableCell>
+                                                <Typography
+                                                    variant="h6"
+                                                    mb={1}
+                                                >
+                                                    Acciones
+                                                </Typography>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableHead>
                                 <TableBody>
-                                {table.getRowModel().rows.map((row) => (
+                                    {table.getRowModel().rows.map((row) => (
                                         <TableRow key={row.id}>
                                             {row.getVisibleCells().map((cell) => (
                                                 <TableCell key={cell.id}>
@@ -232,7 +234,7 @@ const ActividadesPaginationTable = () => {
                                                         onClick={() => handleEdit(row.original.id)}  // Pasar el id aquí
                                                         startIcon={<IconPencil width={18} />}
                                                     >
-                                                        EditarEEE
+                                                        Editar
                                                     </Button>
                                                     <Button
                                                         variant="contained"

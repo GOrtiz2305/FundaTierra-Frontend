@@ -5,7 +5,7 @@ import ActividadesPaginationTable from '../../../components/react-tables/paginat
 const Actividades = () => {
     return (
         <div>
-            <Button variant="contained" color="primary" href='/pages/actividades/nueva'>
+            <Button variant="contained" color="primary" href='/actividades/nueva'>
                 Nuevo
             </Button>
             <br /> <br />
