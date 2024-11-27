@@ -1,13 +1,13 @@
 import {
   Button,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import ParentCard from '../../shared/ParentCard';
 import CustomFormLabel from '../theme-elements/CustomFormLabel';
 import CustomTextField from '../theme-elements/CustomTextField';
 
 const ProyectosOrdinaryForm = () => {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     checkedB: false,
   });
 
@@ -15,13 +15,22 @@ const ProyectosOrdinaryForm = () => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = useState(null);
+  const [presupuesto, setPresupuesto] = useState("");
 
-return (
-    <ParentCard title='Formulario de Actividades adasdasdas- Información general'>
-    <form>
-        <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
-        <CustomTextField type="date" id="fecha_inicio" fullWidth />
+  // Maneja el cambio en el campo de presupuesto
+  const handlePresupuestoChange = (e) => {
+    const valor = e.target.value;
+    const regex = /^Q?\s?(\d+(\.\d{0,2})?)?$/;
+
+    if (regex.test(valor)) {
+      setPresupuesto(valor.startsWith("Q") ? valor : `Q ${valor}`);
+    }
+  };
+
+  return (
+    <ParentCard title='Formulario de proyectos - Información general'>
+      <form>
         <CustomFormLabel
           sx={{
             mt: 0,
@@ -54,16 +63,16 @@ return (
           }}
           htmlFor="presupuesto"
         >
-
+          Presupuesto
         </CustomFormLabel>
-        <CustomFormLabel htmlFor="id_direccion">Direccíon</CustomFormLabel>
-        <CustomSelect
-          id="id_direccion"
-          fullWidth
+        <CustomTextField
+          id="presupuesto"
           variant="outlined"
-        >
+          fullWidth
+          value={presupuesto}
+          onChange={handlePresupuestoChange}
+        />
 
-        </CustomSelect>
         <br /><br />
         <div>
           <Button color="primary" variant="contained">
