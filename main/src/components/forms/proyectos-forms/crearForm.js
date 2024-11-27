@@ -1,13 +1,13 @@
 import {
   Button,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import ParentCard from '../../shared/ParentCard';
 import CustomFormLabel from '../theme-elements/CustomFormLabel';
 import CustomTextField from '../theme-elements/CustomTextField';
 
 const ProyectosOrdinaryForm = () => {
-  const [state, setState] = useState({
+  const [state, setState] = React.useState({
     checkedB: false,
   });
 
@@ -15,22 +15,13 @@ const ProyectosOrdinaryForm = () => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  const [value, setValue] = useState(null);
-  const [presupuesto, setPresupuesto] = useState("");
-
-  // Maneja el cambio en el campo de presupuesto
-  const handlePresupuestoChange = (e) => {
-    const valor = e.target.value;
-    const regex = /^Q?\s?(\d+(\.\d{0,2})?)?$/;
-
-    if (regex.test(valor)) {
-      setPresupuesto(valor.startsWith("Q") ? valor : `Q ${valor}`);
-    }
-  };
+  const [value, setValue] = React.useState(null);
 
   return (
-    <ParentCard title='Formulario de proyectos - Información general'>
+    <ParentCard title='Formulario de Actividades Hola mundo asndlasn- Información general'>
       <form>
+        <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
+        <CustomTextField type="date" id="fecha_inicio" fullWidth />
         <CustomFormLabel
           sx={{
             mt: 0,
@@ -63,16 +54,16 @@ const ProyectosOrdinaryForm = () => {
           }}
           htmlFor="presupuesto"
         >
-          Presupuesto
-        </CustomFormLabel>
-        <CustomTextField
-          id="presupuesto"
-          variant="outlined"
-          fullWidth
-          value={presupuesto}
-          onChange={handlePresupuestoChange}
-        />
 
+        </CustomFormLabel>
+        <CustomFormLabel htmlFor="id_direccion">Direccíon</CustomFormLabel>
+        <CustomSelect
+          id="id_direccion"
+          fullWidth
+          variant="outlined"
+        >
+
+        </CustomSelect>
         <br /><br />
         <div>
           <Button color="primary" variant="contained">
