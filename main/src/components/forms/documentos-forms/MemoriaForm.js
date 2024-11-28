@@ -111,8 +111,8 @@ const MemoriaForm = () => {
 
       const dataNoEncapsulada = {
         nombre: values.nombre,
-        id_actividad: id.id,
-        id_tipo: 1,
+        id_actividad: Number(id.id),
+        id_tipo: 1, //Cambiar
         id_estado: 1,
       };
 
@@ -143,7 +143,7 @@ const MemoriaForm = () => {
       }
 
       //Ir a la pagina anterior
-      // navigate(-1);
+      navigate(-1);
     } catch (error) {
       console.error('Error al llamar a la API:', error);
       alert('Error al llamar a la API');
@@ -218,7 +218,10 @@ const MemoriaForm = () => {
                 id="fecha_hora"
                 name="fecha_hora"
                 placeholder="Fecha y hora"
-                onChange={() => { }}
+                value={formik.values.fecha_hora} // Enlazar con el estado de Formik
+                onChange={(newValue) => {
+                  formik.setFieldValue('fecha_hora', newValue); // Actualizar el estado de Formik
+                }}
                 renderInput={(inputProps) => (
                   <CustomTextField
                     fullWidth
@@ -228,7 +231,6 @@ const MemoriaForm = () => {
                     {...inputProps}
                   />
                 )}
-                value={new Date()}
               />
             </LocalizationProvider>
           </Grid>
