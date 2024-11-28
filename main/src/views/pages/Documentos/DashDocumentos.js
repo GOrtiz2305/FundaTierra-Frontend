@@ -40,6 +40,10 @@ const DashDocumentos = ({ id }) => {
         id_direccion: "",
     });
 
+    const handleAgregarMemoria = () => {
+        navigate(`/actividades/documentos/${id}/memoria`);
+    };
+
     useEffect(() => {
         const fetchActividades = async () => {
             try {
@@ -256,7 +260,7 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
+                        <Button onClick={handleAgregarMemoria}>Agregar</Button>
                         <Button>Ver</Button>
                         <Button>Editar</Button>
                         <Button>Eliminar</Button>

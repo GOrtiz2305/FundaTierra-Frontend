@@ -6,6 +6,7 @@ import Actividades from '../views/pages/Actividades/actividades';
 import Proyectos from '../views/pages/Proyectos/proyectos';
 import DashDocumentos from '../views/pages/Documentos/DashDocumentos';
 import ActividadesDocumentos from '../views/pages/Actividades/actividadesDocumentos';
+import Memoria from '../views/pages/Documentos/Memoria';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -193,6 +194,7 @@ const Router = [
       {path: '/actividades/nueva', element: <ActividadesCrear />},
       {path: '/actividades/cambios/:id', element: <ActividadesEditar />},
       {path: '/actividades/documentos/:id', element: <ActividadesDocumentos />},
+      {path: '/actividades/documentos/:id/memoria', element: <Memoria />},
       {path: '/pages/proyectos', element: <Proyectos /> },
       {path: '/pages/proyectos/nueva', element: <ProyectosCrear />},
       {path: '/pages/proyectos/cambios', element: <ProyectosEditar />},
