@@ -4,6 +4,8 @@ import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 import Actividades from '../views/pages/Actividades/actividades';
 import Proyectos from '../views/pages/Proyectos/proyectos';
+import DashDocumentos from '../views/pages/Documentos/DashDocumentos';
+import ActividadesDocumentos from '../views/pages/Actividades/actividadesDocumentos';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -187,9 +189,10 @@ const Router = [
       { path: '/pages/pricing', element: <Pricing /> },
       { path: '/pages/account-settings', element: <AccountSetting /> },
       { path: '/pages/faq', element: <Faq /> },
-      { path: '/pages/actividades', element: <Actividades /> },
-      {path: '/pages/actividades/nueva', element: <ActividadesCrear />},
-      {path: '/pages/actividades/cambios', element: <ActividadesEditar />},
+      { path: '/actividades', element: <Actividades /> },
+      {path: '/actividades/nueva', element: <ActividadesCrear />},
+      {path: '/actividades/cambios/:id', element: <ActividadesEditar />},
+      {path: '/actividades/documentos/:id', element: <ActividadesDocumentos />},
       {path: '/pages/proyectos', element: <Proyectos /> },
       {path: '/pages/proyectos/nueva', element: <ProyectosCrear />},
       {path: '/pages/proyectos/cambios', element: <ProyectosEditar />},

@@ -16,7 +16,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Actividades',
     icon: IconAperture,
-    href: '/pages/actividades',
+    href: '/actividades',
     chipColor: 'secondary',
   },
   {

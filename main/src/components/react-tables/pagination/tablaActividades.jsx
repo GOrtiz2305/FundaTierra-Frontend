@@ -26,12 +26,14 @@ import {
     useReactTable,
     createColumnHelper
 } from '@tanstack/react-table'
-import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import { IconPencil, IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconTrash } from '@tabler/icons';
 import axios from 'axios';
 import { URL } from "../../../../config";
 import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import CustomTextField from '../../forms/theme-elements/CustomTextField';
 
 const columnHelper = createColumnHelper();
 
@@ -103,45 +105,14 @@ const columns = [
             />
         ),
     }),
-    {
-        id: 'acciones',
-        header: () => 'Acciones',
-        cell: ({ row }) => (
-            <Stack direction="row" spacing={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    href='/pages/actividades/cambios/${row.original.id}'
-                    startIcon={<IconPencil width={18} />}
-                >
-                    Editar
-                </Button>
-                <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => handleViewDetails(row.original)}
-                >
-                    Ver Detalles
-                </Button>
-                <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDelete(row.original)}
-                    startIcon={<IconTrash width={18} />}
-                >
-                    Borrar
-                </Button>
-            </Stack>
-        ),
-    },
 ];
 
 const ActividadesPaginationTable = () => {
-    const [data, setData] = React.useState(() => []);
-    const [columnFilters, setColumnFilters] = React.useState([])
+    const [data, setData] = useState(() => []);
+    const [columnFilters, setColumnFilters] = useState([])
     const navigate = useNavigate();
 
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchActividades = async () => {
             try {
                 const response = await axios.get(`${URL}actividades`);
@@ -154,7 +125,7 @@ const ActividadesPaginationTable = () => {
     }, []);
 
     const handleEdit = (id) => {
-        navigate(`/pages/actividades/cambios/${id}`);  // Redirige a la página de cambios con el id
+        navigate(`/actividades/cambios/${id}`);  // Redirige a la página de cambios con el id
     };
 
     const table = useReactTable({
@@ -200,6 +171,10 @@ const ActividadesPaginationTable = () => {
         document.body.removeChild(link);
     };
 
+    const handleViewDetails = (id) => {
+        navigate(`/actividades/documentos/${id}`);  // Redirige a la página de detalles con el id
+    };
+
     return (
         <DownloadCard title="Actividades" onDownload={handleDownload}>
             <Grid container spacing={3}>
@@ -236,11 +211,19 @@ const ActividadesPaginationTable = () => {
                                                     </Typography>
                                                 </TableCell>
                                             ))}
+                                            <TableCell>
+                                                <Typography
+                                                    variant="h6"
+                                                    mb={1}
+                                                >
+                                                    Acciones
+                                                </Typography>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableHead>
                                 <TableBody>
-                                {table.getRowModel().rows.map((row) => (
+                                    {table.getRowModel().rows.map((row) => (
                                         <TableRow key={row.id}>
                                             {row.getVisibleCells().map((cell) => (
                                                 <TableCell key={cell.id}>
@@ -260,9 +243,9 @@ const ActividadesPaginationTable = () => {
                                                     <Button
                                                         variant="contained"
                                                         color="info"
-                                                        onClick={() => handleViewDetails(row.original)}
+                                                        onClick={() => handleViewDetails(row.original.id)}
                                                     >
-                                                        Ver Detalles
+                                                        Detalles
                                                     </Button>
                                                     <Button
                                                         variant="contained"
