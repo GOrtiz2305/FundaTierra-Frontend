@@ -26,7 +26,6 @@ import {
     useReactTable,
     createColumnHelper
 } from '@tanstack/react-table'
-import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import { IconPencil, IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconTrash } from '@tabler/icons';
 import axios from 'axios';
@@ -34,6 +33,7 @@ import { URL } from "../../../../config";
 import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import CustomTextField from '../../forms/theme-elements/CustomTextField';
 
 const columnHelper = createColumnHelper();
 
@@ -171,6 +171,10 @@ const ActividadesPaginationTable = () => {
         document.body.removeChild(link);
     };
 
+    const handleViewDetails = (id) => {
+        navigate(`/actividades/documentos/${id}`);  // Redirige a la página de detalles con el id
+    };
+
     return (
         <DownloadCard title="Actividades" onDownload={handleDownload}>
             <Grid container spacing={3}>
@@ -239,9 +243,9 @@ const ActividadesPaginationTable = () => {
                                                     <Button
                                                         variant="contained"
                                                         color="info"
-                                                        onClick={() => handleViewDetails(row.original)}
+                                                        onClick={() => handleViewDetails(row.original.id)}
                                                     >
-                                                        Ver Detalles
+                                                        Detalles
                                                     </Button>
                                                     <Button
                                                         variant="contained"

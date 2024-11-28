@@ -4,6 +4,8 @@ import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 import Actividades from '../views/pages/Actividades/actividades';
 import Proyectos from '../views/pages/Proyectos/proyectos';
+import DashDocumentos from '../views/pages/Documentos/DashDocumentos';
+import ActividadesDocumentos from '../views/pages/Actividades/actividadesDocumentos';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -190,9 +192,10 @@ const Router = [
       { path: '/actividades', element: <Actividades /> },
       {path: '/actividades/nueva', element: <ActividadesCrear />},
       {path: '/actividades/cambios/:id', element: <ActividadesEditar />},
-      {path: '/proyectos', element: <Proyectos /> },
-      {path: '/proyectos/nueva', element: <ProyectosCrear />},
-      {path: '/proyectos/cambios', element: <ProyectosEditar />},
+      {path: '/actividades/documentos/:id', element: <ActividadesDocumentos />},
+      {path: '/pages/proyectos', element: <Proyectos /> },
+      {path: '/pages/proyectos/nueva', element: <ProyectosCrear />},
+      {path: '/pages/proyectos/cambios', element: <ProyectosEditar />},
       { path: '/forms/form-elements/autocomplete', element: <MuiAutoComplete /> },
       { path: '/forms/form-elements/button', element: <MuiButton /> },
       { path: '/forms/form-elements/checkbox', element: <MuiCheckbox /> },
