@@ -124,26 +124,26 @@ const MemoriaForm = () => {
       };
 
       console.log(dataToSend);
-      // const response = await fetch(`${URL}documentos`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(dataToSend),
-      // });
+      const response = await fetch(`${URL}documentos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
 
-      // if (response.ok) {
-      //   <Alert variant="filled" severity="success">
-      //     Actividad creada con éxito
-      //   </Alert>
-      // } else {
-      //   <Alert variant='filled' severity='error'>
-      //     Error al crear la actividad
-      //   </Alert>
-      // }
+      if (response.ok) {
+        <Alert variant="filled" severity="success">
+          Actividad creada con éxito
+        </Alert>
+      } else {
+        <Alert variant='filled' severity='error'>
+          Error al crear la actividad
+        </Alert>
+      }
 
-      //Quiero navegar a la pagina anterior
-      navigate(-1);
+      //Ir a la pagina anterior
+      // navigate(-1);
     } catch (error) {
       console.error('Error al llamar a la API:', error);
       alert('Error al llamar a la API');
