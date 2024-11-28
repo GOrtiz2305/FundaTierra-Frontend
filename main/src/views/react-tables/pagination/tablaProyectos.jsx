@@ -1,4 +1,3 @@
-
 import {
     Box,
     Button,
@@ -27,20 +26,21 @@ import {
     useReactTable
 } from '@tanstack/react-table';
 import * as React from 'react';
+import { useNavigate } from 'react-router';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import DownloadCard from 'src/components/shared/DownloadCard';
+import { URL } from "../../../../config";
 import { basicsTableData } from '../../tables/tableData';
 
-
-
+import axios from 'axios';
 const basics = basicsTableData;
 
 const columnHelper = createColumnHelper();
 
 const columns = [
 
-    columnHelper.accessor('Nombre', {
+    columnHelper.accessor('nombre', {
         header: () => 'Nombre',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
@@ -48,7 +48,7 @@ const columns = [
             </Typography>
         ),
     }),
-    columnHelper.accessor('Fecha Inicio', {
+    columnHelper.accessor('fecha_inicio', {
         header: () => 'Fecha Inicio',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
@@ -56,7 +56,7 @@ const columns = [
             </Typography>
         ),
     }),
-    columnHelper.accessor('Fecha fin', {
+    columnHelper.accessor('fecha_fin', {
         header: () => 'Fecha fin',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
@@ -64,7 +64,7 @@ const columns = [
             </Typography>
         ),
     }),
-    columnHelper.accessor('Presupuestos', {
+    columnHelper.accessor('presupuesto', {
         header: () => 'Presupuestos',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
@@ -140,11 +140,27 @@ const columns = [
 ];
 
 const ProyectosPaginationTable = () => {
-    const [data, _setData] = React.useState(() => [...basics]);
-    const [columnFilters, setColumnFilters] = React.useState(
-        []
-    )
-    const rerender = React.useReducer(() => ({}), {})[1]
+    const [data, setData] = React.useState(() => []);
+    const [columnFilters, setColumnFilters] = React.useState([])
+    const navigate = useNavigate();
+    
+    React.useEffect(() => {
+        const fetchProyectos = async () => {
+            try {
+                const response = await axios.get(`${URL}proyectos`);
+                setData(response.data);
+                console.log(data);
+
+            } catch (error) {
+                console.error("Error al obtener proyectos:", error);
+            }
+        };
+        fetchProyectos();
+    }, []);
+
+    const handleEdit = (id) => {
+        navigate(`/pages/proyectos/cambios/${id}`);  // Redirige a la página de cambios con el id
+    };
 
     const table = useReactTable({
         data,
@@ -164,13 +180,13 @@ const ProyectosPaginationTable = () => {
     });
 
     const handleDownload = () => {
-        const headers = ["nombre", "fecha_inicio", "fecha_fin ", "presupuestos", "estado"];
+        const headers = ["nombre", "fecha_inicio", "fecha_fin ", "presupuesto", "estado"];
         const rows = data.map(item => [
 
             item.nombre,
             item.fecha_inicio,
             item.fecha_fin,
-            item.presupuestos,
+            item.presupuesto,
             item.estado,
         ]);
 
