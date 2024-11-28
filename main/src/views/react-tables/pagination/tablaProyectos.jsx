@@ -1,53 +1,46 @@
-import * as React from 'react';
-import {
-    TableContainer,
-    Table,
-    TableRow,
-    TableCell,
-    TableBody,
-    Typography,
-    TableHead,
-    Chip,
-    Box,
-    Grid, MenuItem,
-    Button,
-    Divider,
-    IconButton
-} from '@mui/material';
-import { Stack } from '@mui/system';
-import DownloadCard from 'src/components/shared/DownloadCard';
 
 import {
+    Box,
+    Button,
+    Chip,
+    Divider,
+    Grid,
+    IconButton,
+    MenuItem,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from '@mui/material';
+import { Stack } from '@mui/system';
+import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconPencil, IconTrash } from '@tabler/icons';
+import {
+    createColumnHelper,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable,
-    createColumnHelper
-} from '@tanstack/react-table'
+    useReactTable
+} from '@tanstack/react-table';
+import * as React from 'react';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
-import { IconPencil, IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconTrash } from '@tabler/icons';
-import axios from 'axios';
-import { URL } from "../../../../config";
-import { useNavigate } from 'react-router';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import CustomTextField from '../../forms/theme-elements/CustomTextField';
+import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
+import DownloadCard from 'src/components/shared/DownloadCard';
+import { basicsTableData } from '../../tables/tableData';
+
+
+
+const basics = basicsTableData;
 
 const columnHelper = createColumnHelper();
 
 const columns = [
 
-    columnHelper.accessor('usuario.username', {
-        header: () => 'Usuario',
-        cell: info => (
-            <Typography variant="subtitle1" color="textSecondary">
-                {info.getValue()}
-            </Typography>
-        ),
-    }),
-    columnHelper.accessor('nombre', {
+    columnHelper.accessor('Nombre', {
         header: () => 'Nombre',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
@@ -55,23 +48,31 @@ const columns = [
             </Typography>
         ),
     }),
-    columnHelper.accessor('proyecto.nombre', {
-        header: () => 'Proyecto',
+    columnHelper.accessor('Fecha Inicio', {
+        header: () => 'Fecha Inicio',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
                 {info.getValue()}
             </Typography>
         ),
     }),
-    columnHelper.accessor('fecha_inicio', {
-        header: () => 'Fecha de inicio',
+    columnHelper.accessor('Fecha fin', {
+        header: () => 'Fecha fin',
         cell: info => (
             <Typography variant="subtitle1" color="textSecondary">
                 {info.getValue()}
             </Typography>
         ),
     }),
-    columnHelper.accessor('estado_actividade.nombre', {
+    columnHelper.accessor('Presupuestos', {
+        header: () => 'Presupuestos',
+        cell: info => (
+            <Typography variant="subtitle1" color="textSecondary">
+                {info.getValue()}
+            </Typography>
+        ),
+    }),
+    columnHelper.accessor('estado', {
         header: () => 'Estado',
         meta: {
             filterVariant: 'select',
@@ -80,23 +81,23 @@ const columns = [
             <Chip
                 sx={{
                     bgcolor:
-                        info.getValue() === 'En Progreso'
+                        info.getValue() === 'active'
                             ? (theme) => theme.palette.success.light
-                            : info.getValue() === 'Pendiente'
+                            : info.getValue() === 'pending'
                                 ? (theme) => theme.palette.warning.light
-                                : info.getValue() === 'Completado'
+                                : info.getValue() === 'completed'
                                     ? (theme) => theme.palette.primary.light
-                                    : info.getValue() === 'Cancelado'
+                                    : info.getValue() === 'cancel'
                                         ? (theme) => theme.palette.error.light
                                         : (theme) => theme.palette.secondary.light,
                     color:
-                        info.getValue() === 'En Progreso'
+                        info.getValue() === 'active'
                             ? (theme) => theme.palette.success.main
-                            : info.getValue() === 'Pendiente'
+                            : info.getValue() === 'pending'
                                 ? (theme) => theme.palette.warning.main
-                                : info.getValue() === 'Completado'
+                                : info.getValue() === 'completed'
                                     ? (theme) => theme.palette.primary.main
-                                    : info.getValue() === 'Cancelado'
+                                    : info.getValue() === 'cancel'
                                         ? (theme) => theme.palette.error.main
                                         : (theme) => theme.palette.secondary.main,
                     borderRadius: '8px',
@@ -105,28 +106,45 @@ const columns = [
             />
         ),
     }),
+    {
+        id: 'acciones',
+        header: () => 'Acciones',
+        cell: ({ row }) => (
+            <Stack direction="row" spacing={1}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    href='/pages/proyectos/cambios'
+                    startIcon={<IconPencil width={18} />}
+                >
+                    Editar
+                </Button>
+                <Button
+                    variant="contained"
+                    color="info"
+                    onClick={() => handleViewDetails(row.original)}
+                >
+                    Ver Detalles
+                </Button>
+                <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDelete(row.original)}
+                    startIcon={<IconTrash width={18} />}
+                >
+                    Borrar
+                </Button>
+            </Stack>
+        ),
+    },
 ];
 
-const ActividadesPaginationTable = () => {
-    const [data, setData] = useState(() => []);
-    const [columnFilters, setColumnFilters] = useState([])
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchActividades = async () => {
-            try {
-                const response = await axios.get(`${URL}actividades`);
-                setData(response.data);
-            } catch (error) {
-                console.error("Error al obtener actividades:", error);
-            }
-        };
-        fetchActividades();
-    }, []);
-
-    const handleEdit = (id) => {
-        navigate(`/actividades/cambios/${id}`);  // Redirige a la página de cambios con el id
-    };
+const ProyectosPaginationTable = () => {
+    const [data, _setData] = React.useState(() => [...basics]);
+    const [columnFilters, setColumnFilters] = React.useState(
+        []
+    )
+    const rerender = React.useReducer(() => ({}), {})[1]
 
     const table = useReactTable({
         data,
@@ -146,12 +164,13 @@ const ActividadesPaginationTable = () => {
     });
 
     const handleDownload = () => {
-        const headers = ["usuario", "nombre", "proyecto", "fecha_inicio", "estado"];
+        const headers = ["nombre", "fecha_inicio", "fecha_fin ", "presupuestos", "estado"];
         const rows = data.map(item => [
-            item.usuario,
+
             item.nombre,
-            item.proyecto,
             item.fecha_inicio,
+            item.fecha_fin,
+            item.presupuestos,
             item.estado,
         ]);
 
@@ -171,12 +190,8 @@ const ActividadesPaginationTable = () => {
         document.body.removeChild(link);
     };
 
-    const handleViewDetails = (id) => {
-        navigate(`/actividades/documentos/${id}`);  // Redirige a la página de detalles con el id
-    };
-
     return (
-        <DownloadCard title="Actividades" onDownload={handleDownload}>
+        <DownloadCard title="Proyectos" onDownload={handleDownload}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box>
@@ -211,14 +226,6 @@ const ActividadesPaginationTable = () => {
                                                     </Typography>
                                                 </TableCell>
                                             ))}
-                                            <TableCell>
-                                                <Typography
-                                                    variant="h6"
-                                                    mb={1}
-                                                >
-                                                    Acciones
-                                                </Typography>
-                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableHead>
@@ -230,33 +237,6 @@ const ActividadesPaginationTable = () => {
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </TableCell>
                                             ))}
-                                            <TableCell>
-                                                <Stack direction="row" spacing={1}>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() => handleEdit(row.original.id)}  // Pasar el id aquí
-                                                        startIcon={<IconPencil width={18} />}
-                                                    >
-                                                        Editar
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="info"
-                                                        onClick={() => handleViewDetails(row.original.id)}
-                                                    >
-                                                        Detalles
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="error"
-                                                        onClick={() => handleDelete(row.original)}
-                                                        startIcon={<IconTrash width={18} />}
-                                                    >
-                                                        Borrar
-                                                    </Button>
-                                                </Stack>
-                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -337,4 +317,4 @@ const ActividadesPaginationTable = () => {
     );
 };
 
-export default ActividadesPaginationTable;
+export default ProyectosPaginationTable;

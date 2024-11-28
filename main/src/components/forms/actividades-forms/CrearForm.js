@@ -87,7 +87,7 @@ const ActividadesOrdinaryForm = () => {
       });
 
       if (response.ok) {
-        navigate('/pages/actividades');
+        navigate('/actividades');
         <Alert variant="filled" severity="success">
           Actividad creada con éxito
         </Alert>
@@ -170,9 +170,6 @@ const ActividadesOrdinaryForm = () => {
           fullWidth
           variant="outlined"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {proyectos.map((proyecto) => (
             <MenuItem key={proyecto.id} value={proyecto.id}>
               {proyecto.nombre}
@@ -194,9 +191,6 @@ const ActividadesOrdinaryForm = () => {
           fullWidth
           variant="outlined"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           {direcciones.map((direccion) => (
             <MenuItem key={direccion.id} value={direccion.id}>
               {direccion.detalle}

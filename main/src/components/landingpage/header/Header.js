@@ -68,7 +68,8 @@ const LpHeader = () => {
     <AppBarStyled position="sticky" elevation={y ? 8 : 0}>
       <Container maxWidth="lg">
         <ToolbarStyled>
-          <Logo />
+          {/* <Logo /> */}
+          <h1>Tierra Nuestra</h1>
           <Box flexGrow={1} />
           {lgDown ? (
             <IconButton color="inherit" aria-label="menu" onClick={handleDrawerOpen}>
