@@ -113,7 +113,7 @@ const ProyectosOrdinaryForm = () => {
           id="fecha_fin"
           name="fecha_fin"
           onChange={formik.handleChange}
-          value={formik.values.fecha_inicio}
+          value={formik.values.fecha_fin}
           fullWidth
         />
 
