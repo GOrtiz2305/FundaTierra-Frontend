@@ -1,13 +1,14 @@
-import { Button } from '@mui/material';
+import {
+  Button
+} from '@mui/material';
 import { useFormik } from 'formik';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 import { URL } from "../../../../config";
 import ParentCard from '../../shared/ParentCard';
-import CustomFormLabel from '../theme-elements/CustomFormLabel'; // Asegúrate de importar este componente
+import CustomFormLabel from '../theme-elements/CustomFormLabel';
 import CustomTextField from '../theme-elements/CustomTextField';
-
 
 
 const ProyectosOrdinaryForm = () => {
@@ -112,7 +113,7 @@ const ProyectosOrdinaryForm = () => {
           id="fecha_fin"
           name="fecha_fin"
           onChange={formik.handleChange}
-          value={formik.values.fecha_inicio}
+          value={formik.values.fecha_fin}
           fullWidth
         />
 
