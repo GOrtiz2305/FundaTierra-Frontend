@@ -15,6 +15,7 @@ import ParentCard from '../../../components/shared/ParentCard';
 import { URL } from '../../../../config';
 import styled from '@emotion/styled';
 import { Box } from '@mui/system';
+import useDrivePicker from 'react-google-drive-picker'
 
 const BoxStyled = styled(Box)(() => ({
     padding: '30px',
@@ -31,6 +32,29 @@ const DashDocumentos = ({ id }) => {
     const [direcciones, setDirecciones] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [openPicker, authRes] = useDrivePicker();
+    const [authTocken, setauthTocken] = useState("");
+
+    const handleOpenPicker = () => {
+        openPicker({
+            clientId: "221911056843-0lvr49sctln4lp64f6u0hb7eki0vu4k0.apps.googleusercontent.com",
+            developerKey: "AIzaSyCKfb4fUHYZ9RHu1njWYpj5nZVyDnNJgmA",
+            viewId: "DOCS",
+            token: authTocken,
+            showUploadView: true,
+            showUploadFolders: true,
+            supportDrives: true,
+            multiselect: true,
+            // customViews: customViewsArray, // custom view
+            callbackFunction: (data) => {
+                if (data.action === 'cancel') {
+                    console.log('User clicked cancel/close button')
+                }
+                console.log(data)
+            },
+        })
+    }
+
     const [data, setData] = useState({
         id: 0,
         fecha_inicio: "",
@@ -45,6 +69,10 @@ const DashDocumentos = ({ id }) => {
     };
 
     useEffect(() => {
+        if (authRes) {
+            setauthTocken(authRes.access_token);
+        }
+
         const fetchActividades = async () => {
             try {
                 const response = await axios.get(`${URL}actividades/${id}`);
@@ -90,7 +118,7 @@ const DashDocumentos = ({ id }) => {
 
         fetchProyectos();
         fetchDirecciones();
-    }, [id]);
+    }, [id, authRes]);
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -305,7 +333,7 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
+                        <Button onClick={() => handleOpenPicker()}>Agregar</Button>
                         <Button>Ver</Button>
                         <Button>Editar</Button>
                         <Button>Eliminar</Button>

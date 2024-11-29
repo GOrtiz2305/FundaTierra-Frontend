@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { hoverSidebar, toggleMobileSidebar } from 'src/store/customizer/CustomizerSlice';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import { Profile } from './SidebarProfile/Profile';
+import logo from 'src/assets/images/backgrounds/Fundatierra.png';
 
 const Sidebar = () => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
@@ -73,14 +74,11 @@ const Sidebar = () => {
             {/* Logo */}
             {/* ------------------------------------------- */}
             <Box px={3}>
-              {/* <Logo /> */}
-              {/* Logo png */}
-              {/* <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                <img src="src/assets/images/Fundatierra.png" alt="logo" style={{width:'100px', height:'100px'}} />
-              </Box> */}
-              <h2 style={{color:'black'}}>Tierra Nuestra</h2>
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <img src={logo} alt="logo" style={{ width: '80%', height: '80%', marginTop:3 }}/>
+              </Box>
             </Box>
-            <Scrollbar sx={{ height: 'calc(100% - 190px)' }}>
+            <Scrollbar sx={{ height: 'calc(90% - 190px)' }}>
               {/* ------------------------------------------- */}
               {/* Sidebar Items */}
               {/* ------------------------------------------- */}

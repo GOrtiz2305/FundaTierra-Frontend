@@ -85,58 +85,6 @@ const Profile = () => {
               </Box>
             </Stack>
             <Divider />
-            {dropdownData.profile.map((profile) => (
-              <Box key={profile.title}>
-                <Box sx={{ py: 2, px: 0 }} className="hover-text-primary">
-                  <Link to={profile.href}>
-                    <Stack direction="row" spacing={2}>
-                      <Box
-                        width="45px"
-                        height="45px"
-                        bgcolor="primary.light"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Avatar
-                          src={profile.icon}
-                          alt={profile.icon}
-                          sx={{
-                            width: 24,
-                            height: 24,
-                            borderRadius: 0,
-                          }}
-                        />
-                      </Box>
-                      <Box>
-                        <Typography
-                          variant="subtitle2"
-                          fontWeight={600}
-                          color="textPrimary"
-                          className="text-hover"
-                          noWrap
-                          sx={{
-                            width: '240px',
-                          }}
-                        >
-                          {profile.title}
-                        </Typography>
-                        <Typography
-                          color="textSecondary"
-                          variant="subtitle2"
-                          sx={{
-                            width: '240px',
-                          }}
-                          noWrap
-                        >
-                          {profile.subtitle}
-                        </Typography>
-                      </Box>
-                    </Stack>
-                  </Link>
-                </Box>
-              </Box>
-            ))}
             <Box mt={2}>
               <Button
                 to="/auth/login"

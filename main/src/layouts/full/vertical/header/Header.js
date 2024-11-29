@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Box, AppBar, useMediaQuery, Toolbar, styled, Stack } from '@mui/material';
+import { IconButton, Box, AppBar, useMediaQuery, Toolbar, styled, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -19,7 +19,6 @@ import MobileRightSidebar from './MobileRightSidebar';
 
 const Header = () => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-  const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   // drawer
   const customizer = useSelector((state) => state.customizer);
@@ -52,17 +51,10 @@ const Header = () => {
         >
           <IconMenu2 size="20" />
         </IconButton>
-        {/* ------------------------------------------- */}
-        {/* Search Dropdown */}
-        {/* ------------------------------------------- */}
-        <Search />
-        {lgUp ? (
-          <>
-            <Navigation />
-          </>
-        ) : null}
-
         <Box flexGrow={1} />
+        <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
+          Fundación Tierra Nuestra - Gestión de Actividades
+        </Typography>
         <Stack spacing={1} direction="row" alignItems="center">
           <IconButton size="large" color="inherit">
             {customizer.activeMode === 'light' ? (
@@ -71,15 +63,6 @@ const Header = () => {
               <IconSun size="21" stroke="1.5" onClick={() => dispatch(setDarkMode('light'))} />
             )}
           </IconButton>
-
-          {/* ------------------------------------------- */}
-          {/* End Ecommerce Dropdown */}
-          {/* ------------------------------------------- */}
-          <Notifications />
-          {/* ------------------------------------------- */}
-          {/* Toggle Right Sidebar for mobile */}
-          {/* ------------------------------------------- */}
-          {lgDown ? <MobileRightSidebar /> : null}
           <Profile />
         </Stack>
       </ToolbarStyled>
