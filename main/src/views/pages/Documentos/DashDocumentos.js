@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled';
 import {
     Button,
     ButtonGroup,
@@ -7,15 +7,15 @@ import {
     Select,
     Typography,
 } from '@mui/material';
-import axios from 'axios';
-import { useNavigate } from 'react-router';
-import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
-import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
-import ParentCard from '../../../components/shared/ParentCard';
-import { URL } from '../../../../config';
-import styled from '@emotion/styled';
 import { Box } from '@mui/system';
-import useDrivePicker from 'react-google-drive-picker'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import useDrivePicker from 'react-google-drive-picker';
+import { useNavigate } from 'react-router';
+import { URL } from '../../../../config';
+import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
+import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
+import ParentCard from '../../../components/shared/ParentCard';
 
 const BoxStyled = styled(Box)(() => ({
     padding: '30px',
@@ -76,8 +76,12 @@ const DashDocumentos = ({ id }) => {
         const fetchActividades = async () => {
             try {
                 const response = await axios.get(`${URL}actividades/${id}`);
-                setData(response.data);
-                setLoading(false);
+                if (response.ok) {
+                    const data = await response.json();
+                    setProyectos(data);
+                } else {
+                    console.error('Error al obtener los proyectos');
+                }
             } catch (error) {
                 console.error("Error al obtener actividades:", error);
                 setLoading(false);
