@@ -6,6 +6,7 @@ import { hoverSidebar, toggleMobileSidebar } from 'src/store/customizer/Customiz
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import { Profile } from './SidebarProfile/Profile';
 import logo from 'src/assets/images/backgrounds/Fundatierra.png';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
@@ -75,7 +76,9 @@ const Sidebar = () => {
             {/* ------------------------------------------- */}
             <Box px={3}>
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <img src={logo} alt="logo" style={{ width: '80%', height: '80%', marginTop:3 }}/>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                  <img src={logo} alt="logo" style={{ width: '80%', height: '80%', marginTop: 3 }} />
+                </Link>
               </Box>
             </Box>
             <Scrollbar sx={{ height: 'calc(90% - 190px)' }}>
@@ -114,7 +117,11 @@ const Sidebar = () => {
       {/* Logo */}
       {/* ------------------------------------------- */}
       <Box px={2}>
-        <Logo />
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <img src={logo} alt="logo" style={{ width: '80%', height: '80%', marginTop: 3 }} />
+          </Link>
+        </Box>
       </Box>
       {/* ------------------------------------------- */}
       {/* Sidebar For Mobile */}

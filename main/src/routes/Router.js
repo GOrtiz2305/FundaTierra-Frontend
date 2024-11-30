@@ -6,6 +6,8 @@ import Actividades from '../views/pages/Actividades/actividades';
 import ActividadesDocumentos from '../views/pages/Actividades/actividadesDocumentos';
 import Proyectos from '../views/pages/Proyectos/proyectos';
 import Memoria from '../views/pages/Documentos/Memoria';
+import EditarMemoria from '../views/pages/Documentos/EditarMemoria';
+import VerMemoria from '../views/pages/Documentos/VerMemoria';
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
@@ -159,8 +161,7 @@ const Router = [
     path: '/',
     element: <FullLayout />,
     children: [
-      { path: '/', element: <Navigate to="/dashboards/modern" /> },
-      { path: '/dashboards/modern', exact: true, element: <ModernDash /> },
+      { path: '/', exact: true, element: <ModernDash /> },
       { path: '/dashboards/ecommerce', exact: true, element: <EcommerceDash /> },
       { path: '/apps/chats', element: <Chats /> },
       { path: '/apps/notes', element: <Notes /> },
@@ -193,6 +194,8 @@ const Router = [
       { path: '/actividades/cambios/:id', element: <ActividadesEditar /> },
       { path: '/actividades/documentos/:id', element: <ActividadesDocumentos /> },
       { path: '/actividades/documentos/:id/memoria', element: <Memoria /> },
+      { path: '/actividades/documentos/:id/memoria/cambios', element: <EditarMemoria /> },
+      { path: '/actividades/documentos/:id/memoria/detalles', element: <VerMemoria /> },
       { path: '/pages/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },

@@ -30,10 +30,12 @@ const BoxStyled = styled(Box)(() => ({
 const DashDocumentos = ({ id }) => {
     const [proyectos, setProyectos] = useState([]);
     const [direcciones, setDirecciones] = useState([]);
+    const [memorias, setMemorias] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [openPicker, authRes] = useDrivePicker();
     const [authTocken, setauthTocken] = useState("");
+    const tipoDocumento = 11;
 
     const handleOpenPicker = () => {
         openPicker({
@@ -66,6 +68,14 @@ const DashDocumentos = ({ id }) => {
 
     const handleAgregarMemoria = () => {
         navigate(`/actividades/documentos/${id}/memoria`);
+    };
+
+    const handleEditarMemoria = () => {
+        navigate(`/actividades/documentos/${id}/memoria/cambios`);
+    };
+
+    const handleVerMemoria = () => {
+        navigate(`/actividades/documentos/${id}/memoria/detalles`);
     };
 
     useEffect(() => {
@@ -112,12 +122,27 @@ const DashDocumentos = ({ id }) => {
             }
         };
 
+        const fetchMemorias = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/${tipoDocumento}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setMemorias(data);
+                } else {
+                    console.error('Error al obtener las memorias');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
         if (id) {
             fetchActividades();
         }
 
         fetchProyectos();
         fetchDirecciones();
+        fetchMemorias();
     }, [id, authRes]);
 
     const handleInputChange = (e) => {
@@ -243,10 +268,9 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -258,10 +282,9 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -273,10 +296,9 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -285,13 +307,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Memoria</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {memorias.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + memorias.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button onClick={handleAgregarMemoria}>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button
+                            disabled={memorias.id != null}
+                            onClick={handleAgregarMemoria}
+                            style={{ width: '33.33%' }}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            disabled={memorias.id == null}
+                            onClick={handleVerMemoria}
+                            style={{ width: '33.33%' }}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            disabled={memorias.id == null}
+                            onClick={handleEditarMemoria}
+                            style={{ width: '33.33%' }}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -318,10 +363,9 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -333,10 +377,14 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button onClick={() => handleOpenPicker()}>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button
+                            onClick={() => handleOpenPicker()}
+                            style={{ width: '33.33%' }}
+                        >
+                            Agregar
+                        </Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
             </Grid>
