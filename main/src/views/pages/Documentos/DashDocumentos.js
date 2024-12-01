@@ -70,6 +70,14 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/memoria`);
     };
 
+    const handleAgregarAgenda = () => {
+        navigate(`/actividades/documentos/${id}/agenda`);
+    };
+
+    const handleAgregarPresupuesto = () => {
+        navigate(`/actividades/documentos/${id}/presupuesto`);
+    };
+
     const handleEditarMemoria = () => {
         navigate(`/actividades/documentos/${id}/memoria/cambios`);
     };
@@ -272,7 +280,7 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button onClick={handleAgregarAgenda} style={{ width: '33.33%' }}>Agregar</Button>
                         <Button style={{ width: '33.33%' }}>Ver</Button>
                         <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
@@ -286,7 +294,7 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button onClick={handleAgregarPresupuesto} style={{ width: '33.33%' }}>Agregar</Button>
                         <Button style={{ width: '33.33%' }}>Ver</Button>
                         <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>

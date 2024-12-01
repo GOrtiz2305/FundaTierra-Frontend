@@ -9,6 +9,8 @@ import EditarMemoria from '../views/pages/Documentos/EditarMemoria';
 import VerMemoria from '../views/pages/Documentos/VerMemoria';
 import ProyectosVer from '../views/pages/Documentos/ProyectosVer';
 import Proyectos from '../views/pages/Proyectos/proyectos';
+import Agenda from '../views/pages/Documentos/agenda';
+import Presupuesto from '../views/pages/Documentos/presupuesto';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -196,6 +198,8 @@ const Router = [
       { path: '/actividades/cambios/:id', element: <ActividadesEditar /> },
       { path: '/actividades/documentos/:id', element: <ActividadesDocumentos /> },
       { path: '/actividades/documentos/:id/memoria', element: <Memoria /> },
+      { path: '/actividades/documentos/:id/agenda', element: <Agenda /> },
+      { path: '/actividades/documentos/:id/presupuesto', element: <Presupuesto /> },
       { path: '/actividades/documentos/:id/memoria/cambios', element: <EditarMemoria /> },
       { path: '/actividades/documentos/:id/memoria/detalles', element: <VerMemoria /> },
       { path: '/pages/proyectos', element: <Proyectos/>},

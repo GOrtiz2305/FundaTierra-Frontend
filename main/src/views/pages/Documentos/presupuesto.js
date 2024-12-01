@@ -1,10 +1,13 @@
 import React from 'react'
 import PresupuestoForm from '../../../components/forms/documentos-forms/presupuesto'
+import { useParams } from 'react-router';
 
-const presupuesto = () => {
+const Presupuesto = () => {
+  const { id } = useParams();
+
   return (
-    <PresupuestoForm />
+    <PresupuestoForm id={id}/>
   )
 }
 
-export default presupuesto
+export default Presupuesto
