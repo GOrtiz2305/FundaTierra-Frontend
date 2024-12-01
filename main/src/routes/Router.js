@@ -9,7 +9,7 @@ import EditarMemoria from '../views/pages/Documentos/EditarMemoria';
 import VerMemoria from '../views/pages/Documentos/VerMemoria';
 import ProyectosVer from '../views/pages/Documentos/ProyectosVer';
 import Proyectos from '../views/pages/Proyectos/proyectos';
-import Memoria from '../views/pages/Documentos/Memoria';
+
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
