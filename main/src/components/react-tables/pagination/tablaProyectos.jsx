@@ -60,7 +60,7 @@ const ProyectosPaginationTable = () => {
     };
 
     const handleViewDetails = (id) => {
-        navigate(`/proyectos/documentos/${id}`);  // Redirige a la página de detalles con el id
+        navigate(`/proyectos/detalle/${id}`);  // Redirige a la página de detalles con el id
     };
 
     // Definir las columnas antes de usarlas en useReactTable

@@ -4,10 +4,12 @@ import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 import Actividades from '../views/pages/Actividades/actividades';
 import ActividadesDocumentos from '../views/pages/Actividades/actividadesDocumentos';
-import Proyectos from '../views/pages/Proyectos/proyectos';
 import Memoria from '../views/pages/Documentos/Memoria';
 import EditarMemoria from '../views/pages/Documentos/EditarMemoria';
 import VerMemoria from '../views/pages/Documentos/VerMemoria';
+import ProyectosVer from '../views/pages/Documentos/ProyectosVer';
+import Proyectos from '../views/pages/Proyectos/proyectos';
+import Memoria from '../views/pages/Documentos/Memoria';
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
@@ -199,6 +201,7 @@ const Router = [
       { path: '/pages/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },
+      { path: '/proyectos/detalle/:id', element:<ProyectosVer/>},
       { path: '/forms/form-elements/autocomplete', element: <MuiAutoComplete /> },
       { path: '/forms/form-elements/button', element: <MuiButton /> },
       { path: '/forms/form-elements/checkbox', element: <MuiCheckbox /> },
