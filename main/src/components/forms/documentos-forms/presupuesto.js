@@ -36,6 +36,55 @@ const PresupuestoForm = () => {
     autorizador: yup.string().required('El autorizador es obligatorio'),
   });
 
+  const handleSave = async (values) => {
+    try {
+      const dataEncapsulada = {
+        solicitante: values.solicitante,
+        autorizador: values.autorizador,
+        observaciones: values.responsable,
+        puntos_presupuesto: items,
+      };
+
+      const dataNoEncapsulada = {
+        nombre: "Presupuesto" ,
+        id_tipo: 14,
+        id_estado: 1,
+      };
+
+      const dataToSend = {
+        contenido: {
+          ...dataEncapsulada,
+        },
+        ...dataNoEncapsulada,
+      };
+
+      console.log(dataToSend);
+      const response = await fetch(`${URL}documentos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (response.ok) {
+        <Alert variant="filled" severity="success">
+          Presupuesto creado con éxito
+        </Alert>
+      } else {
+        <Alert variant='filled' severity='error'>
+          Error al crear el presupuesto
+        </Alert>
+      }
+
+      //Ir a la pagina anterior
+      navigate(-1);
+    } catch (error) {
+      console.error('Error al llamar a la API:', error);
+      alert('Error al llamar a la API');
+    }
+  };
+  
   const formik = useFormik({
     initialValues: {
       solicitante: '',
@@ -44,29 +93,7 @@ const PresupuestoForm = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      try {
-        const presupuestoData = {
-          ...values,
-          items,
-        };
-
-        const response = await fetch(`${URL}presupuestos`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(presupuestoData),
-        });
-
-        if (response.ok) {
-          alert('Presupuesto creado con éxito');
-          navigate(-1);
-        } else {
-          alert('Error al crear el presupuesto');
-        }
-      } catch (error) {
-        console.error('Error al guardar el presupuesto:', error);
-      }
+      handleSave(values);
     },
   });
 
@@ -74,16 +101,14 @@ const PresupuestoForm = () => {
     setItems([...items, { unidades: '', descripcion: '', costoUnitario: '', total: '' }]);
   };
 
+  const removeItem = (index) => {
+    const updatedItems = items.filter((_, i) => i !== index); // Filtra los elementos excepto el indicado
+    setItems(updatedItems); // Actualiza el estado
+  };
+
   const handleItemChange = (index, field, value) => {
     const updatedItems = [...items];
     updatedItems[index][field] = value;
-
-    // Calcular total del item
-    if (field === 'unidades' || field === 'costoUnitario') {
-      updatedItems[index].total =
-        (updatedItems[index].unidades || 0) * (updatedItems[index].costoUnitario || 0);
-    }
-
     setItems(updatedItems);
   };
 
@@ -131,11 +156,20 @@ const PresupuestoForm = () => {
                   />
                 </TableCell>
                 <TableCell>{item.total}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => removeItem(index)} // Llama a la función para eliminar el ítem
+                  >
+                    Eliminar
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
             <TableRow>
               <TableCell colSpan={3}>Total</TableCell>
-              <TableCell>{calculateTotal()}</TableCell>
+              <TableCell>Q {calculateTotal()}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

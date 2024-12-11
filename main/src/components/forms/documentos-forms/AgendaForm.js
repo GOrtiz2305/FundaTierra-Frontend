@@ -48,7 +48,10 @@ const AgendaForm = () => {
       };
 
       const dataNoEncapsulada = {
+        id_actividad: Number(id.id),
         nombre: values.actividad,
+        id_tipo: 13,
+        id_estado: 1,
       };
 
       const dataToSend = {

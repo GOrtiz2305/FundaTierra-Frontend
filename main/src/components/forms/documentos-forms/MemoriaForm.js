@@ -112,7 +112,7 @@ const MemoriaForm = () => {
       const dataNoEncapsulada = {
         nombre: values.nombre,
         id_actividad: Number(id.id),
-        id_tipo: 11, //Cambiar
+        id_tipo: 11,
         id_estado: 1,
       };
 
