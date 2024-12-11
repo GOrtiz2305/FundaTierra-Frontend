@@ -31,6 +31,8 @@ const DashDocumentos = ({ id }) => {
     const [proyectos, setProyectos] = useState([]);
     const [direcciones, setDirecciones] = useState([]);
     const [memorias, setMemorias] = useState([]);
+    const [agenda, setAgenda] = useState([]);
+    const [presupuesto, setPresupuesto] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [openPicker, authRes] = useDrivePicker();
@@ -57,7 +59,7 @@ const DashDocumentos = ({ id }) => {
         })
     }
 
-    const [data, setData] = useState({
+    const [actividad, setActividad] = useState({
         id: 0,
         fecha_inicio: "",
         nombre: "",
@@ -86,6 +88,14 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/memoria/detalles`);
     };
 
+    const handleVerAgenda = () => {
+        navigate(`/actividades/documentos/${id}/agenda/detalles`);
+    };
+
+    const handleEditarAgenda = () => {
+        navigate(`/actividades/documentos/${id}/agenda/cambios`);
+    };
+
     useEffect(() => {
         if (authRes) {
             setauthTocken(authRes.access_token);
@@ -93,12 +103,13 @@ const DashDocumentos = ({ id }) => {
 
         const fetchActividades = async () => {
             try {
-                const response = await axios.get(`${URL}actividades/${id}`);
+                const response = await fetch(`${URL}actividades/${id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setProyectos(data);
+                    console.log(data)
+                    setActividad(data);
                 } else {
-                    console.error('Error al obtener los proyectos');
+                    console.error('Error al obtener la actividad');
                 }
             } catch (error) {
                 console.error("Error al obtener actividades:", error);
@@ -148,6 +159,34 @@ const DashDocumentos = ({ id }) => {
             }
         };
 
+        const fetchAgenda = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/13`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAgenda(data);
+                } else {
+                    console.error('Error al obtener la agenda');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
+        const fetchPresupuesto = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/14`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAgenda(data);
+                } else {
+                    console.error('Error al obtener el presupuesto');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
         if (id) {
             fetchActividades();
         }
@@ -155,44 +194,9 @@ const DashDocumentos = ({ id }) => {
         fetchProyectos();
         fetchDirecciones();
         fetchMemorias();
+        fetchPresupuesto();
+        fetchAgenda();
     }, [id, authRes]);
-
-    const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setData({ ...data, [id]: value });
-    };
-
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await fetch(`${URL}actividades/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(
-                    {
-                        fecha_inicio: data.fecha_inicio,
-                        nombre: data.nombre,
-                        descripcion: data.descripcion,
-                        id_proyectos: data.id_proyectos,
-                        id_direccion: data.id_direccion,
-                    }
-                ),
-            });
-
-            if (response.ok) {
-                alert('Actividad actualizada con éxito');
-                navigate('/actividades');
-            } else {
-                alert('Error al actualizar la actividad');
-            }
-        } catch (error) {
-            console.error('Error al llamar a la API:', error);
-            alert('Error al llamar a la API');
-        }
-    };
 
     return (
         <>
@@ -204,7 +208,7 @@ const DashDocumentos = ({ id }) => {
                             id="fecha_inicio"
                             type="date"
                             fullWidth
-                            value={data.fecha_inicio}
+                            value={actividad.fecha_inicio}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -216,7 +220,7 @@ const DashDocumentos = ({ id }) => {
                             rows={4}
                             variant="outlined"
                             fullWidth
-                            value={data.descripcion}
+                            value={actividad.descripcion}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -228,18 +232,18 @@ const DashDocumentos = ({ id }) => {
                             id="nombre"
                             variant="outlined"
                             fullWidth
-                            value={data.nombre}
+                            value={actividad.nombre}
                             InputProps={{
                                 readOnly: true,
                             }}
                         />
 
-                        <CustomFormLabel htmlFor="id_proyecto">Proyecto</CustomFormLabel>
+                        <CustomFormLabel htmlFor="id_proyectos">Proyecto</CustomFormLabel>
                         <Select
-                            id="id_proyecto"
+                            id="id_proyectos"
                             fullWidth
                             variant="outlined"
-                            value={data.id_proyectos}
+                            value={actividad.id_proyectos}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -255,7 +259,7 @@ const DashDocumentos = ({ id }) => {
                             id="id_direccion"
                             fullWidth
                             variant="outlined"
-                            value={data.id_direccion}
+                            value={actividad.id_direccion}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -277,12 +281,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Agenda</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {agenda.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + agenda.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button onClick={handleAgregarAgenda} style={{ width: '33.33%' }}>Agregar</Button>
-                        <Button style={{ width: '33.33%' }}>Ver</Button>
-                        <Button style={{ width: '33.33%' }}>Editar</Button>
+                        <Button
+                            onClick={handleAgregarAgenda}
+                            style={{ width: '33.33%' }}
+                            disabled={agenda.id != null}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            disabled={agenda.id == null}
+                            onClick={handleVerAgenda}
+                            style={{ width: '33.33%' }}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            onClick={handleEditarAgenda}
+                            style={{ width: '33.33%' }}
+                            disabled={agenda.id == null}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -291,12 +319,34 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Presupuesto</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {presupuesto.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + presupuesto.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button onClick={handleAgregarPresupuesto} style={{ width: '33.33%' }}>Agregar</Button>
-                        <Button style={{ width: '33.33%' }}>Ver</Button>
-                        <Button style={{ width: '33.33%' }}>Editar</Button>
+                        <Button
+                            onClick={handleAgregarPresupuesto}
+                            style={{ width: '33.33%' }}
+                            disabled={presupuesto.id != null}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            disabled={presupuesto.id == null}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            disabled={agenda.id == null}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>

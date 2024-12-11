@@ -111,17 +111,20 @@ const PresupuestoForm = () => {
                   <TextField
                     type="number"
                     value={item.unidades}
+                    style={{ width: '100%' }}
                     onChange={(e) => handleItemChange(index, 'unidades', e.target.value)}
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
+                    style={{ width: '100%' }}
                     value={item.descripcion}
                     onChange={(e) => handleItemChange(index, 'descripcion', e.target.value)}
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
+                    style={{ width: '100%' }}
                     type="number"
                     value={item.costoUnitario}
                     onChange={(e) => handleItemChange(index, 'costoUnitario', e.target.value)}
@@ -136,7 +139,7 @@ const PresupuestoForm = () => {
             </TableRow>
           </TableBody>
         </Table>
-        <Button onClick={addItem} variant="contained" color="primary" style={{ marginTop: '10px' }}>
+        <Button onClick={addItem} variant="contained" color="secondary" style={{ marginTop: '10px' }}>
           Agregar Item
         </Button>
 
@@ -191,7 +194,7 @@ const PresupuestoForm = () => {
           style={{ marginTop: '20px' }}
           disabled={!formik.isValid || formik.isSubmitting}
         >
-          Guardar Presupuesto
+          Guardar
         </Button>
       </form>
     </ParentCard>

@@ -130,7 +130,7 @@ const VerMemoriaForm = ({ id }) => {
   }, [id]);
 
   return (
-    <ParentCard title={`Agenda - ${actividad?.nombre ? actividad.nombre : 'Cargando...'
+    <ParentCard title={`Memoria - ${actividad?.nombre ? actividad.nombre : 'Cargando...'
       }`}>
         <Alert severity="info">I. Información general</Alert>
         <Grid container spacing={3} mb={3}>

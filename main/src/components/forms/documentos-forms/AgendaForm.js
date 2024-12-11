@@ -38,6 +38,53 @@ const AgendaForm = () => {
     responsable: yup.string().required('El responsable es obligatorio'),
   });
 
+  const handleSave = async (values) => {
+    try {
+      const dataEncapsulada = {
+        lugar: values.lugar,
+        fecha: values.fecha,
+        responsable: values.responsable,
+        puntos_agenda: agendaItems,
+      };
+
+      const dataNoEncapsulada = {
+        nombre: values.actividad,
+      };
+
+      const dataToSend = {
+        contenido: {
+          ...dataEncapsulada,
+        },
+        ...dataNoEncapsulada,
+      };
+
+      console.log(dataToSend);
+      const response = await fetch(`${URL}documentos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (response.ok) {
+        <Alert variant="filled" severity="success">
+          Agenda creada con éxito
+        </Alert>
+      } else {
+        <Alert variant='filled' severity='error'>
+          Error al crear la agenda
+        </Alert>
+      }
+
+      //Ir a la pagina anterior
+      navigate(-1);
+    } catch (error) {
+      console.error('Error al llamar a la API:', error);
+      alert('Error al llamar a la API');
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       actividad: '',
@@ -48,35 +95,18 @@ const AgendaForm = () => {
       responsable: '',
     },
     validationSchema,
-    onSubmit: async (values) => {
-      try {
-        const agendaData = {
-          ...values,
-          puntosAgenda: agendaItems,
-        };
-
-        const response = await fetch(`${URL}documentos`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(agendaData),
-        });
-
-        if (response.ok) {
-          alert('Agenda creada con éxito');
-          navigate(-1);
-        } else {
-          alert('Error al crear la agenda');
-        }
-      } catch (error) {
-        console.error('Error al guardar la agenda:', error);
-      }
+    onSubmit: (values) => {
+      handleSave(values); // Llamar a handleSave con los valores del formulario si es válido
     },
   });
 
   const addAgendaItem = () => {
     setAgendaItems([...agendaItems, { horario: '', punto: '', responsablePunto: '' }]);
+  };
+
+  const removeAgendaItem = (index) => {
+    const updatedItems = agendaItems.filter((_, i) => i !== index); // Filtra los elementos excepto el indicado
+    setAgendaItems(updatedItems); // Actualiza el estado con los elementos restantes
   };
 
   const handleAgendaItemChange = (index, field, value) => {
@@ -161,29 +191,42 @@ const AgendaForm = () => {
                   <TextField
                     type="time"
                     value={item.horario}
+                    style={{ width: '100%' }}
                     onChange={(e) => handleAgendaItemChange(index, 'horario', e.target.value)}
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
                     value={item.punto}
+                    style={{ width: '100%' }}
                     onChange={(e) => handleAgendaItemChange(index, 'punto', e.target.value)}
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
                     value={item.responsablePunto}
+                    style={{ width: '100%' }}
                     onChange={(e) => handleAgendaItemChange(index, 'responsablePunto', e.target.value)}
                   />
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => removeAgendaItem(index)}
+                  >
+                    Eliminar
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        <Button onClick={addAgendaItem} variant="contained" color="primary" style={{ marginTop: '10px' }}>
+        <Button onClick={addAgendaItem} variant="contained" color="secondary" style={{ marginTop: '10px' }}>
           Agregar Punto
         </Button>
 
+        <br /><br />
         <Button
           type="submit"
           variant="contained"
