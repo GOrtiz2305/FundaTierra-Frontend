@@ -10,10 +10,12 @@ import VerMemoria from '../views/pages/Documentos/VerMemoria';
 import ProyectosVer from '../views/pages/Documentos/ProyectosVer';
 import Proyectos from '../views/pages/Proyectos/proyectos';
 import Agenda from '../views/pages/Documentos/agenda';
-import Presupuesto from '../views/pages/Documentos/presupuesto';
+import Presupuesto from '../views/pages/Documentos/Presupuesto';
 import path from 'path-browserify';
 import VerAgenda from '../views/pages/Documentos/VerAgenda';
 import EditarAgenda from '../views/pages/Documentos/EditarAgenda';
+import VerPresupuesto from '../views/pages/Documentos/VerPresupuesto';
+import EditarPresupuesto from '../views/pages/Documentos/EditarPresupuesto';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -169,33 +171,33 @@ const Router = [
     element: <FullLayout />,
     children: [
       { path: '/', exact: true, element: <ModernDash /> },
-      { path: '/dashboards/ecommerce', exact: true, element: <EcommerceDash /> },
-      { path: '/apps/chats', element: <Chats /> },
-      { path: '/apps/notes', element: <Notes /> },
-      { path: '/apps/calendar', element: <Calendar /> },
-      { path: '/apps/email', element: <Email /> },
-      { path: '/apps/tickets', element: <Tickets /> },
-      { path: '/apps/contacts', element: <Contacts /> },
-      { path: '/apps/ecommerce/shop', element: <Ecommerce /> },
-      { path: '/apps/ecommerce/eco-product-list', element: <EcomProductList /> },
-      { path: '/apps/ecommerce/eco-checkout', element: <EcomProductCheckout /> },
-      { path: '/apps/ecommerce/add-product', element: <EcommerceAddProduct /> },
-      { path: '/apps/ecommerce/edit-product', element: <EcommerceEditProduct /> },
-      { path: '/apps/ecommerce/detail/:id', element: <EcommerceDetail /> },
-      { path: '/apps/kanban', element: <Kanban /> },
-      { path: '/apps/invoice/list', element: <InvoiceList /> },
-      { path: '/apps/invoice/create', element: <InvoiceCreate /> },
-      { path: '/apps/invoice/detail/:id', element: <InvoiceDetail /> },
-      { path: '/apps/invoice/edit/:id', element: <InvoiceEdit /> },
-      { path: '/apps/followers', element: <Followers /> },
-      { path: '/apps/friends', element: <Friends /> },
-      { path: '/apps/gallery', element: <Gallery /> },
-      { path: '/user-profile', element: <UserProfile /> },
-      { path: '/pages/casl', element: <RollbaseCASL /> },
-      { path: '/pages/treeview', element: <Treeview /> },
-      { path: '/pages/pricing', element: <Pricing /> },
-      { path: '/pages/account-settings', element: <AccountSetting /> },
-      { path: '/pages/faq', element: <Faq /> },
+      // { path: '/dashboards/ecommerce', exact: true, element: <EcommerceDash /> },
+      // { path: '/apps/chats', element: <Chats /> },
+      // { path: '/apps/notes', element: <Notes /> },
+      // { path: '/apps/calendar', element: <Calendar /> },
+      // { path: '/apps/email', element: <Email /> },
+      // { path: '/apps/tickets', element: <Tickets /> },
+      // { path: '/apps/contacts', element: <Contacts /> },
+      // { path: '/apps/ecommerce/shop', element: <Ecommerce /> },
+      // { path: '/apps/ecommerce/eco-product-list', element: <EcomProductList /> },
+      // { path: '/apps/ecommerce/eco-checkout', element: <EcomProductCheckout /> },
+      // { path: '/apps/ecommerce/add-product', element: <EcommerceAddProduct /> },
+      // { path: '/apps/ecommerce/edit-product', element: <EcommerceEditProduct /> },
+      // { path: '/apps/ecommerce/detail/:id', element: <EcommerceDetail /> },
+      // { path: '/apps/kanban', element: <Kanban /> },
+      // { path: '/apps/invoice/list', element: <InvoiceList /> },
+      // { path: '/apps/invoice/create', element: <InvoiceCreate /> },
+      // { path: '/apps/invoice/detail/:id', element: <InvoiceDetail /> },
+      // { path: '/apps/invoice/edit/:id', element: <InvoiceEdit /> },
+      // { path: '/apps/followers', element: <Followers /> },
+      // { path: '/apps/friends', element: <Friends /> },
+      // { path: '/apps/gallery', element: <Gallery /> },
+      // { path: '/user-profile', element: <UserProfile /> },
+      // { path: '/pages/casl', element: <RollbaseCASL /> },
+      // { path: '/pages/treeview', element: <Treeview /> },
+      // { path: '/pages/pricing', element: <Pricing /> },
+      // { path: '/pages/account-settings', element: <AccountSetting /> },
+      // { path: '/pages/faq', element: <Faq /> },
       { path: '/actividades', element: <Actividades /> },
       { path: '/actividades/nueva', element: <ActividadesCrear /> },
       { path: '/actividades/cambios/:id', element: <ActividadesEditar /> },
@@ -207,6 +209,8 @@ const Router = [
       { path: '/actividades/documentos/:id/agenda/detalles', element: <VerAgenda /> },
       { path: '/actividades/documentos/:id/agenda/cambios', element: <EditarAgenda />},
       { path: '/actividades/documentos/:id/presupuesto', element: <Presupuesto /> },
+      { path: '/actividades/documentos/:id/presupuesto/cambios', element: <EditarPresupuesto />},
+      { path: '/actividades/documentos/:id/presupuesto/detalles', element: <VerPresupuesto/>},
       { path: '/pages/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },

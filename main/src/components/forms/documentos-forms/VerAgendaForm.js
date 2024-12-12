@@ -1,9 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
 import {
-  Button,
-  FormHelperText,
-  MenuItem,
-  Select,
   Typography,
   Alert,
   Grid,
@@ -14,16 +10,9 @@ import {
   TableCell,
   TableBody
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
 import ParentCard from '../../shared/ParentCard';
 import { URL } from "../../../../config";
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { useNavigate, useParams } from 'react-router';
-import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import esLocale from 'date-fns/locale/es';
 
 const VerAgendaForm = ({ id }) => {
   const [actividad, setActividad] = useState(
@@ -42,8 +31,6 @@ const VerAgendaForm = ({ id }) => {
     contenido: {
     },
   });
-
-  const [loading, setLoading] = useState(true);
 
   const CustomFormLabel = styled((props) => (
     <Typography

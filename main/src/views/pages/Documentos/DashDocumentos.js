@@ -80,10 +80,6 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/presupuesto`);
     };
 
-    const handleEditarMemoria = () => {
-        navigate(`/actividades/documentos/${id}/memoria/cambios`);
-    };
-
     const handleVerMemoria = () => {
         navigate(`/actividades/documentos/${id}/memoria/detalles`);
     };
@@ -92,8 +88,20 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/agenda/detalles`);
     };
 
+    const handleVerPresupuesto = () => {
+        navigate(`/actividades/documentos/${id}/presupuesto/detalles`);
+    };
+
     const handleEditarAgenda = () => {
         navigate(`/actividades/documentos/${id}/agenda/cambios`);
+    };
+
+    const handleEditarMemoria = () => {
+        navigate(`/actividades/documentos/${id}/memoria/cambios`);
+    };
+
+    const handleEditarPresupuesto = () => {
+        navigate(`/actividades/documentos/${id}/presupuesto/cambios`);
     };
 
     useEffect(() => {
@@ -178,7 +186,7 @@ const DashDocumentos = ({ id }) => {
                 const response = await fetch(`${URL}api/documentos/${id}/14`);
                 if (response.ok) {
                     const data = await response.json();
-                    setAgenda(data);
+                    setPresupuesto(data);
                 } else {
                     console.error('Error al obtener el presupuesto');
                 }
@@ -336,14 +344,16 @@ const DashDocumentos = ({ id }) => {
                             Agregar
                         </Button>
                         <Button
+                            onClick={handleVerPresupuesto}
                             style={{ width: '33.33%' }}
                             disabled={presupuesto.id == null}
                         >
                             Ver
                         </Button>
                         <Button
+                            onClick={handleEditarPresupuesto}
                             style={{ width: '33.33%' }}
-                            disabled={agenda.id == null}
+                            disabled={presupuesto.id == null}
                         >
                             Editar
                         </Button>

@@ -41,14 +41,16 @@ const PresupuestoForm = () => {
       const dataEncapsulada = {
         solicitante: values.solicitante,
         autorizador: values.autorizador,
-        observaciones: values.responsable,
+        observaciones: values.observaciones,
         puntos_presupuesto: items,
+        total: calculateTotal(),
       };
 
       const dataNoEncapsulada = {
         nombre: "Presupuesto" ,
         id_tipo: 14,
         id_estado: 1,
+        id_actividad: Number(id.id),
       };
 
       const dataToSend = {
@@ -109,6 +111,14 @@ const PresupuestoForm = () => {
   const handleItemChange = (index, field, value) => {
     const updatedItems = [...items];
     updatedItems[index][field] = value;
+  
+    // Calcular el total si los campos necesarios están presentes
+    if (field === 'unidades' || field === 'costoUnitario') {
+      const unidades = parseFloat(updatedItems[index].unidades) || 0;
+      const costoUnitario = parseFloat(updatedItems[index].costoUnitario) || 0;
+      updatedItems[index].total = (unidades * costoUnitario).toFixed(2);
+    }
+  
     setItems(updatedItems);
   };
 
@@ -155,7 +165,7 @@ const PresupuestoForm = () => {
                     onChange={(e) => handleItemChange(index, 'costoUnitario', e.target.value)}
                   />
                 </TableCell>
-                <TableCell>{item.total}</TableCell>
+                <TableCell>Q{item.total}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
