@@ -22,8 +22,6 @@ const EditarAgendaForm = ({ id }) => {
 
   const navigate = useNavigate();
 
-  const [agendaItems, setAgendaItems] = useState([]);
-
   const [actividad, setActividad] = useState(
     {
       nombre: ""
@@ -117,7 +115,6 @@ const EditarAgendaForm = ({ id }) => {
     },
   });
 
-  const [loading, setLoading] = useState(true);
 
   const CustomFormLabel = styled((props) => (
     <Typography
