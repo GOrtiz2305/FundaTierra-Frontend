@@ -11,7 +11,6 @@ import ProyectosVer from '../views/pages/Documentos/ProyectosVer';
 import Proyectos from '../views/pages/Proyectos/proyectos';
 import Agenda from '../views/pages/Documentos/agenda';
 import Presupuesto from '../views/pages/Documentos/Presupuesto';
-import path from 'path-browserify';
 import VerAgenda from '../views/pages/Documentos/VerAgenda';
 import EditarAgenda from '../views/pages/Documentos/EditarAgenda';
 import VerPresupuesto from '../views/pages/Documentos/VerPresupuesto';
@@ -34,8 +33,6 @@ const Chats = Loadable(lazy(() => import('../views/apps/chat/Chat')));
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
 const Calendar = Loadable(lazy(() => import('../views/apps/calendar/BigCalendar')));
 const Email = Loadable(lazy(() => import('../views/apps/email/Email')));
-// const Blog = Loadable(lazy(() => import('../views/apps/blog/Blog')));
-// const BlogDetail = Loadable(lazy(() => import('../views/apps/blog/BlogPost')));
 const Tickets = Loadable(lazy(() => import('../views/apps/tickets/Tickets')));
 const Contacts = Loadable(lazy(() => import('../views/apps/contacts/Contacts')));
 const Ecommerce = Loadable(lazy(() => import('../views/apps/eCommerce/Ecommerce')));
@@ -59,7 +56,6 @@ const Kanban = Loadable(lazy(() => import('../views/apps/kanban/Kanban')));
 // Pages
 const RollbaseCASL = Loadable(lazy(() => import('../views/pages/rollbaseCASL/RollbaseCASL')));
 const Treeview = Loadable(lazy(() => import('../views/pages/treeview/Treeview')));
-const Pricing = Loadable(lazy(() => import('../views/pages/pricing/Pricing')));
 const AccountSetting = Loadable(
   lazy(() => import('../views/pages/account-setting/AccountSetting')),
 );
@@ -195,7 +191,6 @@ const Router = [
       // { path: '/user-profile', element: <UserProfile /> },
       // { path: '/pages/casl', element: <RollbaseCASL /> },
       // { path: '/pages/treeview', element: <Treeview /> },
-      // { path: '/pages/pricing', element: <Pricing /> },
       // { path: '/pages/account-settings', element: <AccountSetting /> },
       // { path: '/pages/faq', element: <Faq /> },
       { path: '/actividades', element: <Actividades /> },

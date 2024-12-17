@@ -97,7 +97,7 @@ const ProyectosPaginationTable = () => {
                 </Typography>
             ),
         }),
-        columnHelper.accessor('estado', {
+        columnHelper.accessor('estado_proyecto.nombre', {
             header: () => 'Estado',
             meta: {
                 filterVariant: 'select',
@@ -108,7 +108,7 @@ const ProyectosPaginationTable = () => {
                         bgcolor:
                             info.getValue() === 'active'
                                 ? (theme) => theme.palette.success.light
-                                : info.getValue() === 'pending'
+                                : info.getValue() === 'En proceso'
                                     ? (theme) => theme.palette.warning.light
                                     : info.getValue() === 'completed'
                                         ? (theme) => theme.palette.primary.light
@@ -118,7 +118,7 @@ const ProyectosPaginationTable = () => {
                         color:
                             info.getValue() === 'active'
                                 ? (theme) => theme.palette.success.main
-                                : info.getValue() === 'pending'
+                                : info.getValue() === 'En proceso'
                                     ? (theme) => theme.palette.warning.main
                                     : info.getValue() === 'completed'
                                         ? (theme) => theme.palette.primary.main
