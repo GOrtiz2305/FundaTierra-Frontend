@@ -15,6 +15,8 @@ import VerAgenda from '../views/pages/Documentos/VerAgenda';
 import EditarAgenda from '../views/pages/Documentos/EditarAgenda';
 import VerPresupuesto from '../views/pages/Documentos/VerPresupuesto';
 import EditarPresupuesto from '../views/pages/Documentos/EditarPresupuesto';
+import path from 'path-browserify';
+const AnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/AnticipoGastos')));
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -206,6 +208,7 @@ const Router = [
       { path: '/actividades/documentos/:id/presupuesto', element: <Presupuesto /> },
       { path: '/actividades/documentos/:id/presupuesto/cambios', element: <EditarPresupuesto />},
       { path: '/actividades/documentos/:id/presupuesto/detalles', element: <VerPresupuesto/>},
+      { path: '/actividades/documentos/:id/anticipo-gastos', element: <AnticipoGastos /> },
       { path: '/pages/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },

@@ -1,8 +1,7 @@
 import {
-  IconAperture,
-  IconAppWindow,
+  IconFolder,
   IconHome,
-  IconPoint,
+  IconNotes,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -25,16 +24,16 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Actividades',
-    icon: IconAperture,
-    href: '/actividades',
+    title: 'Proyectos',
+    icon: IconFolder,
+    href: '/pages/proyectos',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
-    title: 'Proyectos',
-    icon: IconAperture,
-    href: '/pages/proyectos',
+    title: 'Actividades',
+    icon:   IconNotes,
+    href: '/actividades',
     chipColor: 'secondary',
   },
 ];

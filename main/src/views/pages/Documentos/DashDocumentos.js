@@ -80,6 +80,10 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/presupuesto`);
     };
 
+    const handleAgregarAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos`);
+    };
+
     const handleVerMemoria = () => {
         navigate(`/actividades/documentos/${id}/memoria/detalles`);
     };
@@ -474,7 +478,12 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleAgregarAnticipoGastos}
+                        >
+                            Agregar
+                        </Button>
                         <Button style={{ width: '33.33%' }}>Ver</Button>
                         <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
