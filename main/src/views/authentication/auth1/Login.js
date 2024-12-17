@@ -5,6 +5,8 @@ import PageContainer from 'src/components/container/PageContainer';
 import img1 from 'src/assets/images/backgrounds/login-bg.svg';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from '../authForms/AuthLogin';
+import logo from 'src/assets/images/backgrounds/Fundatierra.png';
+
 
 const Login = () => (
   <PageContainer title="Login" description="this is Login page">
@@ -31,7 +33,9 @@ const Login = () => (
       >
         <Box position="relative">
           <Box px={3}>
-            <Logo />
+            <Typography variant="h3" fontWeight="700" mb={1} mt={3}>
+              Fundación Tierra Nuestra
+            </Typography>
           </Box>
           <Box
             alignItems="center"
@@ -45,7 +49,7 @@ const Login = () => (
             }}
           >
             <img
-              src={img1}
+              src={logo}
               alt="bg"
               style={{
                 width: '100%',
@@ -67,29 +71,11 @@ const Login = () => (
       >
         <Box p={4}>
           <AuthLogin
-            title="Welcome to Modernize"
+            title="Bienvenido"
             subtext={
               <Typography variant="subtitle1" color="textSecondary" mb={1}>
-                Your Admin Dashboard
+                Sistema de Gestión de Proyectos y Actividades
               </Typography>
-            }
-            subtitle={
-              <Stack direction="row" spacing={1} mt={3}>
-                <Typography color="textSecondary" variant="h6" fontWeight="500">
-                  New to Modernize?
-                </Typography>
-                <Typography
-                  component={Link}
-                  to="/auth/register"
-                  fontWeight="500"
-                  sx={{
-                    textDecoration: 'none',
-                    color: 'primary.main',
-                  }}
-                >
-                  Create an account
-                </Typography>
-              </Stack>
             }
           />
         </Box>

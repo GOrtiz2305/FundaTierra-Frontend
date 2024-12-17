@@ -1,21 +1,20 @@
 import React, { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
-
 import Loadable from '../layouts/full/shared/loadable/Loadable';
-import Actividades from '../views/pages/Actividades/actividades';
-import ActividadesDocumentos from '../views/pages/Actividades/actividadesDocumentos';
-import Memoria from '../views/pages/Documentos/Memoria';
-import EditarMemoria from '../views/pages/Documentos/EditarMemoria';
-import VerMemoria from '../views/pages/Documentos/VerMemoria';
-import ProyectosVer from '../views/pages/Documentos/ProyectosVer';
-import Proyectos from '../views/pages/Proyectos/proyectos';
-import Agenda from '../views/pages/Documentos/agenda';
-import Presupuesto from '../views/pages/Documentos/Presupuesto';
-import VerAgenda from '../views/pages/Documentos/VerAgenda';
-import EditarAgenda from '../views/pages/Documentos/EditarAgenda';
-import VerPresupuesto from '../views/pages/Documentos/VerPresupuesto';
-import EditarPresupuesto from '../views/pages/Documentos/EditarPresupuesto';
-import path from 'path-browserify';
+
+const Actividades = Loadable(lazy(() => import('../views/pages/Actividades/actividades')));
+const ActividadesDocumentos = Loadable(lazy(() => import('../views/pages/Actividades/actividadesDocumentos')));
+const Memoria = Loadable(lazy(() => import('../views/pages/Documentos/Memoria')));
+const EditarMemoria = Loadable(lazy(() => import('../views/pages/Documentos/EditarMemoria')));
+const VerMemoria = Loadable(lazy(() => import('../views/pages/Documentos/VerMemoria')));
+const ProyectosVer = Loadable(lazy(() => import('../views/pages/Documentos/ProyectosVer')));
+const Proyectos = Loadable(lazy(() => import('../views/pages/Proyectos/proyectos')));
+const Agenda = Loadable(lazy(() => import('../views/pages/Documentos/agenda')));
+const Presupuesto = Loadable(lazy(() => import('../views/pages/Documentos/Presupuesto')));
+const VerAgenda = Loadable(lazy(() => import('../views/pages/Documentos/VerAgenda')));
+const EditarAgenda = Loadable(lazy(() => import('../views/pages/Documentos/EditarAgenda')));
+const VerPresupuesto = Loadable(lazy(() => import('../views/pages/Documentos/VerPresupuesto')));
+const EditarPresupuesto = Loadable(lazy(() => import('../views/pages/Documentos/EditarPresupuesto'))); 
 const AnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/AnticipoGastos')));
 
 /* ***Layouts**** */
