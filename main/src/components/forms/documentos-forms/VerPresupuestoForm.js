@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   Grid,
   Table,
   TableBody,
@@ -11,10 +10,7 @@ import {
   Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import * as yup from 'yup';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
 
@@ -36,11 +32,6 @@ const VerPresupuestoForm = ({ id }) => {
     marginTop: '25px',
     display: 'block',
   }));
-
-  const validationSchema = yup.object({
-    solicitante: yup.string().required('El solicitante es obligatorio'),
-    autorizador: yup.string().required('El autorizador es obligatorio'),
-  });
 
   useEffect(() => {
     const fetchPresupuesto = async () => {

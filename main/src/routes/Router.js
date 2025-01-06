@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
+import path from 'path-browserify';
 
 const Actividades = Loadable(lazy(() => import('../views/pages/Actividades/actividades')));
 const ActividadesDocumentos = Loadable(lazy(() => import('../views/pages/Actividades/actividadesDocumentos')));
@@ -16,6 +17,7 @@ const EditarAgenda = Loadable(lazy(() => import('../views/pages/Documentos/Edita
 const VerPresupuesto = Loadable(lazy(() => import('../views/pages/Documentos/VerPresupuesto')));
 const EditarPresupuesto = Loadable(lazy(() => import('../views/pages/Documentos/EditarPresupuesto'))); 
 const AnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/AnticipoGastos')));
+const VerAnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/VerAnticipoGastos')));
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -208,6 +210,7 @@ const Router = [
       { path: '/actividades/documentos/:id/presupuesto/cambios', element: <EditarPresupuesto />},
       { path: '/actividades/documentos/:id/presupuesto/detalles', element: <VerPresupuesto/>},
       { path: '/actividades/documentos/:id/anticipo-gastos', element: <AnticipoGastos /> },
+      { path: '/actividades/documentos/:id/anticipo-gastos/detalles', element: <VerAnticipoGastos /> },
       { path: '/pages/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },
