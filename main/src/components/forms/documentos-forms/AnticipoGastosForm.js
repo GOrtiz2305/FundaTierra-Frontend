@@ -200,7 +200,6 @@ const AnticipoGastosForm = () => {
                 body: JSON.stringify(elementosToSend),
             });
 
-            console.log(elementosToSend);
             if (responseElementos.ok) {
                 <Alert variant="filled" severity="success">
                     Elementos guardados con éxito
