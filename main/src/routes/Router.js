@@ -18,6 +18,7 @@ const VerPresupuesto = Loadable(lazy(() => import('../views/pages/Documentos/Ver
 const EditarPresupuesto = Loadable(lazy(() => import('../views/pages/Documentos/EditarPresupuesto'))); 
 const AnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/AnticipoGastos')));
 const VerAnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/VerAnticipoGastos')));
+const EditarAnticipoGasto = Loadable(lazy (() => import('../views/pages/Documentos/EditarAnticipoGasto'))) ;
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -210,6 +211,7 @@ const Router = [
       { path: '/actividades/documentos/:id/presupuesto/cambios', element: <EditarPresupuesto />},
       { path: '/actividades/documentos/:id/presupuesto/detalles', element: <VerPresupuesto/>},
       { path: '/actividades/documentos/:id/anticipo-gastos', element: <AnticipoGastos /> },
+      { path: '/actividades/documentos/:id/anticipo-gastos/cambios', element: <EditarAnticipoGasto />},
       { path: '/actividades/documentos/:id/anticipo-gastos/detalles', element: <VerAnticipoGastos /> },
       { path: '/pages/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
