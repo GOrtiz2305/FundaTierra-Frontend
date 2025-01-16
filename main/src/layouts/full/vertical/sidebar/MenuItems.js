@@ -2,6 +2,8 @@ import {
   IconFolder,
   IconHome,
   IconNotes,
+  IconMap2,
+  IconUsers,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -18,6 +20,24 @@ const Menuitems = [
     href: '/',
     chipColor: 'primary',
   },
+  {
+    navlabel: true,
+    subheader: 'ADMINISTRACION',
+  },
+  {
+    id: uniqueId(),
+    title: 'Departamentos/Municipios',
+    icon: IconMap2,
+    href: '/DeparmetosMunicipios',
+    chipColor: 'secondary',
+  },
+  {
+    id: uniqueId(),
+    title: 'Usuarios',
+    icon: IconUsers,
+    href: '/usuarios',
+    chipColor: 'secondary',
+  },       
   {
     navlabel: true,
     subheader: 'Promotores',
