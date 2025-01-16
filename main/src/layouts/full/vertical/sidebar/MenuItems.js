@@ -1,7 +1,9 @@
 import {
-  IconAperture,
-  IconAppWindow,
-  IconPoint,
+  IconFolder,
+  IconHome,
+  IconNotes,
+  IconMap2,
+  IconUsers,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -9,72 +11,50 @@ import { uniqueId } from 'lodash';
 const Menuitems = [
   {
     navlabel: true,
-    subheader: 'Promotores',
+    subheader: 'Principal',
   },
-
   {
     id: uniqueId(),
-    title: 'Actividades',
-    icon: IconAperture,
-    href: '/actividades',
+    title: 'Inicio',
+    icon: IconHome,
+    href: '/',
+    chipColor: 'primary',
+  },
+  {
+    navlabel: true,
+    subheader: 'ADMINISTRACION',
+  },
+  {
+    id: uniqueId(),
+    title: 'Departamentos/Municipios',
+    icon: IconMap2,
+    href: '/DeparmetosMunicipios',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
+    title: 'Usuarios',
+    icon: IconUsers,
+    href: '/usuarios',
+    chipColor: 'secondary',
+  },       
+  {
+    navlabel: true,
+    subheader: 'Promotores',
+  },
+  {
+    id: uniqueId(),
     title: 'Proyectos',
-    icon: IconAperture,
+    icon: IconFolder,
     href: '/pages/proyectos',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
-    title: 'Frontend pages',
-    icon: IconAppWindow,
-    href: '/frontend-pages/',
-    children: [
-      {
-        id: uniqueId(),
-        title: 'Homepage',
-        icon: IconPoint,
-        href: '/frontend-pages/homepage',
-      },
-      {
-        id: uniqueId(),
-        title: 'About Us',
-        icon: IconPoint,
-        href: '/frontend-pages/about',
-      },
-      {
-        id: uniqueId(),
-        title: 'Blog',
-        icon: IconPoint,
-        href: '/frontend-pages/blog',
-      },
-      {
-        id: uniqueId(),
-        title: 'Blog Details',
-        icon: IconPoint,
-        href: '/frontend-pages/blog/Blog_1',
-      },
-      {
-        id: uniqueId(),
-        title: 'Contact',
-        icon: IconPoint,
-        href: '/frontend-pages/contact',
-      },
-      {
-        id: uniqueId(),
-        title: 'Portfolio',
-        icon: IconPoint,
-        href: '/frontend-pages/portfolio',
-      },
-      {
-        id: uniqueId(),
-        title: 'Pricing',
-        icon: IconPoint,
-        href: '/frontend-pages/pricing',
-      },
-    ],
+    title: 'Actividades',
+    icon:   IconNotes,
+    href: '/actividades',
+    chipColor: 'secondary',
   },
 ];
 

@@ -1,75 +1,112 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, CardContent, Grid, Typography } from '@mui/material';
 
-import icon1 from '../../../assets/images/svgs/icon-connect.svg';
-import icon2 from '../../../assets/images/svgs/icon-user-male.svg';
-import icon3 from '../../../assets/images/svgs/icon-briefcase.svg';
-import icon4 from '../../../assets/images/svgs/icon-mailbox.svg';
-import icon5 from '../../../assets/images/svgs/icon-favorites.svg';
-import icon6 from '../../../assets/images/svgs/icon-speech-bubble.svg';
-
-const topcards = [
-  {
-    icon: icon2,
-    title: 'Employees',
-    digits: '96',
-    bgcolor: 'primary',
-  },
-  {
-    icon: icon3,
-    title: 'Clients',
-    digits: '3,650',
-    bgcolor: 'warning',
-  },
-  {
-    icon: icon4,
-    title: 'Projects',
-    digits: '356',
-    bgcolor: 'secondary',
-  },
-  {
-    icon: icon5,
-    title: 'Events',
-    digits: '696',
-    bgcolor: 'error',
-  },
-  {
-    icon: icon6,
-    title: 'Payroll',
-    digits: '$96k',
-    bgcolor: 'success',
-  },
-  {
-    icon: icon1,
-    title: 'Reports',
-    digits: '59',
-    bgcolor: 'info',
-  },
-];
+import icon1 from '../../../assets/images/svgs/done.svg';
+import icon2 from '../../../assets/images/svgs/workingOn.svg';
+import { URL } from '../../../../config';
+import axios from 'axios';
 
 const TopCards = () => {
+  const [proyectos, setProyectos] = useState({});
+  const [actividades, setActividades] = useState({});
+
+  useEffect(() => {
+    const fetchProyectos = async () => {
+      try {
+        const response = await axios.get(`${URL}api/conteoProyectos/`);
+        setProyectos(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    const fetchActividades = async () => {
+      try {
+        const response = await axios.get(`${URL}api/conteoActividades/`);
+        setActividades(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchProyectos();
+    fetchActividades();
+  }, []);
+
   return (
     <Grid container spacing={3}>
-      {topcards.map((topcard, i) => (
-        <Grid item xs={12} sm={4} lg={2} key={i}>
-          <Box bgcolor={topcard.bgcolor + '.light'} textAlign="center">
-            <CardContent>
-              <img src={topcard.icon} alt={topcard.icon} width="50" />
-              <Typography
-                color={topcard.bgcolor + '.main'}
-                mt={1}
-                variant="subtitle1"
-                fontWeight={600}
-              >
-                {topcard.title}
-              </Typography>
-              <Typography color={topcard.bgcolor + '.main'} variant="h4" fontWeight={600}>
-                {topcard.digits}
-              </Typography>
-            </CardContent>
-          </Box>
-        </Grid>
-      ))}
+      <Grid item xs={12} sm={4} lg={3}>
+        <Box bgcolor={'success' + '.light'} textAlign="center">
+          <CardContent>
+            <img src={icon2} alt={icon2} width="50" />
+            <Typography
+              color={'success' + '.main'}
+              mt={1}
+              variant="subtitle1"
+              fontWeight={600}
+            >
+              Proyectos Activos
+            </Typography>
+            <Typography color={'success' + '.main'} variant="h4" fontWeight={600}>
+              {proyectos.enProgreso || 0}
+            </Typography>
+          </CardContent>
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={4} lg={3}>
+        <Box bgcolor={'error' + '.light'} textAlign="center">
+          <CardContent>
+            <img src={icon1} alt={icon1} width="50" />
+            <Typography
+              color={'error' + '.main'}
+              mt={1}
+              variant="subtitle1"
+              fontWeight={600}
+            >
+              Proyectos Finalizados
+            </Typography>
+            <Typography color={'error' + '.main'} variant="h4" fontWeight={600}>
+              {proyectos.finalizado || 0}
+            </Typography>
+          </CardContent>
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={4} lg={3}>
+        <Box bgcolor={'success' + '.light'} textAlign="center">
+          <CardContent>
+            <img src={icon2} alt={icon2} width="50" />
+            <Typography
+              color={'success' + '.main'}
+              mt={1}
+              variant="subtitle1"
+              fontWeight={600}
+            >
+              Actividades Activas
+            </Typography>
+            <Typography color={'success' + '.main'} variant="h4" fontWeight={600}>
+              {actividades.enProgreso + actividades.pendiente || 0}
+            </Typography>
+          </CardContent>
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={4} lg={3}>
+        <Box bgcolor={'error' + '.light'} textAlign="center">
+          <CardContent>
+            <img src={icon1} alt={icon1} width="50" />
+            <Typography
+              color={'error' + '.main'}
+              mt={1}
+              variant="subtitle1"
+              fontWeight={600}
+            >
+              Actividades Finalizadas
+            </Typography>
+            <Typography color={'error' + '.main'} variant="h4" fontWeight={600}>
+              {actividades.completado || 0}
+            </Typography>
+          </CardContent>
+        </Box>
+      </Grid>
     </Grid>
   );
 };

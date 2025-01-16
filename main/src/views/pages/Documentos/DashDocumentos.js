@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled';
 import {
+    Alert,
     Button,
     ButtonGroup,
     Grid,
@@ -7,14 +8,14 @@ import {
     Select,
     Typography,
 } from '@mui/material';
-import axios from 'axios';
-import { useNavigate } from 'react-router';
-import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
-import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
-import ParentCard from '../../../components/shared/ParentCard';
-import { URL } from '../../../../config';
-import styled from '@emotion/styled';
 import { Box } from '@mui/system';
+import React, { useEffect, useState } from 'react';
+import useDrivePicker from 'react-google-drive-picker';
+import { useNavigate } from 'react-router';
+import { URL } from '../../../../config';
+import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
+import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
+import ParentCard from '../../../components/shared/ParentCard';
 
 const BoxStyled = styled(Box)(() => ({
     padding: '30px',
@@ -29,9 +30,36 @@ const BoxStyled = styled(Box)(() => ({
 const DashDocumentos = ({ id }) => {
     const [proyectos, setProyectos] = useState([]);
     const [direcciones, setDirecciones] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [memorias, setMemorias] = useState([]);
+    const [agenda, setAgenda] = useState([]);
+    const [presupuesto, setPresupuesto] = useState([]);
+    const [anticipoGastos, setAnticipoGastos] = useState([]);
     const navigate = useNavigate();
-    const [data, setData] = useState({
+    const [openPicker, authRes] = useDrivePicker();
+    const [authTocken, setauthTocken] = useState("");
+    const tipoDocumento = 11;
+
+    const handleOpenPicker = () => {
+        openPicker({
+            clientId: "221911056843-0lvr49sctln4lp64f6u0hb7eki0vu4k0.apps.googleusercontent.com",
+            developerKey: "AIzaSyCKfb4fUHYZ9RHu1njWYpj5nZVyDnNJgmA",
+            viewId: "DOCS",
+            token: authTocken,
+            showUploadView: true,
+            showUploadFolders: true,
+            supportDrives: true,
+            multiselect: true,
+            // customViews: customViewsArray, // custom view
+            callbackFunction: (data) => {
+                if (data.action === 'cancel') {
+                    console.log('User clicked cancel/close button')
+                }
+                console.log(data)
+            },
+        })
+    }
+
+    const [actividad, setActividad] = useState({
         id: 0,
         fecha_inicio: "",
         nombre: "",
@@ -40,12 +68,69 @@ const DashDocumentos = ({ id }) => {
         id_direccion: "",
     });
 
+    const handleAgregarMemoria = () => {
+        navigate(`/actividades/documentos/${id}/memoria`);
+    };
+
+    const handleAgregarAgenda = () => {
+        navigate(`/actividades/documentos/${id}/agenda`);
+    };
+
+    const handleAgregarPresupuesto = () => {
+        navigate(`/actividades/documentos/${id}/presupuesto`);
+    };
+
+    const handleAgregarAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos`);
+    };
+
+    const handleVerMemoria = () => {
+        navigate(`/actividades/documentos/${id}/memoria/detalles`);
+    };
+
+    const handleVerAgenda = () => {
+        navigate(`/actividades/documentos/${id}/agenda/detalles`);
+    };
+
+    const handleVerPresupuesto = () => {
+        navigate(`/actividades/documentos/${id}/presupuesto/detalles`);
+    };
+
+    const handleVerAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos/detalles`);
+    };
+
+    const handleEditarAgenda = () => {
+        navigate(`/actividades/documentos/${id}/agenda/cambios`);
+    };
+
+    const handleEditarMemoria = () => {
+        navigate(`/actividades/documentos/${id}/memoria/cambios`);
+    };
+
+    const handleEditarPresupuesto = () => {
+        navigate(`/actividades/documentos/${id}/presupuesto/cambios`);
+    };
+
+    const handleEditarAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos/cambios`);
+    };
+
     useEffect(() => {
+        if (authRes) {
+            setauthTocken(authRes.access_token);
+        }
+
         const fetchActividades = async () => {
             try {
-                const response = await axios.get(`${URL}actividades/${id}`);
-                setData(response.data);
-                setLoading(false);
+                const response = await fetch(`${URL}actividades/${id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data)
+                    setActividad(data);
+                } else {
+                    console.error('Error al obtener la actividad');
+                }
             } catch (error) {
                 console.error("Error al obtener actividades:", error);
                 setLoading(false);
@@ -80,50 +165,73 @@ const DashDocumentos = ({ id }) => {
             }
         };
 
+        const fetchMemorias = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/${tipoDocumento}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setMemorias(data);
+                } else {
+                    console.error('Error al obtener las memorias');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
+        const fetchAgenda = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/13`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAgenda(data);
+                } else {
+                    console.error('Error al obtener la agenda');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
+        const fetchPresupuesto = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/14`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setPresupuesto(data);
+                } else {
+                    console.error('Error al obtener el presupuesto');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
+        const fetchAnticipoGastos = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/5`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAnticipoGastos(data);
+                } else {
+                    console.error('Error al obtener el anticipo de gastos');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
         if (id) {
             fetchActividades();
         }
 
         fetchProyectos();
         fetchDirecciones();
-    }, [id]);
-
-    const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setData({ ...data, [id]: value });
-    };
-
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await fetch(`${URL}actividades/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(
-                    {
-                        fecha_inicio: data.fecha_inicio,
-                        nombre: data.nombre,
-                        descripcion: data.descripcion,
-                        id_proyectos: data.id_proyectos,
-                        id_direccion: data.id_direccion,
-                    }
-                ),
-            });
-
-            if (response.ok) {
-                alert('Actividad actualizada con éxito');
-                navigate('/actividades');
-            } else {
-                alert('Error al actualizar la actividad');
-            }
-        } catch (error) {
-            console.error('Error al llamar a la API:', error);
-            alert('Error al llamar a la API');
-        }
-    };
+        fetchMemorias();
+        fetchPresupuesto();
+        fetchAgenda();
+        fetchAnticipoGastos();
+    }, [id, authRes]);
 
     return (
         <>
@@ -135,7 +243,7 @@ const DashDocumentos = ({ id }) => {
                             id="fecha_inicio"
                             type="date"
                             fullWidth
-                            value={data.fecha_inicio}
+                            value={actividad.fecha_inicio}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -147,7 +255,7 @@ const DashDocumentos = ({ id }) => {
                             rows={4}
                             variant="outlined"
                             fullWidth
-                            value={data.descripcion}
+                            value={actividad.descripcion}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -159,18 +267,18 @@ const DashDocumentos = ({ id }) => {
                             id="nombre"
                             variant="outlined"
                             fullWidth
-                            value={data.nombre}
+                            value={actividad.nombre}
                             InputProps={{
                                 readOnly: true,
                             }}
                         />
 
-                        <CustomFormLabel htmlFor="id_proyecto">Proyecto</CustomFormLabel>
+                        <CustomFormLabel htmlFor="id_proyectos">Proyecto</CustomFormLabel>
                         <Select
-                            id="id_proyecto"
+                            id="id_proyectos"
                             fullWidth
                             variant="outlined"
-                            value={data.id_proyectos}
+                            value={actividad.id_proyectos}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -186,7 +294,7 @@ const DashDocumentos = ({ id }) => {
                             id="id_direccion"
                             fullWidth
                             variant="outlined"
-                            value={data.id_direccion}
+                            value={actividad.id_direccion}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -199,6 +307,97 @@ const DashDocumentos = ({ id }) => {
                         </Select>
                     </Grid>
                 </Grid>
+                <Grid container spacing={3} mb={3}>
+                    <Grid item lg={12} md={12}>
+                        <Alert severity="info">Información adicional</Alert>
+                    </Grid>
+                    <Grid item lg={6} md={12}>
+                        <CustomFormLabel htmlFor="descripcion">Objetivo general</CustomFormLabel>
+                        <CustomTextField
+                            id="descripcion"
+                            multiline
+                            rows={4}
+                            variant="outlined"
+                            fullWidth
+                            value={
+                                memorias && memorias.contenido && memorias.contenido.objetivo_general
+                                    ? memorias.contenido.objetivo_general
+                                    : 'Pendiente de ser agregado en la memoria'
+                            }
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item lg={6} md={12}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel>Total de participantes</CustomFormLabel>
+                                <CustomTextField
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.participantes_total
+                                            ? memorias.contenido.participantes_total
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel>Niños</CustomFormLabel>
+                                <CustomTextField
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.ninos_participantes
+                                            ? memorias.contenido.ninos_participantes
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel htmlFor="hombres">Hombres</CustomFormLabel>
+                                <CustomTextField
+                                    id="hombres"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.hombres_participantes
+                                            ? memorias.contenido.hombres_participantes
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel htmlFor="mujeres">Mujeres</CustomFormLabel>
+                                <CustomTextField
+                                    id="mujeres"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.mujeres_participantes
+                                            ? memorias.contenido.mujeres_participantes
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </ParentCard>
             <br /> <br />
             <Grid container spacing={3} textAlign="center">
@@ -208,13 +407,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Agenda</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {agenda.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + agenda.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button
+                            onClick={handleAgregarAgenda}
+                            style={{ width: '33.33%' }}
+                            disabled={agenda.id != null}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            disabled={agenda.id == null}
+                            onClick={handleVerAgenda}
+                            style={{ width: '33.33%' }}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            onClick={handleEditarAgenda}
+                            style={{ width: '33.33%' }}
+                            disabled={agenda.id == null}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -223,13 +445,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Presupuesto</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {presupuesto.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + presupuesto.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button
+                            onClick={handleAgregarPresupuesto}
+                            style={{ width: '33.33%' }}
+                            disabled={presupuesto.id != null}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            onClick={handleVerPresupuesto}
+                            style={{ width: '33.33%' }}
+                            disabled={presupuesto.id == null}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            onClick={handleEditarPresupuesto}
+                            style={{ width: '33.33%' }}
+                            disabled={presupuesto.id == null}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -238,13 +483,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Anticipo de gastos</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {anticipoGastos.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + anticipoGastos.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleAgregarAnticipoGastos}
+                            disabled={anticipoGastos.id != null}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleVerAnticipoGastos}
+                            disabled={anticipoGastos.id == null}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleEditarAnticipoGastos}
+                            disabled={anticipoGastos.id == null}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -253,13 +521,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Memoria</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {memorias.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + memorias.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button
+                            disabled={memorias.id != null}
+                            onClick={handleAgregarMemoria}
+                            style={{ width: '33.33%' }}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            disabled={memorias.id == null}
+                            onClick={handleVerMemoria}
+                            style={{ width: '33.33%' }}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            disabled={memorias.id == null}
+                            onClick={handleEditarMemoria}
+                            style={{ width: '33.33%' }}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -271,10 +562,9 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -286,10 +576,9 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -301,10 +590,14 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button
+                            onClick={() => handleOpenPicker()}
+                            style={{ width: '33.33%' }}
+                        >
+                            Agregar
+                        </Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
             </Grid>
