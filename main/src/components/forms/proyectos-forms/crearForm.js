@@ -73,6 +73,7 @@ const ProyectosOrdinaryForm = () => {
     nombre: yup.string().required('El nombre del proyecto es necesario'),
     alias: yup.string().required('El alias es necesario'),
     cooperantes: yup.array().min(1, 'Seleccione al menos un cooperante').required('Los cooperantes son necesarios'),
+    lineas_estrategicas: yup.array().min(1, 'Seleccione al menos una línea estratégica').required('Las líneas estratégicas son necesarias'),
     descripcion: yup.string().required('La descripción es necesaria'),
     fecha_inicio: yup.date().required('La fecha de inicio es necesaria'),
     fecha_fin: yup.date().required('La fecha final es necesaria'),
@@ -88,6 +89,7 @@ const ProyectosOrdinaryForm = () => {
       nombre: '',
       alias: '',
       cooperantes: [],
+      lineas_estrategicas: [],
       descripcion: '',
       fecha_inicio: '',
       fecha_fin: '',
@@ -115,6 +117,7 @@ const ProyectosOrdinaryForm = () => {
   };
 
   const cooperantesOptions = ["Cooperante A", "Cooperante B", "Cooperante C"]; // Opciones de ejemplo
+  const lineasEstrategicasOptions = ["Línea Estratégica 1", "Línea Estratégica 2", "Línea Estratégica 3"]; // Opciones de ejemplo
 
   return (
     <ParentCard title="Formulario de proyectos - Información general">
@@ -143,32 +146,65 @@ const ProyectosOrdinaryForm = () => {
           helperText={formik.touched.alias && formik.errors.alias}
         />
 
-        <CustomFormLabel htmlFor="cooperantes">Cooperantes</CustomFormLabel>
-        <FormControl fullWidth>
-          <InputLabel id="cooperantes-label">Seleccione los cooperantes</InputLabel>
-          <Select
-            labelId="cooperantes-label"
-            id="cooperantes"
-            name="cooperantes"
-            multiple
-            value={formik.values.cooperantes}
-            onChange={formik.handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
-            renderValue={(selected) => (
-              <div>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={6}>
+            <CustomFormLabel htmlFor="cooperantes">Cooperantes</CustomFormLabel>
+            <FormControl fullWidth>
+              <InputLabel id="cooperantes-label">Seleccione los cooperantes</InputLabel>
+              <Select
+                labelId="cooperantes-label"
+                id="cooperantes"
+                name="cooperantes"
+                multiple
+                value={formik.values.cooperantes}
+                onChange={formik.handleChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
+                renderValue={(selected) => (
+                  <div>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </div>
+                )}
+              >
+                {cooperantesOptions.map((cooperante) => (
+                  <MenuItem key={cooperante} value={cooperante}>
+                    {cooperante}
+                  </MenuItem>
                 ))}
-              </div>
-            )}
-          >
-            {cooperantesOptions.map((cooperante) => (
-              <MenuItem key={cooperante} value={cooperante}>
-                {cooperante}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={6}>
+            <CustomFormLabel htmlFor="lineas_estrategicas">Líneas Estratégicas</CustomFormLabel>
+            <FormControl fullWidth>
+              <InputLabel id="lineas-estrategicas-label">Seleccione las líneas estratégicas</InputLabel>
+              <Select
+                labelId="lineas-estrategicas-label"
+                id="lineas_estrategicas"
+                name="lineas_estrategicas"
+                multiple
+                value={formik.values.lineas_estrategicas}
+                onChange={formik.handleChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Seleccione las líneas estratégicas" />}
+                renderValue={(selected) => (
+                  <div>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </div>
+                )}
+              >
+                {lineasEstrategicasOptions.map((linea) => (
+                  <MenuItem key={linea} value={linea}>
+                    {linea}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
 
         <CustomFormLabel htmlFor="descripcion">Descripción</CustomFormLabel>
         <CustomTextField
