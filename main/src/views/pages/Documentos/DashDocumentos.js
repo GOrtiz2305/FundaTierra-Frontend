@@ -96,6 +96,10 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/presupuesto/detalles`);
     };
 
+    const handleVerAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos/detalles`);
+    };
+
     const handleEditarAgenda = () => {
         navigate(`/actividades/documentos/${id}/agenda/cambios`);
     };
@@ -106,6 +110,10 @@ const DashDocumentos = ({ id }) => {
 
     const handleEditarPresupuesto = () => {
         navigate(`/actividades/documentos/${id}/presupuesto/cambios`);
+    };
+
+    const handleEditarAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos/cambios`);
     };
 
     useEffect(() => {
@@ -201,7 +209,7 @@ const DashDocumentos = ({ id }) => {
 
         const fetchAnticipoGastos = async () => {
             try {
-                const response = await fetch(`${URL}api/documentos/${id}/15`);
+                const response = await fetch(`${URL}api/documentos/${id}/5`);
                 if (response.ok) {
                     const data = await response.json();
                     setAnticipoGastos(data);
@@ -475,17 +483,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Anticipo de gastos</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {anticipoGastos.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + anticipoGastos.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
                         <Button
                             style={{ width: '33.33%' }}
                             onClick={handleAgregarAnticipoGastos}
+                            disabled={anticipoGastos.id != null}
                         >
                             Agregar
                         </Button>
-                        <Button style={{ width: '33.33%' }}>Ver</Button>
-                        <Button style={{ width: '33.33%' }}>Editar</Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleVerAnticipoGastos}
+                            disabled={anticipoGastos.id == null}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleEditarAnticipoGastos}
+                            disabled={anticipoGastos.id == null}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
