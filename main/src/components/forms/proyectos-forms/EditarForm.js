@@ -1,4 +1,3 @@
-
 import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -20,6 +19,7 @@ const ProyectosEditarForm = () => {
     nombre: '',
     alias: '',
     cooperantes: [],
+    lineas_estrategicas: [],
     descripcion: '',
     fecha_inicio: '',
     fecha_fin: '',
@@ -99,6 +99,7 @@ const ProyectosEditarForm = () => {
     nombre: yup.string().required('El nombre del proyecto es necesario'),
     alias: yup.string().required('El alias es necesario'),
     cooperantes: yup.array().min(1, 'Seleccione al menos un cooperante').required('Los cooperantes son necesarios'),
+    lineas_estrategicas: yup.array().min(1, 'Seleccione al menos una línea estratégica').required('Las líneas estratégicas son necesarias'),
     descripcion: yup.string().required('La descripción es necesaria'),
     fecha_inicio: yup.date().required('La fecha de inicio es necesaria'),
     fecha_fin: yup.date().required('La fecha final es necesaria'),
@@ -133,6 +134,7 @@ const ProyectosEditarForm = () => {
   };
 
   const cooperantesOptions = ["Cooperante A", "Cooperante B", "Cooperante C"]; // Opciones de ejemplo
+  const lineasEstrategicasOptions = ["Línea Estratégica 1", "Línea Estratégica 2", "Línea Estratégica 3"]; // Opciones de ejemplo
 
   if (loading) return <div>Cargando...</div>; // Mensaje de carga
   console.log('Estado del proyecto:', proyecto);
@@ -165,105 +167,140 @@ const ProyectosEditarForm = () => {
           helperText={formik.touched.alias && formik.errors.alias}
         />
 
-        <CustomFormLabel htmlFor="cooperantes">Cooperantes</CustomFormLabel>
-        <FormControl fullWidth>
-          <InputLabel id="cooperantes-label">Seleccione los cooperantes</InputLabel>
-          <Select
-            labelId="cooperantes-label"
-            id="cooperantes"
-            name="cooperantes"
-            multiple
-            value={formik.values.cooperantes}
-            onChange={formik.handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
-            renderValue={(selected) => (
-              <div>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <CustomFormLabel htmlFor="cooperantes">Cooperantes</CustomFormLabel>
+            <FormControl fullWidth>
+              <InputLabel id="cooperantes-label">Seleccione los cooperantes</InputLabel>
+              <Select
+                labelId="cooperantes-label"
+                id="cooperantes"
+                name="cooperantes"
+                multiple
+                value={formik.values.cooperantes}
+                onChange={formik.handleChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
+                renderValue={(selected) => (
+                  <div>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </div>
+                )}
+              >
+                {cooperantesOptions.map((cooperante) => (
+                  <MenuItem key={cooperante} value={cooperante}>
+                    {cooperante}
+                  </MenuItem>
                 ))}
-              </div>
-            )}
-          >
-            {cooperantesOptions.map((cooperante) => (
-              <MenuItem key={cooperante} value={cooperante}>
-                {cooperante}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={6}>
+            <CustomFormLabel htmlFor="lineas_estrategicas">Líneas Estratégicas</CustomFormLabel>
+            <FormControl fullWidth>
+              <InputLabel id="lineas-estrategicas-label">Seleccione las líneas estratégicas</InputLabel>
+              <Select
+                labelId="lineas-estrategicas-label"
+                id="lineas_estrategicas"
+                name="lineas_estrategicas"
+                multiple
+                value={formik.values.lineas_estrategicas}
+                onChange={formik.handleChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Seleccione las líneas estratégicas" />}
+                renderValue={(selected) => (
+                  <div>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </div>
+                )}
+              >
+                {lineasEstrategicasOptions.map((linea) => (
+                  <MenuItem key={linea} value={linea}>
+                    {linea}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
 
         <CustomFormLabel htmlFor="descripcion">Descripción</CustomFormLabel>
         <CustomTextField
           id="descripcion"
           name="descripcion"
+          variant="outlined"
           multiline
           rows={4}
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.descripcion}
           fullWidth
+          value={formik.values.descripcion}
+          onChange={formik.handleChange}
+          error={formik.touched.descripcion && Boolean(formik.errors.descripcion)}
+          helperText={formik.touched.descripcion && formik.errors.descripcion}
         />
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <CustomFormLabel htmlFor="fecha_inicio">Fecha de Inicio</CustomFormLabel>
             <CustomTextField
-              type="date"
               id="fecha_inicio"
               name="fecha_inicio"
-              onChange={formik.handleChange}
-              value={formik.values.fecha_inicio}
+              type="date"
+              variant="outlined"
               fullWidth
+              value={formik.values.fecha_inicio}
+              onChange={formik.handleChange}
+              error={formik.touched.fecha_inicio && Boolean(formik.errors.fecha_inicio)}
+              helperText={formik.touched.fecha_inicio && formik.errors.fecha_inicio}
             />
           </Grid>
+
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="fecha_fin">Fecha Final</CustomFormLabel>
+            <CustomFormLabel htmlFor="fecha_fin">Fecha de Fin</CustomFormLabel>
             <CustomTextField
-              type="date"
               id="fecha_fin"
               name="fecha_fin"
-              onChange={formik.handleChange}
+              type="date"
+              variant="outlined"
+              fullWidth
               value={formik.values.fecha_fin}
-              fullWidth
+              onChange={formik.handleChange}
+              error={formik.touched.fecha_fin && Boolean(formik.errors.fecha_fin)}
+              helperText={formik.touched.fecha_fin && formik.errors.fecha_fin}
             />
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-          <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto (Quetzales)</CustomFormLabel>
-            <CustomTextField
-              id="presupuesto_quetzales"
-              name="presupuesto_quetzales"
-              variant="outlined"
-              fullWidth
-              value={formik.values.presupuesto_quetzales}
-              onChange={handleQuetzalesChange}
-              error={formik.touched.presupuesto_quetzales && Boolean(formik.errors.presupuesto_quetzales)}
-              helperText={formik.touched.presupuesto_quetzales && formik.errors.presupuesto_quetzales}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto (Euros)</CustomFormLabel>
-            <CustomTextField
-              id="presupuesto_euros"
-              name="presupuesto_euros"
-              variant="outlined"
-              fullWidth
-              value={formik.values.presupuesto_euros}
-              disabled // Deshabilitar edición manual
-            />
-          </Grid>
-        </Grid>
+        <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en Quetzales</CustomFormLabel>
+        <CustomTextField
+          id="presupuesto_quetzales"
+          name="presupuesto_quetzales"
+          type="number"
+          variant="outlined"
+          fullWidth
+          value={formik.values.presupuesto_quetzales}
+          onChange={handleQuetzalesChange}
+          error={formik.touched.presupuesto_quetzales && Boolean(formik.errors.presupuesto_quetzales)}
+          helperText={formik.touched.presupuesto_quetzales && formik.errors.presupuesto_quetzales}
+        />
 
-        <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          disabled={!formik.isValid || formik.isSubmitting}
-          sx={{ mt: 2 }}
-        >
-          Guardar
+        <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en Euros</CustomFormLabel>
+        <CustomTextField
+          id="presupuesto_euros"
+          name="presupuesto_euros"
+          type="number"
+          variant="outlined"
+          fullWidth
+          value={formik.values.presupuesto_euros}
+          onChange={formik.handleChange}
+          error={formik.touched.presupuesto_euros && Boolean(formik.errors.presupuesto_euros)}
+          helperText={formik.touched.presupuesto_euros && formik.errors.presupuesto_euros}
+        />
+
+        <Button color="primary" variant="contained" fullWidth type="submit">
+          Actualizar Proyecto
         </Button>
       </form>
     </ParentCard>
