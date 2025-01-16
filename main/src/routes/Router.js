@@ -3,6 +3,8 @@ import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 import path from 'path-browserify';
 
+const DepartamentosMunicipios = Loadable(lazy(() => import('../views/pages/DeparmetosMunicipios/departamentosmunicipios')));
+const Usuarios = Loadable(lazy(() => import('../views/pages/Usuarios/usuarios')));
 const Actividades = Loadable(lazy(() => import('../views/pages/Actividades/actividades')));
 const ActividadesDocumentos = Loadable(lazy(() => import('../views/pages/Actividades/actividadesDocumentos')));
 const Memoria = Loadable(lazy(() => import('../views/pages/Documentos/Memoria')));
@@ -27,6 +29,10 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 /* ****Pages***** */
 const ModernDash = Loadable(lazy(() => import('../views/dashboard/Modern')));
 const EcommerceDash = Loadable(lazy(() => import('../views/dashboard/Ecommerce')));
+const DepartamentosCrear = Loadable(lazy(() => import('../views/pages/DeparmetosMunicipios/departamentoscrear')));
+const DepartamentosEditar = Loadable(lazy(() => import('../views/pages/DeparmetosMunicipios/departamentoseditar')));
+const UsuariosCrear = Loadable(lazy(() => import('../views/pages/Usuarios/usuariosCrear')));
+const UsuariosEditar = Loadable(lazy(() => import('../views/pages/Usuarios/usuariosEditar')));
 const ActividadesEditar = Loadable(lazy(() => import('../views/pages/Actividades/actividadesEditar')));
 const ActividadesCrear = Loadable(lazy(() => import('../views/pages/Actividades/actividadesCrear')));
 const ProyectosEditar = Loadable(lazy(() => import('../views/pages/Proyectos/proyectosEditar')));
@@ -197,6 +203,14 @@ const Router = [
       // { path: '/pages/treeview', element: <Treeview /> },
       // { path: '/pages/account-settings', element: <AccountSetting /> },
       // { path: '/pages/faq', element: <Faq /> },
+      { path: '/DeparmetosMunicipios', element: <DepartamentosMunicipios/> },
+      { path: '/DeparmetosMunicipios/crearDepartamentos', element: <DepartamentosCrear/> },
+      { path: '/DeparmetosMunicipios/editarDepartamentos', element: <DepartamentosEditar/> },
+      { path: '/DeparmetosMunicipios/crearMunicipios', element: <DepartamentosMunicipios/> },
+      { path: '/DeparmetosMunicipios/editarMunicipios', element: <DepartamentosMunicipios/> },
+      { path: '/usuarios', element: <Usuarios /> },
+      { path: '/usuarios/crear', element: <UsuariosCrear /> },
+      { path: '/usuarios/editar', element: <UsuariosEditar /> },
       { path: '/actividades', element: <Actividades /> },
       { path: '/actividades/nueva', element: <ActividadesCrear /> },
       { path: '/actividades/cambios/:id', element: <ActividadesEditar /> },
