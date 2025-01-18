@@ -40,7 +40,7 @@ const CrearDepartamentoForm = () => {
       });
 
       if (response.ok) {
-        navigate('/departamentos');
+        navigate('/DepartamentosMunicipios');
         <Alert variant="filled" severity="success">
           Departamento creado con éxito
         </Alert>;

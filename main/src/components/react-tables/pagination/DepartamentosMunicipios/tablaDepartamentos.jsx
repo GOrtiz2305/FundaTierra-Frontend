@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
     Box,
     Button,
@@ -16,6 +15,7 @@ import {
     Typography
 } from '@mui/material';
 import { Stack } from '@mui/system';
+import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconPencil, IconTrash } from '@tabler/icons';
 import {
     createColumnHelper,
     flexRender,
@@ -25,45 +25,43 @@ import {
     getSortedRowModel,
     useReactTable
 } from '@tanstack/react-table';
+import * as React from 'react';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import DownloadCard from 'src/components/shared/DownloadCard';
-import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconPencil, IconTrash } from '@tabler/icons';
-import { URL } from "../../../../config";
+import { URL } from "../../../../../config";
+
+import axios from 'axios';
 
 const columnHelper = createColumnHelper();
 
-const MunicipiosPaginationTable = () => {
-    const [data, setData] = useState([]);
-    const [columnFilters, setColumnFilters] = useState([]);
+const DepartamentosPaginationTable = () => {
+    const [data, setData] = React.useState(() => []);
+    const [columnFilters, setColumnFilters] = React.useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchMunicipios = async () => {
+    React.useEffect(() => {
+        const fetchDepartamentos = async () => {
             try {
-                const response = await axios.get(`${URL}municipios`);
+                const response = await axios.get(`${URL}departamentos`);
                 setData(response.data);
+                console.log(data);
             } catch (error) {
-                console.error("Error al obtener municipios:", error);
+                console.error("Error al obtener departamentos:", error);
             }
         };
-        fetchMunicipios();
+        fetchDepartamentos();
     }, []);
 
     const handleEdit = (id) => {
-        navigate(`/municipios/editar/${id}`);
-    };
-
-    const handleViewDetails = (id) => {
-        navigate(`/municipios/detalle/${id}`);
+        navigate(`/DepartamentosMunicipios/editarDepartamentos/${id}`);
     };
 
     const handleDelete = async (row) => {
         try {
-            await axios.delete(`${URL}municipios/${row.id}`);
-            setData(data.filter((item) => item.id !== row.id));
+            await axios.put(`${URL}departamentos/eliminar/${row.id}`);
+            setData((prevData) => prevData.filter((item) => item.id !== row.id));
         } catch (error) {
             console.error("Error al eliminar municipio:", error);
         }
@@ -71,29 +69,49 @@ const MunicipiosPaginationTable = () => {
 
     const columns = [
         columnHelper.accessor('nombre', {
-            header: 'Nombre',
-            cell: (info) => (
+            header: () => 'Nombre',
+            cell: info => (
                 <Typography variant="subtitle1" color="textSecondary">
                     {info.getValue()}
                 </Typography>
             ),
         }),
         columnHelper.accessor('estado', {
-            header: 'Estado',
-            cell: (info) => (
+            header: () => 'Estado',
+            meta: {
+                filterVariant: 'select',
+            },
+            cell: info => (
                 <Chip
                     sx={{
-                        bgcolor: info.getValue() ? 'success.light' : 'error.light',
-                        color: info.getValue() ? 'success.main' : 'error.main',
+                        bgcolor: info.getValue() ? (theme) => theme.palette.success.light : (theme) => theme.palette.error.light,
+                        color: info.getValue() ? (theme) => theme.palette.success.main : (theme) => theme.palette.error.main,
                         borderRadius: '8px',
                     }}
                     label={info.getValue() ? 'Activo' : 'Inactivo'}
                 />
             ),
         }),
+        columnHelper.accessor('createdAt', {
+            header: () => 'Fecha Creación',
+            cell: info => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {new Date(info.getValue()).toLocaleDateString()}
+                </Typography>
+            ),
+        }),
+        columnHelper.accessor('updatedAt', {
+            header: () => 'Fecha Actualización',
+            cell: info => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {new Date(info.getValue()).toLocaleDateString()}
+                </Typography>
+            ),
+        }),
+        
         {
             id: 'acciones',
-            header: 'Acciones',
+            header: () => 'Acciones',
             cell: ({ row }) => (
                 <Stack direction="row" spacing={1}>
                     <Button
@@ -106,18 +124,11 @@ const MunicipiosPaginationTable = () => {
                     </Button>
                     <Button
                         variant="contained"
-                        color="info"
-                        onClick={() => handleViewDetails(row.original.id)}
-                    >
-                        Ver Detalles
-                    </Button>
-                    <Button
-                        variant="contained"
                         color="error"
                         onClick={() => handleDelete(row.original)}
                         startIcon={<IconTrash width={18} />}
                     >
-                        Borrar
+                        Desactivar
                     </Button>
                 </Stack>
             ),
@@ -127,21 +138,32 @@ const MunicipiosPaginationTable = () => {
     const table = useReactTable({
         data,
         columns,
-        state: { columnFilters },
+        filterFns: {},
+        state: {
+            columnFilters,
+        },
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        debugTable: true,
+        debugHeaders: true,
+        debugColumns: false,
     });
 
     const handleDownload = () => {
-        const headers = ["nombre", "estado"];
-        const rows = data.map((item) => [item.nombre, item.estado ? 'Activo' : 'Inactivo']);
+        const headers = ["nombre", "estado", "fecha_creacion", "fecha_actualizacion"];
+        const rows = data.map(item => [
+            item.nombre,
+            item.estado ? 'Activo' : 'Inactivo',
+            new Date(item.createdAt).toLocaleDateString(),
+            new Date(item.updatedAt).toLocaleDateString(),
+        ]);
 
         const csvContent = [
             headers.join(","),
-            ...rows.map((row) => row.join(",")),
+            ...rows.map(e => e.join(","))
         ].join("\n");
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -149,27 +171,45 @@ const MunicipiosPaginationTable = () => {
 
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "municipios.csv");
+        link.setAttribute("download", "departamentos-data.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     };
 
     return (
-        <DownloadCard title="Municipios" onDownload={handleDownload}>
+        <DownloadCard title="Departamentos" onDownload={handleDownload}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box>
                         <TableContainer>
-                            <Table sx={{ whiteSpace: 'nowrap' }}>
+                            <Table
+                                sx={{
+                                    whiteSpace: 'nowrap',
+                                }}
+                            >
                                 <TableHead>
                                     {table.getHeaderGroups().map((headerGroup) => (
                                         <TableRow key={headerGroup.id}>
                                             {headerGroup.headers.map((header) => (
                                                 <TableCell key={header.id}>
-                                                    {header.isPlaceholder
-                                                        ? null
-                                                        : flexRender(header.column.columnDef.header, header.getContext())}
+                                                    <Typography
+                                                        variant="h6"
+                                                        mb={1}
+                                                        className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                                                        onClick={header.column.getToggleSortingHandler()}
+                                                    >
+                                                        {header.isPlaceholder
+                                                            ? null
+                                                            : flexRender(header.column.columnDef.header, header.getContext())
+                                                        }
+                                                        {(() => {
+                                                            const sortState = header.column.getIsSorted();
+                                                            if (sortState === 'asc') return ' 🔼';
+                                                            if (sortState === 'desc') return ' 🔽';
+                                                            return null;
+                                                        })()}
+                                                    </Typography>
                                                 </TableCell>
                                             ))}
                                         </TableRow>
@@ -189,58 +229,66 @@ const MunicipiosPaginationTable = () => {
                             </Table>
                         </TableContainer>
                         <Divider />
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" p={3}>
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                                <Typography>
-                                    Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
-                                </Typography>
-                                <CustomTextField
-                                    type="number"
-                                    min="1"
-                                    max={table.getPageCount()}
-                                    defaultValue={table.getState().pagination.pageIndex + 1}
-                                    onChange={(e) => {
-                                        const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                                        table.setPageIndex(page);
-                                    }}
-                                />
+                        <Stack gap={1} p={3} alignItems="center" direction="row" justifyContent="space-between">
+                            <Box display="flex" alignItems="center" gap={1}>
+                                <Stack direction="row" alignItems="center" gap={1}>
+                                    <Typography variant="body1">Páginas</Typography>
+                                    <Typography variant="body1" fontWeight={600}>
+                                        {table.getState().pagination.pageIndex + 1} de {' '}
+                                        {table.getPageCount()}
+                                    </Typography>
+                                </Stack>
+                                <Stack direction="row" alignItems="center" gap={1}>
+                                    | Ir a la página:
+                                    <CustomTextField
+                                        type="number"
+                                        min="1"
+                                        max={table.getPageCount()}
+                                        defaultValue={table.getState().pagination.pageIndex + 1}
+                                        onChange={(e) => {
+                                            const page = e.target.value ? Number(e.target.value) - 1 : 0
+                                            table.setPageIndex(page)
+                                        }}
+                                    />
+                                </Stack>
                                 <CustomSelect
                                     value={table.getState().pagination.pageSize}
-                                    onChange={(e) => table.setPageSize(Number(e.target.value))}
+                                    onChange={(e) => {
+                                        table.setPageSize(Number(e.target.value))
+                                    }}
                                 >
-                                    {[10, 20, 30].map((pageSize) => (
+                                    {[10, 15, 20, 25].map(pageSize => (
                                         <MenuItem key={pageSize} value={pageSize}>
                                             {pageSize}
                                         </MenuItem>
                                     ))}
                                 </CustomSelect>
-                            </Stack>
-                            <Stack direction="row" spacing={1}>
-                                <IconButton
+
+                                <IconButton size='small'
                                     onClick={() => table.setPageIndex(0)}
                                     disabled={!table.getCanPreviousPage()}
                                 >
                                     <IconChevronsLeft />
                                 </IconButton>
-                                <IconButton
+                                <IconButton size='small'
                                     onClick={() => table.previousPage()}
                                     disabled={!table.getCanPreviousPage()}
                                 >
                                     <IconChevronLeft />
                                 </IconButton>
-                                <IconButton
+                                <IconButton size='small'
                                     onClick={() => table.nextPage()}
                                     disabled={!table.getCanNextPage()}
                                 >
                                     <IconChevronRight />
                                 </IconButton>
-                                <IconButton
+                                <IconButton size='small'
                                     onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                                     disabled={!table.getCanNextPage()}
                                 >
                                     <IconChevronsRight />
                                 </IconButton>
-                            </Stack>
+                            </Box>
                         </Stack>
                     </Box>
                 </Grid>
@@ -249,4 +297,4 @@ const MunicipiosPaginationTable = () => {
     );
 };
 
-export default MunicipiosPaginationTable;
+export default DepartamentosPaginationTable;

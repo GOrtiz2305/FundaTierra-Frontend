@@ -4,6 +4,11 @@ import {
   Typography,
   Alert,
   Checkbox,
+  TextField,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import CustomTextField from '../theme-elements/CustomTextField';
 import ParentCard from '../../shared/ParentCard';
@@ -14,11 +19,13 @@ import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import { URL } from '../../../../config';
 
-const EditarDepartamentoForm = ({ id }) => {
+const EditarMunicipioForm = ({ id }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [departamentos, setDepartamentos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const CustomFormLabel = styled(({ htmlFor, ...other }) => (
     <Typography
@@ -34,36 +41,53 @@ const EditarDepartamentoForm = ({ id }) => {
     display: 'block',
   }));
 
-  const fetchDepartamento = async () => {
+  const fetchMunicipio = async () => {
     try {
-      const response = await fetch(`${URL}departamentos/${id}`);
+      const response = await fetch(`${URL}municipios/${id}`);
       if (response.ok) {
         const data = await response.json();
-        if (!data.nombre || data.estado === undefined) {
+        if (!data.nombre || !data.id_departamento) {
           throw new Error('Datos inválidos recibidos del servidor');
         }
         formik.setValues({
           nombre: data.nombre,
+          id_departamento: data.departamentoId,
           estado: data.estado,
         });
         setLoading(false);
       } else {
-        throw new Error('Error al cargar los datos del departamento');
+        throw new Error('Error al cargar los datos del municipio');
       }
     } catch (err) {
       console.error(err);
-      setError('Error al cargar los datos del departamento');
+      setError('Error al cargar los datos del municipio');
       setLoading(false);
     }
   };
 
+  const fetchDepartamentos = async () => {
+    try {
+      const response = await fetch(`${URL}departamentos`);
+      if (response.ok) {
+        const data = await response.json();
+        setDepartamentos(data);
+      } else {
+        throw new Error('Error al cargar los departamentos');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Error al cargar los departamentos');
+    }
+  };
+
   useEffect(() => {
-    fetchDepartamento();
+    fetchMunicipio();
+    fetchDepartamentos();
   }, [id]);
 
   const handleSave = async (values) => {
     try {
-      const response = await fetch(`${URL}departamentos/${id}`, {
+      const response = await fetch(`${URL}municipios/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -72,10 +96,10 @@ const EditarDepartamentoForm = ({ id }) => {
       });
 
       if (response.ok) {
-        setSuccessMessage('Departamento actualizado con éxito');
+        setSuccessMessage('Municipio actualizado con éxito');
         setTimeout(() => navigate('/DepartamentosMunicipios'), 2000);
       } else {
-        setSuccessMessage('Error al actualizar el departamento');
+        setSuccessMessage('Error al actualizar el municipio');
       }
     } catch (err) {
       console.error('Error al llamar a la API:', err);
@@ -84,12 +108,16 @@ const EditarDepartamentoForm = ({ id }) => {
   };
 
   const validationSchema = yup.object({
-    nombre: yup.string().required('El nombre del departamento es obligatorio'),
+    nombre: yup.string().required('El nombre del municipio es obligatorio'),
+    departamentoId: yup
+      .string()
+      .required('El departamento es obligatorio'),
   });
 
   const formik = useFormik({
     initialValues: {
       nombre: '',
+      departamentoId: '',
       estado: true,
     },
     validationSchema,
@@ -97,6 +125,10 @@ const EditarDepartamentoForm = ({ id }) => {
       handleSave(values);
     },
   });
+
+  const filteredDepartamentos = departamentos.filter((dep) =>
+    dep.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
     return <Typography>Cargando...</Typography>;
@@ -107,10 +139,10 @@ const EditarDepartamentoForm = ({ id }) => {
   }
 
   return (
-    <ParentCard title="Formulario de Edición de Departamento">
+    <ParentCard title="Formulario de Edición de Municipio">
       {successMessage && <Alert severity="info">{successMessage}</Alert>}
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre del Departamento</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del Municipio</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"
@@ -122,6 +154,33 @@ const EditarDepartamentoForm = ({ id }) => {
           onBlur={formik.handleBlur}
           fullWidth
         />
+
+        <CustomFormLabel htmlFor="departamento">Departamento</CustomFormLabel>
+        <TextField
+          variant="outlined"
+          placeholder="Buscar departamento"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          fullWidth
+          sx={{ marginBottom: '10px' }}
+        />
+        <FormControl fullWidth>
+          <InputLabel id="departamento-label">Departamento</InputLabel>
+          <Select
+            id="departamentoId"
+            name="departamentoId"
+            labelId="departamento-label"
+            value={formik.values.departamentoId}
+            onChange={formik.handleChange}
+            error={formik.touched.departamentoId && Boolean(formik.errors.departamentoId)}
+          >
+            {filteredDepartamentos.map((dep) => (
+              <MenuItem key={dep.id} value={dep.id}>
+                {dep.nombre}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <CustomFormLabel htmlFor="estado">Estado</CustomFormLabel>
         <Checkbox
@@ -146,8 +205,8 @@ const EditarDepartamentoForm = ({ id }) => {
   );
 };
 
-EditarDepartamentoForm.propTypes = {
+EditarMunicipioForm.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
-export default EditarDepartamentoForm;
+export default EditarMunicipioForm;
