@@ -4,9 +4,7 @@ import {
     Button,
     Chip,
     Divider,
-    Grid,
     IconButton,
-    MenuItem,
     Table,
     TableBody,
     TableCell,
@@ -28,7 +26,7 @@ import {
 import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconPencil, IconTrash } from '@tabler/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { URL } from '../../../../config';
+import { URL } from '../../../../../config';
 
 const columnHelper = createColumnHelper();
 
@@ -53,8 +51,13 @@ const UsuariosPaginationTable = () => {
         navigate(`/usuarios/editar/${id}`);
     };
 
-    const handleDelete = (usuario) => {
-        console.log(`Eliminar usuario:`, usuario);
+    const handleDelete = async (usuario) => {
+        try {
+            await axios.put(`${URL}usuarios/eliminar/${usuario.id}`);
+            setData((prevData) => prevData.filter((item) => item.id !== usuario.id));
+        } catch (error) {
+            console.error("Error al eliminar Usuario:", error);
+        }
     };
 
     const columns = [
@@ -67,7 +70,7 @@ const UsuariosPaginationTable = () => {
             ),
         }),
         columnHelper.accessor('persona.nombre', {
-            header: () => 'Conribuyene',
+            header: () => 'Colaborador',
             cell: (info) => (
                 <Typography variant="subtitle1" color="textSecondary">
                     {info.getValue()}
@@ -113,7 +116,7 @@ const UsuariosPaginationTable = () => {
                         onClick={() => handleDelete(row.original)}
                         startIcon={<IconTrash />}
                     >
-                        Borrar
+                        Desactivar
                     </Button>
                 </Stack>
             ),
