@@ -1,8 +1,13 @@
 import {
     Alert,
     Button,
+    Chip,
+    FormControl,
     Grid,
+    InputLabel,
     MenuItem,
+    OutlinedInput,
+    Select,
     Table,
     TableBody,
     TableCell,
@@ -17,16 +22,25 @@ import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
 import CustomSelect from '../theme-elements/CustomSelect';
 import { useNavigate } from 'react-router';
+import { values } from 'lodash';
 
 const EditarAnticipoGastosForm = ({ id }) => {
 
     const navigate = useNavigate();
-    const [proyectos, setProyectos] = useState([]);
+    const [actividad, setActividad] = useState(
+        {
+            id_proyectos: 0,
+            proyecto: {
+                nombre: '',
+            },
+        }
+    );
     const [elementos, setElementos] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [subcategorias, setSubcategorias] = useState([]);
     const [elementosAnticipo, setElementosAnticipo] = useState([]);
-
+    const [rubrosOptions, setRubrosOptions] = useState([]);
+    const [proyectoRubros, setProyectoRubros] = useState([]);
     const [anticipoGastos, setAnticipoGastos] = useState({
         id: 0,
         fecha: '',
@@ -37,6 +51,13 @@ const EditarAnticipoGastosForm = ({ id }) => {
         monto_solicitado: 0,
         id_proyectos: 0,
         nombre_actividad: '',
+        actividade: {},
+        rubros: [],
+        proyectoRubros: [
+            {
+                rubro: {}
+            }
+        ],
         contenido: {},
     });
 
@@ -63,14 +84,28 @@ const EditarAnticipoGastosForm = ({ id }) => {
             }
         };
 
-        const fetchProyectos = async () => {
+        const fetchRubros = async () => {
             try {
-                const response = await fetch(`${URL}proyectos`);
+                const response = await fetch(`${URL}rubros`);
                 if (response.ok) {
                     const data = await response.json();
-                    setProyectos(data);
+                    setRubrosOptions(data);
                 } else {
-                    console.error('Error al obtener los proyectos');
+                    console.error('Error al obtener los rubros');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
+        const fetchActividad = async () => {
+            try {
+                const response = await fetch(`${URL}actividades/${id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setActividad(data);
+                } else {
+                    console.error('Error al obtener la actividad');
                 }
             } catch (error) {
                 console.error('Error al llamar a la API:', error);
@@ -117,9 +152,10 @@ const EditarAnticipoGastosForm = ({ id }) => {
             }
         };
 
+        fetchRubros();
         fetchSubcategorias();
         fetchCategorias();
-        fetchProyectos();
+        fetchActividad();
         fetchAnticipoGastos();
     }, []);
 
@@ -139,7 +175,33 @@ const EditarAnticipoGastosForm = ({ id }) => {
             }
         };
 
+        //Fetch rubros de a cuerdo con el proyecto seleccionado
+        const fetchProyectoRubros = async () => {
+            try {
+                const response = await fetch(`${URL}proyectoRubros/proyecto/${anticipoGastos.contenido.id_proyectos}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setProyectoRubros(data);
+                    
+                    // Sincronizar rubros seleccionados con los IDs de proyectoRubros
+                    setAnticipoGastos((prevState) => ({
+                        ...prevState,
+                        rubros: data.map((rubro) => rubro.id_rubro), // Extrae solo los IDs
+                    }));
+                } else {
+                    console.error('Error al obtener los rubros');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
         fetchElementosAnticipo();
+
+        if (anticipoGastos.contenido.id_proyectos) {
+            fetchProyectoRubros();
+        }
+
     }, [anticipoGastos.id]);
 
     const handleInputChange = (e) => {
@@ -225,6 +287,32 @@ const EditarAnticipoGastosForm = ({ id }) => {
                 console.error('Error al actualizar el anticipo de gastos');
             }
 
+            //Actualizar los rubros
+            const rubrosPorEnviar = (anticipoGastos.rubros || []).map((idRubro) => ({
+                id_rubro: Number(idRubro),
+                id_proyecto: Number(anticipoGastos.contenido.id_proyectos),
+            }));
+
+            console.log("Rubros por enviar:", rubrosPorEnviar);
+
+            const responseRubros = await fetch(`${URL}proyectoRubros/proyecto/${anticipoGastos.actividade.id_proyectos}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rubrosPorEnviar),
+            });
+
+            if (responseRubros.ok) {
+                <Alert variant="filled" severity="success">
+                    Rubros guardados con éxito
+                </Alert>
+            } else {
+                <Alert variant='filled' severity='error'>
+                    Error al guardar los rubros
+                </Alert>
+            }
+
         } catch (error) {
             console.error('Error al llamar a la API:', error);
         }
@@ -301,34 +389,49 @@ const EditarAnticipoGastosForm = ({ id }) => {
                         />
                     </Grid>
                     <Grid item lg={6} md={12}>
-                        <CustomFormLabel>Rubro:</CustomFormLabel>
-                        <CustomSelect fullWidth>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </CustomSelect>
+                        <CustomFormLabel htmlFor="rubros">Rubros</CustomFormLabel>
+                        <FormControl fullWidth>
+                            <InputLabel id="rubros-label">Seleccione los rubros</InputLabel>
+                            <Select
+                                labelId="rubros-label"
+                                id="rubros"
+                                name="rubros"
+                                multiple
+                                value={anticipoGastos.rubros || []}
+                                onChange={(e) =>
+                                    setAnticipoGastos({
+                                        ...anticipoGastos,
+                                        rubros: e.target.value, // Actualiza el estado con los rubros seleccionados
+                                    })
+                                }
+                                input={<OutlinedInput id="select-multiple-chip" label="Seleccione los rubros" />}
+                                renderValue={(selected) => (
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                        {selected.map((rubroId) => {
+                                            const rubro = rubrosOptions.find((r) => r.id === rubroId);
+                                            return <Chip key={rubroId} label={rubro ? rubro.nombre_rubro : ''} />;
+                                        })}
+                                    </div>
+                                )}
+                            >
+                                {rubrosOptions.map((rubro) => (
+                                    <MenuItem key={rubro.id} value={rubro.id}>
+                                        {rubro.nombre_rubro}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item lg={6} md={12}>
                         <CustomFormLabel>Proyecto:</CustomFormLabel>
-                        <CustomSelect
+                        <TextField
                             id="id_proyectos"
                             name="id_proyectos"
+                            value={actividad.proyecto.nombre || "Error al cargar el proyecto"}
                             fullWidth
                             variant="outlined"
-                            value={anticipoGastos?.contenido?.id_proyectos || ""}
-                            onChange={(e) => setAnticipoGastos({
-                                ...anticipoGastos, // Mantener el estado anterior
-                                contenido: {
-                                    ...anticipoGastos.contenido, // Mantener las propiedades dentro de 'contenido'
-                                    id_proyectos: e.target.value // Actualizar solo 'municipio_id'
-                                }
-                            })}
-                        >
-                            {proyectos.map((proyecto) => (
-                                <MenuItem key={proyecto.id} value={proyecto.id}>
-                                    {proyecto.nombre}
-                                </MenuItem>
-                            ))}
-                        </CustomSelect>
+                            disabled
+                        />
                     </Grid>
                 </Grid>
 

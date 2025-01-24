@@ -1,8 +1,12 @@
 import {
     Alert,
     Button,
+    Chip,
+    FormControl,
     Grid,
+    InputLabel,
     MenuItem,
+    OutlinedInput,
     Select,
     Table,
     TableBody,
@@ -19,16 +23,23 @@ import { useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
-import CustomSelect from '../theme-elements/CustomSelect';
 
 const AnticipoGastosForm = () => {
 
     const id = useParams();
     const navigate = useNavigate();
-    const [proyectos, setProyectos] = useState([]);
+    const [actividad, setActividad] = useState(
+        {
+            id_proyectos: 0,
+            proyecto: {
+                nombre: '',
+            },
+        }
+    );
     const [elementos, setElementos] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [subcategorias, setSubcategorias] = useState([]);
+    const [rubrosOptions, setRubrosOptions] = useState([]);
 
     const CustomFormLabel = styled((props) => (
         <Typography variant="subtitle1" fontWeight={600} {...props} component="label" />
@@ -55,14 +66,14 @@ const AnticipoGastosForm = () => {
     });
 
     useEffect(() => {
-        const fetchProyectos = async () => {
+        const fetchActividad = async () => {
             try {
-                const response = await fetch(`${URL}proyectos`);
+                const response = await fetch(`${URL}actividades/${id.id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setProyectos(data);
+                    setActividad(data);
                 } else {
-                    console.error('Error al obtener los proyectos');
+                    console.error('Error al obtener la actividad');
                 }
             } catch (error) {
                 console.error('Error al llamar a la API:', error);
@@ -109,9 +120,24 @@ const AnticipoGastosForm = () => {
             }
         };
 
+        const fetchRubros = async () => {
+            try {
+                const response = await fetch(`${URL}rubros`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setRubrosOptions(data);
+                } else {
+                    console.error('Error al obtener los rubros');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
+        fetchRubros();
         fetchSubcategorias();
         fetchCategorias();
-        fetchProyectos();
+        fetchActividad();
     }, []);
 
     const handleItemChange = (id, key, value) => {
@@ -140,7 +166,7 @@ const AnticipoGastosForm = () => {
                 concepto: values.concepto,
                 cheque_a_favor: values.cheque_a_favor,
                 monto_solicitado: Number(values.monto_solicitado),
-                id_proyectos: Number(values.id_proyectos),
+                id_proyectos: Number(actividad.id_proyectos),
                 total: Number(calculateTotal()),
             };
 
@@ -181,6 +207,30 @@ const AnticipoGastosForm = () => {
 
             const documentoData = await response.json();
             const idDocumento = documentoData.id; // Se obtiene el id del documento creado
+
+            //Se guardan los rubros
+            const rubrosPorEnviar = formik.values.rubros.map((idRubro) => ({
+                id_rubro: Number(idRubro),
+                id_proyecto: Number(actividad.id_proyectos),
+            }));
+
+            const responseRubros = await fetch(`${URL}proyectoRubros`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rubrosPorEnviar),
+            });
+
+            if (responseRubros.ok) {
+                <Alert variant="filled" severity="success">
+                    Rubros guardados con éxito
+                </Alert>
+            } else {
+                <Alert variant='filled' severity='error'>
+                    Error al guardar los rubros
+                </Alert>
+            }
 
             // Se guardan los elementos
             const elementosToSend = elementos.map((elemento) => ({
@@ -226,6 +276,7 @@ const AnticipoGastosForm = () => {
             concepto: '',
             cheque_a_favor: '',
             monto_solicitado: '',
+            rubros: [],
             id_proyectos: 0,
             total: 0,
         },
@@ -318,36 +369,50 @@ const AnticipoGastosForm = () => {
                         />
                     </Grid>
                     <Grid item lg={6} md={12}>
-                        <CustomFormLabel>Rubro:</CustomFormLabel>
-                        <Select fullWidth>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </Select>
+                        <CustomFormLabel htmlFor="rubros">Rubros</CustomFormLabel>
+                        <FormControl fullWidth>
+                            <InputLabel id="rubros-label">Seleccione los rubros</InputLabel>
+                            <Select
+                                labelId="rubros-label"
+                                id="rubros"
+                                name="rubros"
+                                multiple
+                                value={formik.values.rubros || []}
+                                onChange={(e) => {
+                                    formik.setFieldValue("rubros", e.target.value); // Actualiza correctamente los valores seleccionados
+                                }}
+                                input={<OutlinedInput id="select-multiple-chip" label="Seleccione los rubros" />}
+                                renderValue={(selected) => (
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                        {selected.map((rubroId) => {
+                                            const rubro = rubrosOptions.find((r) => r.id === rubroId);
+                                            return <Chip key={rubroId} label={rubro ? rubro.nombre_rubro : ''} />;
+                                        })}
+                                    </div>
+                                )}
+                            >
+                                {rubrosOptions.map((rubro) => (
+                                    <MenuItem key={rubro.id} value={rubro.id}>
+                                        {rubro.nombre_rubro}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item lg={6} md={12}>
                         <CustomFormLabel>Proyecto:</CustomFormLabel>
-                        <CustomSelect
+                        <TextField
                             id="id_proyectos"
                             name="id_proyectos"
-                            value={formik.values.id_proyectos}
-                            onChange={(e) => formik.setFieldValue("id_proyectos", e.target.value)}
+                            value={actividad.proyecto.nombre}
+                            // onChange={(e) => formik.setFieldValue("id_proyectos", e.target.value)}
                             onBlur={formik.handleBlur}
                             error={formik.touched.id_proyectos && Boolean(formik.errors.id_proyectos)}
                             helperText={formik.touched.id_proyectos && formik.errors.id_proyectos}
                             fullWidth
                             variant="outlined"
-                        >
-                            {proyectos.map((proyecto) => (
-                                <MenuItem key={proyecto.id} value={proyecto.id}>
-                                    {proyecto.nombre}
-                                </MenuItem>
-                            ))}
-                        </CustomSelect>
-                        {formik.errors.id_proyectos && (
-                            <FormHelperText error>
-                                {formik.errors.id_proyectos}
-                            </FormHelperText>
-                        )}
+                            disabled
+                        />
                     </Grid>
                 </Grid>
 
