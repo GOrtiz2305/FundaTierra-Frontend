@@ -54,7 +54,7 @@ const DashDocumentos = ({ id }) => {
                 if (data.action === 'cancel') {
                     console.log('User clicked cancel/close button')
                 }
-                console.log(data)
+                // console.log(data)
             },
         })
     }
@@ -126,7 +126,7 @@ const DashDocumentos = ({ id }) => {
                 const response = await fetch(`${URL}actividades/${id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data)
+                    // console.log(data)
                     setActividad(data);
                 } else {
                     console.error('Error al obtener la actividad');
