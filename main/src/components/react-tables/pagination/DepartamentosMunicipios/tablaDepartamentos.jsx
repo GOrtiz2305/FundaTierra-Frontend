@@ -30,40 +30,43 @@ import { useNavigate } from 'react-router';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import DownloadCard from 'src/components/shared/DownloadCard';
-import { URL } from "../../../../config";
+import { URL } from "../../../../../config";
 
 import axios from 'axios';
 
 const columnHelper = createColumnHelper();
 
-const ProyectosPaginationTable = () => {
+const DepartamentosPaginationTable = () => {
     const [data, setData] = React.useState(() => []);
     const [columnFilters, setColumnFilters] = React.useState([]);
     const navigate = useNavigate();
-    
+
     React.useEffect(() => {
-        const fetchProyectos = async () => {
+        const fetchDepartamentos = async () => {
             try {
-                const response = await axios.get(`${URL}proyectos`);
+                const response = await axios.get(`${URL}departamentos`);
                 setData(response.data);
                 console.log(data);
-
             } catch (error) {
-                console.error("Error al obtener proyectos:", error);
+                console.error("Error al obtener departamentos:", error);
             }
         };
-        fetchProyectos();
+        fetchDepartamentos();
     }, []);
 
     const handleEdit = (id) => {
-        navigate(`/Proyectos/cambios/${id}`);  // Redirige a la página de cambios con el id
+        navigate(`/DepartamentosMunicipios/editarDepartamentos/${id}`);
     };
 
-    const handleViewDetails = (id) => {
-        navigate(`/proyectos/detalle/${id}`);  // Redirige a la página de detalles con el id
+    const handleDelete = async (row) => {
+        try {
+            await axios.put(`${URL}departamentos/eliminar/${row.id}`);
+            setData((prevData) => prevData.filter((item) => item.id !== row.id));
+        } catch (error) {
+            console.error("Error al eliminar municipio:", error);
+        }
     };
 
-    // Definir las columnas antes de usarlas en useReactTable
     const columns = [
         columnHelper.accessor('nombre', {
             header: () => 'Nombre',
@@ -73,31 +76,7 @@ const ProyectosPaginationTable = () => {
                 </Typography>
             ),
         }),
-        columnHelper.accessor('fecha_inicio', {
-            header: () => 'Fecha Inicio',
-            cell: info => (
-                <Typography variant="subtitle1" color="textSecondary">
-                    {info.getValue()}
-                </Typography>
-            ),
-        }),
-        columnHelper.accessor('fecha_fin', {
-            header: () => 'Fecha fin',
-            cell: info => (
-                <Typography variant="subtitle1" color="textSecondary">
-                    {info.getValue()}
-                </Typography>
-            ),
-        }),
-        columnHelper.accessor('presupuesto', {
-            header: () => 'Presupuestos',
-            cell: info => (
-                <Typography variant="subtitle1" color="textSecondary">
-                    {info.getValue()}
-                </Typography>
-            ),
-        }),
-        columnHelper.accessor('estado_proyecto.nombre', {
+        columnHelper.accessor('estado', {
             header: () => 'Estado',
             meta: {
                 filterVariant: 'select',
@@ -105,30 +84,28 @@ const ProyectosPaginationTable = () => {
             cell: info => (
                 <Chip
                     sx={{
-                        bgcolor:
-                            info.getValue() === 'active'
-                                ? (theme) => theme.palette.success.light
-                                : info.getValue() === 'En proceso'
-                                    ? (theme) => theme.palette.warning.light
-                                    : info.getValue() === 'completed'
-                                        ? (theme) => theme.palette.primary.light
-                                        : info.getValue() === 'cancel'
-                                            ? (theme) => theme.palette.error.light
-                                            : (theme) => theme.palette.secondary.light,
-                        color:
-                            info.getValue() === 'active'
-                                ? (theme) => theme.palette.success.main
-                                : info.getValue() === 'En proceso'
-                                    ? (theme) => theme.palette.warning.main
-                                    : info.getValue() === 'completed'
-                                        ? (theme) => theme.palette.primary.main
-                                        : info.getValue() === 'cancel'
-                                            ? (theme) => theme.palette.error.main
-                                            : (theme) => theme.palette.secondary.main,
+                        bgcolor: info.getValue() ? (theme) => theme.palette.success.light : (theme) => theme.palette.error.light,
+                        color: info.getValue() ? (theme) => theme.palette.success.main : (theme) => theme.palette.error.main,
                         borderRadius: '8px',
                     }}
-                    label={info.getValue()}
+                    label={info.getValue() ? 'Activo' : 'Inactivo'}
                 />
+            ),
+        }),
+        columnHelper.accessor('createdAt', {
+            header: () => 'Fecha Creación',
+            cell: info => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {new Date(info.getValue()).toLocaleDateString()}
+                </Typography>
+            ),
+        }),
+        columnHelper.accessor('updatedAt', {
+            header: () => 'Fecha Actualización',
+            cell: info => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {new Date(info.getValue()).toLocaleDateString()}
+                </Typography>
             ),
         }),
         
@@ -140,17 +117,10 @@ const ProyectosPaginationTable = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => handleEdit(row.original.id)}  // Pasar el id aquí
+                        onClick={() => handleEdit(row.original.id)}
                         startIcon={<IconPencil width={18} />}
                     >
                         Editar
-                    </Button>
-                    <Button
-                         variant="contained"
-                         color="info"
-                         onClick={() => handleViewDetails(row.original.id)}
-                    >
-                        Ver Detalles
                     </Button>
                     <Button
                         variant="contained"
@@ -158,7 +128,7 @@ const ProyectosPaginationTable = () => {
                         onClick={() => handleDelete(row.original)}
                         startIcon={<IconTrash width={18} />}
                     >
-                        Borrar
+                        Desactivar
                     </Button>
                 </Stack>
             ),
@@ -167,14 +137,14 @@ const ProyectosPaginationTable = () => {
 
     const table = useReactTable({
         data,
-        columns,  // Ahora 'columns' ya está inicializado
+        columns,
         filterFns: {},
         state: {
             columnFilters,
         },
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(), //client side filtering
+        getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         debugTable: true,
@@ -183,14 +153,12 @@ const ProyectosPaginationTable = () => {
     });
 
     const handleDownload = () => {
-        const headers = ["nombre", "fecha_inicio", "fecha_fin ", "presupuesto", "estado"];
+        const headers = ["nombre", "estado", "fecha_creacion", "fecha_actualizacion"];
         const rows = data.map(item => [
-
             item.nombre,
-            item.fecha_inicio,
-            item.fecha_fin,
-            item.presupuesto,
-            item.estado,
+            item.estado ? 'Activo' : 'Inactivo',
+            new Date(item.createdAt).toLocaleDateString(),
+            new Date(item.updatedAt).toLocaleDateString(),
         ]);
 
         const csvContent = [
@@ -203,14 +171,14 @@ const ProyectosPaginationTable = () => {
 
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "table-data.csv");
+        link.setAttribute("download", "departamentos-data.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     };
 
     return (
-        <DownloadCard title="Proyectos" onDownload={handleDownload}>
+        <DownloadCard title="Departamentos" onDownload={handleDownload}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box>
@@ -329,5 +297,4 @@ const ProyectosPaginationTable = () => {
     );
 };
 
-export default ProyectosPaginationTable;
-
+export default DepartamentosPaginationTable;

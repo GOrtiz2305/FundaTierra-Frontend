@@ -18,7 +18,6 @@ import { useNavigate, useParams } from 'react-router';
 import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import esLocale from 'date-fns/locale/es';
-import { set } from 'lodash';
 
 const MemoriaForm = () => {
   const id = useParams();
@@ -100,6 +99,7 @@ const MemoriaForm = () => {
         participantes_total: values.participantes_total,
         hombres_participantes: values.hombres_participantes,
         mujeres_participantes: values.mujeres_participantes,
+        ninos_participantes: values.ninos_participantes,
         responsable: values.responsable,
         cargo: values.cargo,
         objetivo_general: values.objetivo_general,
@@ -177,6 +177,7 @@ const MemoriaForm = () => {
       participantes_total: '',
       hombres_participantes: '',
       mujeres_participantes: '',
+      ninos_participantes: '',
       responsable: '',
       cargo: '',
       objetivo_general: '',
@@ -283,7 +284,7 @@ const MemoriaForm = () => {
           </Grid>
         </Grid>
         <Grid container spacing={3} mb={3}>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="participantes_total">Participantes</CustomFormLabel>
             <CustomTextField
               id="participantes_total"
@@ -295,7 +296,7 @@ const MemoriaForm = () => {
               disabled
             />
           </Grid>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="hombres_participantes">Hombres</CustomFormLabel>
             <CustomTextField
               id="hombres_participantes"
@@ -304,8 +305,9 @@ const MemoriaForm = () => {
               onChange={(e) => {
                 const hombres = parseInt(e.target.value || 0, 10); // Convertir a número o 0 si está vacío
                 const mujeres = parseInt(formik.values.mujeres_participantes || 0, 10);
+                const ninos = parseInt(formik.values.ninos_participantes || 0, 10);
                 formik.setFieldValue('hombres_participantes', hombres);
-                formik.setFieldValue('participantes_total', hombres + mujeres);
+                formik.setFieldValue('participantes_total', hombres + mujeres + ninos);
               }}
               value={formik.values.hombres_participantes}
               error={formik.touched.hombres_participantes && Boolean(formik.errors.hombres_participantes)}
@@ -314,7 +316,7 @@ const MemoriaForm = () => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="mujeres_participantes">Mujeres</CustomFormLabel>
             <CustomTextField
               id="mujeres_participantes"
@@ -323,12 +325,33 @@ const MemoriaForm = () => {
               onChange={(e) => {
                 const mujeres = parseInt(e.target.value || 0, 10); // Convertir a número o 0 si está vacío
                 const hombres = parseInt(formik.values.hombres_participantes || 0, 10);
+                const ninos = parseInt(formik.values.ninos_participantes || 0, 10);
                 formik.setFieldValue('mujeres_participantes', mujeres);
-                formik.setFieldValue('participantes_total', hombres + mujeres);
+                formik.setFieldValue('participantes_total', hombres + mujeres + ninos);
               }}
               value={formik.values.mujeres_participantes}
               error={formik.touched.mujeres_participantes && Boolean(formik.errors.mujeres_participantes)}
               helperText={formik.touched.mujeres_participantes && formik.errors.mujeres_participantes}
+              onBlur={formik.handleBlur}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={3} md={12} sm={12}>
+            <CustomFormLabel htmlFor="ninos_participantes">Niños</CustomFormLabel>
+            <CustomTextField
+              id="ninos_participantes"
+              name="ninos_participantes"
+              variant="outlined"
+              onChange={(e) => {
+                const ninos = parseInt(e.target.value || 0, 10); // Convertir a número o 0 si está vacío
+                const hombres = parseInt(formik.values.hombres_participantes || 0, 10);
+                const mujeres = parseInt(formik.values.mujeres_participantes || 0, 10);
+                formik.setFieldValue('ninos_participantes', ninos);
+                formik.setFieldValue('participantes_total', hombres + mujeres + ninos);
+              }}
+              value={formik.values.ninos_participantes}
+              error={formik.touched.ninos_participantes && Boolean(formik.errors.ninos_participantes)}
+              helperText={formik.touched.ninos_participantes && formik.errors.ninos_participantes}
               onBlur={formik.handleBlur}
               fullWidth
             />

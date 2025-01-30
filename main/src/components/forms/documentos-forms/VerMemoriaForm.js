@@ -1,7 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
 import {
-  Button,
-  FormHelperText,
   MenuItem,
   Select,
   Typography,
@@ -11,10 +9,8 @@ import {
 import CustomTextField from '../theme-elements/CustomTextField';
 import ParentCard from '../../shared/ParentCard';
 import { URL } from "../../../../config";
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import esLocale from 'date-fns/locale/es';
@@ -23,7 +19,6 @@ const VerMemoriaForm = ({ id }) => {
   const [actividad, setActividad] = useState(null);
   const [departamentos, setDepartamentos] = useState([]);
   const [municipios, setMunicipios] = useState([]);
-  const navigate = useNavigate();
 
   const [memoria, setMemoria] = useState({
     id: 0,
@@ -44,8 +39,6 @@ const VerMemoriaForm = ({ id }) => {
     contenido: {
     },
   });
-
-  const [loading, setLoading] = useState(true);
 
   const CustomFormLabel = styled((props) => (
     <Typography
@@ -202,7 +195,7 @@ const VerMemoriaForm = ({ id }) => {
           </Grid>
         </Grid>
         <Grid container spacing={3} mb={3}>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="participantes_total">Participantes</CustomFormLabel>
             <CustomTextField
               id="participantes_total"
@@ -213,7 +206,7 @@ const VerMemoriaForm = ({ id }) => {
               disabled
             />
           </Grid>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="hombres_participantes">Hombres</CustomFormLabel>
             <CustomTextField
               id="hombres_participantes"
@@ -224,13 +217,24 @@ const VerMemoriaForm = ({ id }) => {
               disabled
             />
           </Grid>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="mujeres_participantes">Mujeres</CustomFormLabel>
             <CustomTextField
               id="mujeres_participantes"
               name="mujeres_participantes"
               variant="outlined"
               value={memoria.contenido.mujeres_participantes}
+              fullWidth
+              disabled
+            />
+          </Grid>
+          <Grid item lg={3} md={12} sm={12}>
+            <CustomFormLabel htmlFor="ninos_participantes">Niños</CustomFormLabel>
+            <CustomTextField
+              id="ninos_participantes"
+              name="ninos_participantes"
+              variant="outlined"
+              value={memoria.contenido.ninos_participantes}
               fullWidth
               disabled
             />

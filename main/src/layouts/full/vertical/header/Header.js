@@ -53,7 +53,7 @@ const Header = () => {
         </IconButton>
         <Box flexGrow={1} />
         <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
-          Fundación Tierra Nuestra - Gestión de Actividades
+          Fundación Tierra Nuestra
         </Typography>
         <Stack spacing={1} direction="row" alignItems="center">
           <IconButton size="large" color="inherit">

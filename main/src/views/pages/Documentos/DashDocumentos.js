@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import {
+    Alert,
     Button,
     ButtonGroup,
     Grid,
@@ -8,7 +9,6 @@ import {
     Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import useDrivePicker from 'react-google-drive-picker';
 import { useNavigate } from 'react-router';
@@ -33,7 +33,7 @@ const DashDocumentos = ({ id }) => {
     const [memorias, setMemorias] = useState([]);
     const [agenda, setAgenda] = useState([]);
     const [presupuesto, setPresupuesto] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [anticipoGastos, setAnticipoGastos] = useState([]);
     const navigate = useNavigate();
     const [openPicker, authRes] = useDrivePicker();
     const [authTocken, setauthTocken] = useState("");
@@ -54,7 +54,7 @@ const DashDocumentos = ({ id }) => {
                 if (data.action === 'cancel') {
                     console.log('User clicked cancel/close button')
                 }
-                console.log(data)
+                // console.log(data)
             },
         })
     }
@@ -80,6 +80,10 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/presupuesto`);
     };
 
+    const handleAgregarAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos`);
+    };
+
     const handleVerMemoria = () => {
         navigate(`/actividades/documentos/${id}/memoria/detalles`);
     };
@@ -90,6 +94,10 @@ const DashDocumentos = ({ id }) => {
 
     const handleVerPresupuesto = () => {
         navigate(`/actividades/documentos/${id}/presupuesto/detalles`);
+    };
+
+    const handleVerAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos/detalles`);
     };
 
     const handleEditarAgenda = () => {
@@ -104,6 +112,10 @@ const DashDocumentos = ({ id }) => {
         navigate(`/actividades/documentos/${id}/presupuesto/cambios`);
     };
 
+    const handleEditarAnticipoGastos = () => {
+        navigate(`/actividades/documentos/${id}/anticipo-gastos/cambios`);
+    };
+
     useEffect(() => {
         if (authRes) {
             setauthTocken(authRes.access_token);
@@ -114,7 +126,7 @@ const DashDocumentos = ({ id }) => {
                 const response = await fetch(`${URL}actividades/${id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data)
+                    // console.log(data)
                     setActividad(data);
                 } else {
                     console.error('Error al obtener la actividad');
@@ -195,6 +207,20 @@ const DashDocumentos = ({ id }) => {
             }
         };
 
+        const fetchAnticipoGastos = async () => {
+            try {
+                const response = await fetch(`${URL}api/documentos/${id}/5`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAnticipoGastos(data);
+                } else {
+                    console.error('Error al obtener el anticipo de gastos');
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
         if (id) {
             fetchActividades();
         }
@@ -204,6 +230,7 @@ const DashDocumentos = ({ id }) => {
         fetchMemorias();
         fetchPresupuesto();
         fetchAgenda();
+        fetchAnticipoGastos();
     }, [id, authRes]);
 
     return (
@@ -278,6 +305,97 @@ const DashDocumentos = ({ id }) => {
                                 </MenuItem>
                             ))}
                         </Select>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={3} mb={3}>
+                    <Grid item lg={12} md={12}>
+                        <Alert severity="info">Información adicional</Alert>
+                    </Grid>
+                    <Grid item lg={6} md={12}>
+                        <CustomFormLabel htmlFor="descripcion">Objetivo general</CustomFormLabel>
+                        <CustomTextField
+                            id="descripcion"
+                            multiline
+                            rows={4}
+                            variant="outlined"
+                            fullWidth
+                            value={
+                                memorias && memorias.contenido && memorias.contenido.objetivo_general
+                                    ? memorias.contenido.objetivo_general
+                                    : 'Pendiente de ser agregado en la memoria'
+                            }
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item lg={6} md={12}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel>Total de participantes</CustomFormLabel>
+                                <CustomTextField
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.participantes_total
+                                            ? memorias.contenido.participantes_total
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel>Niños</CustomFormLabel>
+                                <CustomTextField
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.ninos_participantes
+                                            ? memorias.contenido.ninos_participantes
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel htmlFor="hombres">Hombres</CustomFormLabel>
+                                <CustomTextField
+                                    id="hombres"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.hombres_participantes
+                                            ? memorias.contenido.hombres_participantes
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <CustomFormLabel htmlFor="mujeres">Mujeres</CustomFormLabel>
+                                <CustomTextField
+                                    id="mujeres"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={
+                                        memorias && memorias.contenido && memorias.contenido.mujeres_participantes
+                                            ? memorias.contenido.mujeres_participantes
+                                            : 'Pendiente'
+                                    }
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </ParentCard>
@@ -365,12 +483,36 @@ const DashDocumentos = ({ id }) => {
                         sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
                     >
                         <Typography variant="h6">Anticipo de gastos</Typography>
+                        <br />
+                        <Typography variant="body2">
+                            {anticipoGastos.id == null
+                                ? 'Agregar documento'
+                                : 'Documento: ' + anticipoGastos.estado_documento.nombre}
+                        </Typography>
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button style={{ width: '33.33%' }}>Agregar</Button>
-                        <Button style={{ width: '33.33%' }}>Ver</Button>
-                        <Button style={{ width: '33.33%' }}>Editar</Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleAgregarAnticipoGastos}
+                            disabled={anticipoGastos.id != null}
+                        >
+                            Agregar
+                        </Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleVerAnticipoGastos}
+                            disabled={anticipoGastos.id == null}
+                        >
+                            Ver
+                        </Button>
+                        <Button
+                            style={{ width: '33.33%' }}
+                            onClick={handleEditarAnticipoGastos}
+                            disabled={anticipoGastos.id == null}
+                        >
+                            Editar
+                        </Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>
@@ -420,10 +562,9 @@ const DashDocumentos = ({ id }) => {
                     </BoxStyled>
                     <br />
                     <ButtonGroup variant="contained" aria-label="outlined primary button group" style={{ width: '100%' }}>
-                        <Button>Agregar</Button>
-                        <Button>Ver</Button>
-                        <Button>Editar</Button>
-                        <Button>Eliminar</Button>
+                        <Button style={{ width: '33.33%' }}>Agregar</Button>
+                        <Button style={{ width: '33.33%' }}>Ver</Button>
+                        <Button style={{ width: '33.33%' }}>Editar</Button>
                     </ButtonGroup>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={3}>

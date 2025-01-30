@@ -14,8 +14,6 @@ import CustomCheckbox from '../../../components/forms/theme-elements/CustomCheck
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 
-import AuthSocialButtons from './AuthSocialButtons';
-
 const AuthLogin = ({ title, subtitle, subtext }) => (
   <>
     {title ? (
@@ -25,33 +23,16 @@ const AuthLogin = ({ title, subtitle, subtext }) => (
     ) : null}
 
     {subtext}
-
-    <AuthSocialButtons title="Sign in with" />
-    <Box mt={3}>
-      <Divider>
-        <Typography
-          component="span"
-          color="textSecondary"
-          variant="h6"
-          fontWeight="400"
-          position="relative"
-          px={2}
-        >
-          or sign in with
-        </Typography>
-      </Divider>
-    </Box>
-
     <Stack>
       <Box>
-        <CustomFormLabel htmlFor="username">Username</CustomFormLabel>
+        <CustomFormLabel htmlFor="username">Usuario</CustomFormLabel>
         <CustomTextField id="username" variant="outlined" fullWidth />
       </Box>
       <Box>
-        <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
+        <CustomFormLabel htmlFor="password">Contraseña</CustomFormLabel>
         <CustomTextField id="password" type="password" variant="outlined" fullWidth />
       </Box>
-      <Stack justifyContent="space-between" direction="row" alignItems="center" my={2}>
+      {/* <Stack justifyContent="space-between" direction="row" alignItems="center" my={2}>
         <FormGroup>
           <FormControlLabel
             control={<CustomCheckbox defaultChecked />}
@@ -69,8 +50,9 @@ const AuthLogin = ({ title, subtitle, subtext }) => (
         >
           Forgot Password ?
         </Typography>
-      </Stack>
+      </Stack> */}
     </Stack>
+    <br />
     <Box>
       <Button
         color="primary"
@@ -81,7 +63,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => (
         to="/"
         type="submit"
       >
-        Sign In
+        Ingresar
       </Button>
     </Box>
     {subtitle}

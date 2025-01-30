@@ -1,6 +1,11 @@
 import {
+  IconFolder,
+  IconHome,
+  IconNotes,
+  IconMap2,
+  IconUsers,
+  IconBriefcase,
   IconAperture,
-  IconHome
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -19,20 +24,27 @@ const Menuitems = [
   },
   {
     navlabel: true,
-    subheader: 'Promotores',
+    subheader: 'ADMINISTRACION',
   },
   {
     id: uniqueId(),
-    title: 'Actividades',
-    icon: IconAperture,
-    href: '/actividades',
+    title: 'Departamentos/Municipios',
+    icon: IconMap2,
+    href: '/DepartamentosMunicipios',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
-    title: 'Proyectos',
-    icon: IconAperture,
-    href: '/pages/proyectos',
+    title: 'Usuarios',
+    icon: IconUsers,
+    href: '/usuarios',
+    chipColor: 'secondary',
+  },
+  {
+    id: uniqueId(),
+    title: 'Colaboradores',
+    icon: IconBriefcase,
+    href: '/personas',
     chipColor: 'secondary',
   },
   {
@@ -54,6 +66,24 @@ const Menuitems = [
     title: 'Rubros',
     icon: IconAperture,
     href: '/pages/Rubros',
+    chipColor: 'secondary',
+  },
+  {
+    navlabel: true,
+    subheader: 'Promotores',
+  },
+  {
+    id: uniqueId(),
+    title: 'Proyectos',
+    icon: IconFolder,
+    href: '/pages/proyectos',
+    chipColor: 'secondary',
+  },
+    {
+    id: uniqueId(),
+    title: 'Actividades',
+    icon:   IconNotes,
+    href: '/actividades',
     chipColor: 'secondary',
   },
 ];

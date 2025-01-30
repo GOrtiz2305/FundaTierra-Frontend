@@ -31,6 +31,7 @@ const EditarMemoriaForm = ({ id }) => {
     participantes_total: 0,
     hombres_participantes: 0,
     mujeres_participantes: 0,
+    ninos_participantes: 0,
     responsable: '',
     cargo: '',
     objetivo_general: '',
@@ -41,8 +42,6 @@ const EditarMemoriaForm = ({ id }) => {
     contenido: {
     },
   });
-
-  const [loading, setLoading] = useState(true);
 
   const CustomFormLabel = styled((props) => (
     <Typography
@@ -147,9 +146,10 @@ const EditarMemoriaForm = ({ id }) => {
       const dataToSend = {
         contenido: {
           cargo: memoria.contenido.cargo,
-          participantes_total: Number(memoria.contenido.hombres_participantes)+Number(memoria.contenido.mujeres_participantes),
+          participantes_total: Number(memoria.contenido.hombres_participantes)+Number(memoria.contenido.mujeres_participantes)+Number(memoria.contenido.ninos_participantes),
           hombres_participantes: memoria.contenido.hombres_participantes,
           mujeres_participantes: memoria.contenido.mujeres_participantes,
+          ninos_participantes: memoria.contenido.ninos_participantes,
           responsable: memoria.contenido.responsable,
           objetivo_general: memoria.contenido.objetivo_general,
           agenda: memoria.contenido.agenda,
@@ -286,7 +286,7 @@ const EditarMemoriaForm = ({ id }) => {
           </Grid>
         </Grid>
         <Grid container spacing={3} mb={3}>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="participantes_total">Participantes</CustomFormLabel>
             <CustomTextField
               id="participantes_total"
@@ -298,7 +298,7 @@ const EditarMemoriaForm = ({ id }) => {
               disabled
             />
           </Grid>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="hombres_participantes">Hombres</CustomFormLabel>
             <CustomTextField
               id="hombres_participantes"
@@ -309,7 +309,7 @@ const EditarMemoriaForm = ({ id }) => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={4} md={12} sm={12}>
+          <Grid item lg={3} md={12} sm={12}>
             <CustomFormLabel htmlFor="mujeres_participantes">Mujeres</CustomFormLabel>
             <CustomTextField
               id="mujeres_participantes"
@@ -317,6 +317,17 @@ const EditarMemoriaForm = ({ id }) => {
               variant="outlined"
               onChange={handleInputChange}
               value={memoria.contenido.mujeres_participantes}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={3} md={12} sm={12}>
+            <CustomFormLabel htmlFor="ninos_participantes">Niños</CustomFormLabel>
+            <CustomTextField
+              id="ninos_participantes"
+              name="ninos_participantes"
+              variant="outlined"
+              onChange={handleInputChange}
+              value={memoria.contenido.ninos_participantes}
               fullWidth
             />
           </Grid>
