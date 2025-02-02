@@ -37,6 +37,8 @@ const ProyectosEditarForm = () => {
         const proyectoData = response.data;
         setProyecto({
           ...proyectoData,
+          cooperantes: Array.isArray(proyectoData.cooperantes) ? proyectoData.cooperantes : [],
+        lineas_estrategicas: Array.isArray(proyectoData.lineas_estrategicas) ? proyectoData.lineas_estrategicas : [],
           presupuesto_euros: (proyectoData.presupuesto_quetzales * conversionRate).toFixed(2),
         });
         setLoading(false);
@@ -70,8 +72,8 @@ const ProyectosEditarForm = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const cooperantesResponse = await axios.get(`${URL}cooperantes`); // Cambia esto a la URL correcta
-        const lineasEstrategicasResponse = await axios.get(`${URL}lineas-estrategicas`); // Cambia esto a la URL correcta
+       const cooperantesResponse = await axios.get(`${URL}cooperante`); // Cambia esto a la URL correcta
+        const lineasEstrategicasResponse = await axios.get(`${URL}lineasEstrategicas`); // Cambia esto a la URL correcta
 
         setCooperantesOptions(cooperantesResponse.data);
         setLineasEstrategicasOptions(lineasEstrategicasResponse.data);
@@ -119,7 +121,7 @@ const ProyectosEditarForm = () => {
 
         if (response.ok) {
           alert('Proyecto actualizado con éxito');
-          navigate('/pages/proyectos');
+          navigate('/proyectos');
         } else {
           alert('Error al actualizar el proyecto');
         }
@@ -187,15 +189,17 @@ const ProyectosEditarForm = () => {
                 input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
                 renderValue={(selected) => (
                   <div>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
+                    {selected.map((value) => {
+                      const cooperante = cooperantesOptions.find(coop => coop.id === value);
+                      return cooperante ? <Chip key={value} label={cooperante.nombre_donante} /> : null;
+
+                })}
                   </div>
                 )}
               >
                 {cooperantesOptions.map((cooperante) => (
                   <MenuItem key={cooperante.id} value={cooperante.id}>
-                    {cooperante.nombre}
+                    {cooperante.nombre_donante}
                   </MenuItem>
                 ))}
               </Select>
@@ -216,9 +220,11 @@ const ProyectosEditarForm = () => {
                 input={<OutlinedInput id="select-multiple-chip" label="Seleccione las líneas estratégicas" />}
                 renderValue={(selected) => (
                   <div>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
+                    {selected.map((value) => {
+                      const linea = lineasEstrategicasOptions.find(linea => linea.id === value);
+                      return linea ? <Chip key={value} label={linea.nombre} /> : null;
+
+                })}
                   </div>
                 )}
               >
@@ -314,4 +320,5 @@ const ProyectosEditarForm = () => {
 };
 
 export default ProyectosEditarForm;
+
 
