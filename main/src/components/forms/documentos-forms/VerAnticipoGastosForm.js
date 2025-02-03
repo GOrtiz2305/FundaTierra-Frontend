@@ -1,5 +1,6 @@
 import {
     Alert,
+    Button,
     Chip,
     FormControl,
     Grid,
@@ -343,6 +344,14 @@ const VerAnticipoGastosForm = ({ id }) => {
             <br />
             <Alert severity="warning">Al superar el monto de Q10,000.00 en anticipos de gastos, se necesitará autorización de Coordinación ejecutiva para realizar cheques</Alert>
             <br />
+            <br />
+            <Button variant="contained" color="success" style={{ marginTop: '20px' }}>
+                Aprobar documento
+            </Button>
+            <Button variant="contained" color="error" style={{ marginTop: '20px', marginLeft: '10px' }}>
+                Solicitar correcciones
+            </Button>
+            
         </ParentCard>
     )
 }
