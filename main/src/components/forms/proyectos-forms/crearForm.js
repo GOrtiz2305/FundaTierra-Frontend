@@ -6,7 +6,8 @@ import {
   InputLabel,
   MenuItem,
   OutlinedInput,
-  Select
+  Select,
+  TextField, // Importando TextField para las fechas y presupuestos
 } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -20,24 +21,62 @@ import CustomTextField from '../theme-elements/CustomTextField';
 const ProyectosOrdinaryForm = () => {
   const navigate = useNavigate();
   const [conversionRate, setConversionRate] = useState(0.11); // Tasa de conversión por defecto
+  const [cooperantesOptions, setCooperantesOptions] = useState([]);
+  const [lineasEstrategicasOptions, setLineasEstrategicasOptions] = useState([]);
 
   // Obtener la tasa de conversión desde la API
   useEffect(() => {
     const fetchConversionRate = async () => {
       try {
-        const response = await fetch(`https://api.exchangerate.host/latest?base=GTQ&symbols=EUR`);
+        const response = await fetch(`https://api.exchangerate-api.com/v4/latest/GTQ`);
         const data = await response.json();
         if (data && data.rates && data.rates.EUR) {
           setConversionRate(data.rates.EUR);
         } else {
           console.error('Error al obtener la tasa de conversión.');
+          alert('No se pudo obtener la tasa de conversión');
         }
       } catch (error) {
         console.error('Error al llamar a la API de conversión:', error);
+        alert('Hubo un problema al obtener la tasa de conversión');
       }
     };
 
     fetchConversionRate();
+  }, []);
+
+  // Obtener los cooperantes desde la API
+  useEffect(() => {
+    const fetchCooperantes = async () => {
+      try {
+        const response = await fetch(`${URL}cooperante`);
+        if (!response.ok) throw new Error('Error al obtener cooperantes');
+        const data = await response.json();
+        setCooperantesOptions(data); // Asumiendo que la respuesta tiene el formato adecuado
+      } catch (error) {
+        console.error('Error al obtener los cooperantes:', error);
+        alert('Hubo un problema al obtener los cooperantes');
+      }
+    };
+
+    fetchCooperantes();
+  }, []);
+
+  // Obtener las líneas estratégicas desde la API
+  useEffect(() => {
+    const fetchLineasEstrategicas = async () => {
+      try {
+        const response = await fetch(`${URL}proyectoLinea`);
+        if (!response.ok) throw new Error('Error al obtener las líneas estratégicas');
+        const data = await response.json();
+        setLineasEstrategicasOptions(data); // Asumiendo que la respuesta tiene el formato adecuado
+      } catch (error) {
+        console.error('Error al obtener las líneas estratégicas:', error);
+        alert('Hubo un problema al obtener las líneas estratégicas');
+      }
+    };
+
+    fetchLineasEstrategicas();
   }, []);
 
   const handleSave = async (values) => {
@@ -116,12 +155,10 @@ const ProyectosOrdinaryForm = () => {
     }
   };
 
-  const cooperantesOptions = ["Cooperante A", "Cooperante B", "Cooperante C"]; // Opciones de ejemplo
-  const lineasEstrategicasOptions = ["Línea Estratégica 1", "Línea Estratégica 2", "Línea Estratégica 3"]; // Opciones de ejemplo
-
   return (
     <ParentCard title="Formulario de proyectos - Información general">
       <form onSubmit={formik.handleSubmit}>
+        {/* Campos del formulario */}
         <CustomFormLabel htmlFor="nombre">Nombre del Proyecto</CustomFormLabel>
         <CustomTextField
           id="nombre"
@@ -168,8 +205,8 @@ const ProyectosOrdinaryForm = () => {
                 )}
               >
                 {cooperantesOptions.map((cooperante) => (
-                  <MenuItem key={cooperante} value={cooperante}>
-                    {cooperante}
+                  <MenuItem key={cooperante.id} value={cooperante.id}>
+                    {cooperante.nombre}
                   </MenuItem>
                 ))}
               </Select>
@@ -197,8 +234,8 @@ const ProyectosOrdinaryForm = () => {
                 )}
               >
                 {lineasEstrategicasOptions.map((linea) => (
-                  <MenuItem key={linea} value={linea}>
-                    {linea}
+                  <MenuItem key={linea.id} value={linea.id}>
+                    {linea.nombre}
                   </MenuItem>
                 ))}
               </Select>
@@ -206,49 +243,52 @@ const ProyectosOrdinaryForm = () => {
           </Grid>
         </Grid>
 
-        <CustomFormLabel htmlFor="descripcion">Descripción</CustomFormLabel>
-        <CustomTextField
-          id="descripcion"
-          name="descripcion"
-          multiline
-          rows={4}
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.descripcion}
-          fullWidth
-        />
-
-        <Grid container spacing={2}>
+        {/* Campos de fechas y presupuesto */}
+        <Grid container spacing={2} alignItems="center">
           <Grid item xs={6}>
             <CustomFormLabel htmlFor="fecha_inicio">Fecha de Inicio</CustomFormLabel>
-            <CustomTextField
-              type="date"
+            <TextField
               id="fecha_inicio"
               name="fecha_inicio"
-              onChange={formik.handleChange}
-              value={formik.values.fecha_inicio}
+              type="date"
+              variant="outlined"
               fullWidth
+              value={formik.values.fecha_inicio}
+              onChange={formik.handleChange}
+              error={formik.touched.fecha_inicio && Boolean(formik.errors.fecha_inicio)}
+              helperText={formik.touched.fecha_inicio && formik.errors.fecha_inicio}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </Grid>
+
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="fecha_fin">Fecha Final</CustomFormLabel>
-            <CustomTextField
-              type="date"
+            <CustomFormLabel htmlFor="fecha_fin">Fecha de Fin</CustomFormLabel>
+            <TextField
               id="fecha_fin"
               name="fecha_fin"
-              onChange={formik.handleChange}
-              value={formik.values.fecha_fin}
+              type="date"
+              variant="outlined"
               fullWidth
+              value={formik.values.fecha_fin}
+              onChange={formik.handleChange}
+              error={formik.touched.fecha_fin && Boolean(formik.errors.fecha_fin)}
+              helperText={formik.touched.fecha_fin && formik.errors.fecha_fin}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid container spacing={2} alignItems="center">
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto (Quetzales)</CustomFormLabel>
-            <CustomTextField
+            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en Quetzales</CustomFormLabel>
+            <TextField
               id="presupuesto_quetzales"
               name="presupuesto_quetzales"
+              type="number"
               variant="outlined"
               fullWidth
               value={formik.values.presupuesto_quetzales}
@@ -257,15 +297,17 @@ const ProyectosOrdinaryForm = () => {
               helperText={formik.touched.presupuesto_quetzales && formik.errors.presupuesto_quetzales}
             />
           </Grid>
+
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto (Euros)</CustomFormLabel>
-            <CustomTextField
+            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en Euros</CustomFormLabel>
+            <TextField
               id="presupuesto_euros"
               name="presupuesto_euros"
+              type="number"
               variant="outlined"
               fullWidth
               value={formik.values.presupuesto_euros}
-              disabled // Deshabilitar edición manual
+              disabled
             />
           </Grid>
         </Grid>
@@ -285,3 +327,5 @@ const ProyectosOrdinaryForm = () => {
 };
 
 export default ProyectosOrdinaryForm;
+
+
