@@ -6,7 +6,8 @@ import {
   InputLabel,
   MenuItem,
   OutlinedInput,
-  Select
+  Select,
+  TextField,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -20,35 +21,71 @@ import CustomTextField from '../theme-elements/CustomTextField';
 const ProyectosOrdinaryForm = () => {
   const navigate = useNavigate();
   const [conversionRate, setConversionRate] = useState(0.11); // Tasa de conversión por defecto
+  const [cooperantesOptions, setCooperantesOptions] = useState([]);
+  const [lineasEstrategicasOptions, setLineasEstrategicasOptions] = useState([]);
 
-  // Obtener la tasa de conversión desde la API
   useEffect(() => {
     const fetchConversionRate = async () => {
       try {
-        const response = await fetch(`https://api.exchangerate.host/latest?base=GTQ&symbols=EUR`);
+        const response = await fetch(`https://api.exchangerate-api.com/v4/latest/GTQ`);
         const data = await response.json();
         if (data && data.rates && data.rates.EUR) {
           setConversionRate(data.rates.EUR);
         } else {
           console.error('Error al obtener la tasa de conversión.');
+          alert('No se pudo obtener la tasa de conversión');
         }
       } catch (error) {
         console.error('Error al llamar a la API de conversión:', error);
+        alert('Hubo un problema al obtener la tasa de conversión');
       }
     };
 
     fetchConversionRate();
   }, []);
 
+  useEffect(() => {
+    const fetchCooperantes = async () => {
+      try {
+        const response = await fetch(`${URL}cooperante`);
+        if (!response.ok) throw new Error('Error al obtener los cooperantes');
+        const data = await response.json();
+        setCooperantesOptions(data);
+      } catch (error) {
+        console.error('Error al obtener los cooperantes:', error);
+        alert('Hubo un problema al obtener los cooperantes');
+      }
+    };
+
+    fetchCooperantes();
+  }, []);
+
+  useEffect(() => {
+    const fetchLineasEstrategicas = async () => {
+      try {
+        const response = await fetch(`${URL}lineasEstrategicas`);
+        if (!response.ok) throw new Error('Error al obtener las líneas estratégicas');
+        const data = await response.json();
+        setLineasEstrategicasOptions(data);
+      } catch (error) {
+        console.error('Error al obtener las líneas estratégicas:', error);
+        alert('Hubo un problema al obtener las líneas estratégicas');
+      }
+    };
+
+    fetchLineasEstrategicas();
+  }, []);
+
   const handleSave = async (values) => {
     try {
+      // Primero, crea el proyecto solo cuando los datos sean válidos
       const dataToSend = {
         ...values,
         id_usuario: 3, // ID del usuario
         id_estado: 1,  // Estado inicial
       };
 
-      const response = await fetch(`${URL}proyectos`, {
+      const responseProyecto = await fetch(`${URL}proyectos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,19 +93,57 @@ const ProyectosOrdinaryForm = () => {
         body: JSON.stringify(dataToSend),
       });
 
-      if (response.ok) {
-        alert('Proyecto creado con éxito');
-        navigate('/pages/proyectos');
-      } else {
-        alert('Error al crear el proyecto');
+      if (!responseProyecto.ok) {
+        throw new Error('Error al crear el proyecto');
       }
+
+      const proyectoCreado = await responseProyecto.json();
+      const idProyecto = proyectoCreado.id; // Obtén el ID del proyecto creado
+
+      // Luego, envía los cooperantes
+      const cooperantesEnviar = values.cooperantes.map((idCooperantes) => ({
+        id_cooperante: Number(idCooperantes),
+        id_proyecto: idProyecto,  // Usa el ID del proyecto creado
+      }));
+
+      const responseCooperantes = await fetch(`${URL}proyectoCooperantes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cooperantesEnviar),
+      });
+
+      if (!responseCooperantes.ok) {
+        throw new Error('Error al guardar los cooperantes');
+      }
+
+      // Finalmente, envía las líneas estratégicas
+      const lineasEstrategicasEnviar = values.lineas_estrategicas.map((idLinea) => ({
+        id_linea_estrategica: Number(idLinea),
+        id_proyecto: idProyecto,  // Usa el ID del proyecto creado
+      }));
+
+      const responseLineas = await fetch(`${URL}proyectoLinea`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(lineasEstrategicasEnviar),
+      });
+
+      if (!responseLineas.ok) {
+        throw new Error('Error al guardar las líneas estratégicas');
+      }
+
+      alert('Proyecto creado con éxito');
+      navigate('/proyectos');
     } catch (error) {
       console.error('Error al llamar a la API:', error);
-      alert('Error al llamar a la API');
+      alert('Hubo un problema al guardar los datos del proyecto');
     }
   };
 
-  // Validaciones con Yup
   const validationSchema = yup.object({
     nombre: yup.string().required('El nombre del proyecto es necesario'),
     alias: yup.string().required('El alias es necesario'),
@@ -99,11 +174,9 @@ const ProyectosOrdinaryForm = () => {
     validationSchema,
     onSubmit: (values) => {
       handleSave(values);
-      console.log(values);
     },
   });
 
-  // Actualizar presupuesto en euros al cambiar el valor en quetzales
   const handleQuetzalesChange = (event) => {
     const valueInQuetzales = event.target.value;
     formik.setFieldValue('presupuesto_quetzales', valueInQuetzales);
@@ -116,12 +189,10 @@ const ProyectosOrdinaryForm = () => {
     }
   };
 
-  const cooperantesOptions = ["Cooperante A", "Cooperante B", "Cooperante C"]; // Opciones de ejemplo
-  const lineasEstrategicasOptions = ["Línea Estratégica 1", "Línea Estratégica 2", "Línea Estratégica 3"]; // Opciones de ejemplo
-
   return (
     <ParentCard title="Formulario de proyectos - Información general">
       <form onSubmit={formik.handleSubmit}>
+        {/* Nombre y Alias */}
         <CustomFormLabel htmlFor="nombre">Nombre del Proyecto</CustomFormLabel>
         <CustomTextField
           id="nombre"
@@ -133,7 +204,6 @@ const ProyectosOrdinaryForm = () => {
           error={formik.touched.nombre && Boolean(formik.errors.nombre)}
           helperText={formik.touched.nombre && formik.errors.nombre}
         />
-
         <CustomFormLabel htmlFor="alias">Alias</CustomFormLabel>
         <CustomTextField
           id="alias"
@@ -146,7 +216,8 @@ const ProyectosOrdinaryForm = () => {
           helperText={formik.touched.alias && formik.errors.alias}
         />
 
-        <Grid container spacing={2} alignItems="center">
+        {/* Cooperantes y Líneas Estratégicas */}
+        <Grid container spacing={2}>
           <Grid item xs={6}>
             <CustomFormLabel htmlFor="cooperantes">Cooperantes</CustomFormLabel>
             <FormControl fullWidth>
@@ -157,19 +228,20 @@ const ProyectosOrdinaryForm = () => {
                 name="cooperantes"
                 multiple
                 value={formik.values.cooperantes}
-                onChange={formik.handleChange}
+                onChange={(e) => formik.setFieldValue("cooperantes", e.target.value)}
                 input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
                 renderValue={(selected) => (
-                  <div>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {selected.map((cooperanteId) => {
+                      const cooperante = cooperantesOptions.find((r) => r.id === cooperanteId);
+                      return <Chip key={cooperanteId} label={cooperante ? cooperante.nombre_donante : ''} />;
+                    })}
                   </div>
                 )}
               >
                 {cooperantesOptions.map((cooperante) => (
-                  <MenuItem key={cooperante} value={cooperante}>
-                    {cooperante}
+                  <MenuItem key={cooperante.id} value={cooperante.id}>
+                    {cooperante.nombre_donante}
                   </MenuItem>
                 ))}
               </Select>
@@ -190,15 +262,16 @@ const ProyectosOrdinaryForm = () => {
                 input={<OutlinedInput id="select-multiple-chip" label="Seleccione las líneas estratégicas" />}
                 renderValue={(selected) => (
                   <div>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
+                    {selected.map((value) => {
+                      const linea = lineasEstrategicasOptions.find((r) => r.id === value);
+                      return <Chip key={value} label={linea ? linea.nombre : ''} />;
+                    })}
                   </div>
                 )}
               >
                 {lineasEstrategicasOptions.map((linea) => (
-                  <MenuItem key={linea} value={linea}>
-                    {linea}
+                  <MenuItem key={linea.id} value={linea.id}>
+                    {linea.nombre}
                   </MenuItem>
                 ))}
               </Select>
@@ -206,49 +279,48 @@ const ProyectosOrdinaryForm = () => {
           </Grid>
         </Grid>
 
-        <CustomFormLabel htmlFor="descripcion">Descripción</CustomFormLabel>
-        <CustomTextField
-          id="descripcion"
-          name="descripcion"
-          multiline
-          rows={4}
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.descripcion}
-          fullWidth
-        />
-
+        {/* Fechas y presupuesto */}
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <CustomFormLabel htmlFor="fecha_inicio">Fecha de Inicio</CustomFormLabel>
-            <CustomTextField
-              type="date"
+            <TextField
               id="fecha_inicio"
               name="fecha_inicio"
-              onChange={formik.handleChange}
-              value={formik.values.fecha_inicio}
+              type="date"
+              variant="outlined"
               fullWidth
+              value={formik.values.fecha_inicio}
+              onChange={formik.handleChange}
+              error={formik.touched.fecha_inicio && Boolean(formik.errors.fecha_inicio)}
+              helperText={formik.touched.fecha_inicio && formik.errors.fecha_inicio}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
+
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="fecha_fin">Fecha Final</CustomFormLabel>
-            <CustomTextField
-              type="date"
+            <CustomFormLabel htmlFor="fecha_fin">Fecha de Fin</CustomFormLabel>
+            <TextField
               id="fecha_fin"
               name="fecha_fin"
-              onChange={formik.handleChange}
-              value={formik.values.fecha_fin}
+              type="date"
+              variant="outlined"
               fullWidth
+              value={formik.values.fecha_fin}
+              onChange={formik.handleChange}
+              error={formik.touched.fecha_fin && Boolean(formik.errors.fecha_fin)}
+              helperText={formik.touched.fecha_fin && formik.errors.fecha_fin}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid container spacing={2}>
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto (Quetzales)</CustomFormLabel>
-            <CustomTextField
+            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en Quetzales</CustomFormLabel>
+            <TextField
               id="presupuesto_quetzales"
               name="presupuesto_quetzales"
+              type="number"
               variant="outlined"
               fullWidth
               value={formik.values.presupuesto_quetzales}
@@ -257,19 +329,22 @@ const ProyectosOrdinaryForm = () => {
               helperText={formik.touched.presupuesto_quetzales && formik.errors.presupuesto_quetzales}
             />
           </Grid>
+
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto (Euros)</CustomFormLabel>
-            <CustomTextField
+            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en Euros</CustomFormLabel>
+            <TextField
               id="presupuesto_euros"
               name="presupuesto_euros"
+              type="number"
               variant="outlined"
               fullWidth
               value={formik.values.presupuesto_euros}
-              disabled // Deshabilitar edición manual
+              disabled
             />
           </Grid>
         </Grid>
 
+        {/* Botón Guardar */}
         <Button
           type="submit"
           color="primary"
@@ -285,3 +360,4 @@ const ProyectosOrdinaryForm = () => {
 };
 
 export default ProyectosOrdinaryForm;
+

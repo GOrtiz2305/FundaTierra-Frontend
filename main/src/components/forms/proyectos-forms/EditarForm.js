@@ -2,7 +2,7 @@ import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, S
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom'; // Usar useParams para obtener el id del proyecto
 import * as yup from 'yup';
 import { URL } from "../../../../config";
 import ParentCard from '../../shared/ParentCard';
@@ -10,11 +10,13 @@ import CustomFormLabel from '../theme-elements/CustomFormLabel';
 import CustomTextField from '../theme-elements/CustomTextField';
 
 const ProyectosEditarForm = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const [conversionRate, setConversionRate] = useState(0.11); // Tasa de conversión por defecto
-  const [loading, setLoading] = useState(true); // Estado de carga
-
+  const { id } = useParams(); // Obtenemos el id del proyecto de la URL
+  const [conversionRate, setConversionRate] = useState(0.11);
+  const [loading, setLoading] = useState(true);
+  const [cooperantesOptions, setCooperantesOptions] = useState([]);
+  const [lineasEstrategicasOptions, setLineasEstrategicasOptions] = useState([]);
+  
   const [proyecto, setProyecto] = useState({
     nombre: '',
     alias: '',
@@ -35,6 +37,8 @@ const ProyectosEditarForm = () => {
         const proyectoData = response.data;
         setProyecto({
           ...proyectoData,
+          cooperantes: Array.isArray(proyectoData.cooperantes) ? proyectoData.cooperantes : [],
+        lineas_estrategicas: Array.isArray(proyectoData.lineas_estrategicas) ? proyectoData.lineas_estrategicas : [],
           presupuesto_euros: (proyectoData.presupuesto_quetzales * conversionRate).toFixed(2),
         });
         setLoading(false);
@@ -43,7 +47,6 @@ const ProyectosEditarForm = () => {
         setLoading(false);
       }
     };
-
     fetchProyecto();
   }, [id, conversionRate]);
 
@@ -62,61 +65,70 @@ const ProyectosEditarForm = () => {
         console.error('Error al llamar a la API de conversión:', error);
       }
     };
-
     fetchConversionRate();
   }, []);
 
-  const handleSave = async (values) => {
-    try {
-      const dataToSend = {
-        ...values,
-        id_usuario: 3, // ID del usuario
-        id_estado: 1, // Estado inicial
-      };
+  // Obtener las opciones de cooperantes y líneas estratégicas
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+       const cooperantesResponse = await axios.get(`${URL}cooperante`); // Cambia esto a la URL correcta
+        const lineasEstrategicasResponse = await axios.get(`${URL}lineasEstrategicas`); // Cambia esto a la URL correcta
 
-      const response = await fetch(`${URL}proyectos/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
-      });
-
-      if (response.ok) {
-        alert('Proyecto actualizado con éxito');
-        navigate('/pages/proyectos');
-      } else {
-        alert('Error al actualizar el proyecto');
+        setCooperantesOptions(cooperantesResponse.data);
+        setLineasEstrategicasOptions(lineasEstrategicasResponse.data);
+      } catch (error) {
+        console.error('Error al obtener las opciones de cooperantes y líneas estratégicas:', error);
       }
-    } catch (error) {
-      console.error('Error al llamar a la API:', error);
-      alert('Error al llamar a la API');
-    }
-  };
+    };
 
-  // Validaciones con Yup
-  const validationSchema = yup.object({
-    nombre: yup.string().required('El nombre del proyecto es necesario'),
-    alias: yup.string().required('El alias es necesario'),
-    cooperantes: yup.array().min(1, 'Seleccione al menos un cooperante').required('Los cooperantes son necesarios'),
-    lineas_estrategicas: yup.array().min(1, 'Seleccione al menos una línea estratégica').required('Las líneas estratégicas son necesarias'),
-    descripcion: yup.string().required('La descripción es necesaria'),
-    fecha_inicio: yup.date().required('La fecha de inicio es necesaria'),
-    fecha_fin: yup.date().required('La fecha final es necesaria'),
-    presupuesto_quetzales: yup
-      .number()
-      .typeError('El presupuesto debe ser un número')
-      .positive('Debe ser un número positivo')
-      .required('El presupuesto en quetzales es necesario'),
-  });
+    fetchOptions();
+  }, []);
 
+  // Actualizar valores de Formik cuando el proyecto se actualice
   const formik = useFormik({
     initialValues: proyecto,
     enableReinitialize: true,
-    validationSchema,
-    onSubmit: (values) => {
-      handleSave(values);
-      console.log(values);
+    validationSchema: yup.object({
+      nombre: yup.string().required('El nombre del proyecto es necesario'),
+      alias: yup.string().required('El alias es necesario'),
+      cooperantes: yup.array().min(1, 'Seleccione al menos un cooperante').required('Los cooperantes son necesarios'),
+      lineas_estrategicas: yup.array().min(1, 'Seleccione al menos una línea estratégica').required('Las líneas estratégicas son necesarias'),
+      descripcion: yup.string().required('La descripción es necesaria'),
+      fecha_inicio: yup.date().required('La fecha de inicio es necesaria'),
+      fecha_fin: yup.date().required('La fecha final es necesaria'),
+      presupuesto_quetzales: yup
+        .number()
+        .typeError('El presupuesto debe ser un número')
+        .positive('Debe ser un número positivo')
+        .required('El presupuesto en quetzales es necesario'),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const dataToSend = {
+          ...values,
+          id_usuario: 3, // ID del usuario
+          id_estado: 1, // Estado inicial
+        };
+
+        const response = await fetch(`${URL}proyectos/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        if (response.ok) {
+          alert('Proyecto actualizado con éxito');
+          navigate('/proyectos');
+        } else {
+          alert('Error al actualizar el proyecto');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+        alert('Error al llamar a la API');
+      }
     },
   });
 
@@ -133,13 +145,8 @@ const ProyectosEditarForm = () => {
     }
   };
 
-  const cooperantesOptions = ["Cooperante A", "Cooperante B", "Cooperante C"]; // Opciones de ejemplo
-  const lineasEstrategicasOptions = ["Línea Estratégica 1", "Línea Estratégica 2", "Línea Estratégica 3"]; // Opciones de ejemplo
+  if (loading) return <div>Cargando...</div>;
 
-  if (loading) return <div>Cargando...</div>; // Mensaje de carga
-  console.log('Estado del proyecto:', proyecto);
-  console.log('Estado de loading:', loading);
-  console.log('Valores de formik:', formik.values);
   return (
     <ParentCard title="Editar Proyecto - Actualizar datos">
       <form onSubmit={formik.handleSubmit}>
@@ -182,15 +189,17 @@ const ProyectosEditarForm = () => {
                 input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
                 renderValue={(selected) => (
                   <div>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
+                    {selected.map((value) => {
+                      const cooperante = cooperantesOptions.find(coop => coop.id === value);
+                      return cooperante ? <Chip key={value} label={cooperante.nombre_donante} /> : null;
+
+                })}
                   </div>
                 )}
               >
                 {cooperantesOptions.map((cooperante) => (
-                  <MenuItem key={cooperante} value={cooperante}>
-                    {cooperante}
+                  <MenuItem key={cooperante.id} value={cooperante.id}>
+                    {cooperante.nombre_donante}
                   </MenuItem>
                 ))}
               </Select>
@@ -211,15 +220,17 @@ const ProyectosEditarForm = () => {
                 input={<OutlinedInput id="select-multiple-chip" label="Seleccione las líneas estratégicas" />}
                 renderValue={(selected) => (
                   <div>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
+                    {selected.map((value) => {
+                      const linea = lineasEstrategicasOptions.find(linea => linea.id === value);
+                      return linea ? <Chip key={value} label={linea.nombre} /> : null;
+
+                })}
                   </div>
                 )}
               >
                 {lineasEstrategicasOptions.map((linea) => (
-                  <MenuItem key={linea} value={linea}>
-                    {linea}
+                  <MenuItem key={linea.id} value={linea.id}>
+                    {linea.nombre}
                   </MenuItem>
                 ))}
               </Select>
@@ -227,6 +238,7 @@ const ProyectosEditarForm = () => {
           </Grid>
         </Grid>
 
+        {/* Campos de formulario restantes */}
         <CustomFormLabel htmlFor="descripcion">Descripción</CustomFormLabel>
         <CustomTextField
           id="descripcion"
@@ -308,3 +320,5 @@ const ProyectosEditarForm = () => {
 };
 
 export default ProyectosEditarForm;
+
+
