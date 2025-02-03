@@ -21,11 +21,7 @@ import ParentCard from '../../../components/shared/ParentCard';
 const BoxStyled = styled(Box)(() => ({
   padding: '30px',
   transition: '0.1s ease-in',
-  // cursor: 'pointer',
   color: 'inherit',
-  // '&:hover': {
-  //     transform: 'scale(1.03)',
-  // },
 }));
 
 const DashDocumentos = ({ id }) => {
@@ -40,18 +36,20 @@ const DashDocumentos = ({ id }) => {
   const [authTocken, setauthTocken] = useState('');
   const tipoDocumento = 11;
 
-  //Para qué es useRef? Se puede utilizar useState?
   const fileInputRef = useRef(null);
-  const [carpeta, serCarpeta] = useState('');
+  const [carpeta, setCarpeta] = useState('');
 
   const saveCarpetaListadoParticipantes = () => {
-    serCarpeta('carpeta1');
+    setCarpeta('carpeta1');
+    fileInputRef.current.click();
   };
   const saveCarpetaPlanillaPagos = () => {
-    serCarpeta('carpeta2');
+    setCarpeta('carpeta2');
+    fileInputRef.current.click();
   };
   const saveCarpetaOtros = () => {
-    serCarpeta('carpeta3');
+    setCarpeta('carpeta3');
+    fileInputRef.current.click();
   };
 
   const handleFileUpload = async () => {
@@ -608,7 +606,7 @@ const DashDocumentos = ({ id }) => {
             aria-label="outlined primary button group"
             style={{ width: '100%' }}
           >
-            <Button onClick={() => saveCarpetaListadoParticipantes()} style={{ width: '33.33%' }}>
+            <Button onClick={saveCarpetaListadoParticipantes} style={{ width: '33.33%' }}>
               Agregar
             </Button>
             <Button style={{ width: '33.33%' }}>Ver</Button>
@@ -656,7 +654,7 @@ const DashDocumentos = ({ id }) => {
           </ButtonGroup>
         </Grid>
       </Grid>
-      <input type="file" multiple ref={fileInputRef} />
+      <input type="file" multiple ref={fileInputRef} style={{display:'none'}} onChange={handleFileUpload}/>
     </>
   );
 };
