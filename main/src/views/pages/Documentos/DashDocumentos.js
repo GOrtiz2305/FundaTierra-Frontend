@@ -40,16 +40,16 @@ const DashDocumentos = ({ id }) => {
   const [carpeta, setCarpeta] = useState('');
 
   const saveCarpetaListadoParticipantes = () => {
-    setCarpeta('carpeta1');
     fileInputRef.current.click();
+    setCarpeta('carpeta1');
   };
   const saveCarpetaPlanillaPagos = () => {
-    setCarpeta('carpeta2');
     fileInputRef.current.click();
+    setCarpeta('carpeta2');
   };
   const saveCarpetaOtros = () => {
-    setCarpeta('carpeta3');
     fileInputRef.current.click();
+    setCarpeta('carpeta3');
   };
 
   const handleFileUpload = async () => {
