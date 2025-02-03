@@ -64,13 +64,6 @@ const Menuitems = [
     href: '/actividades',
     chipColor: 'secondary',
   },
-  {
-    id: uniqueId(),
-    title: 'Documentos',
-    icon:   IconNotes,
-    href: '/documentos',
-    chipColor: 'secondary',
-  },
 ];
 
 export default Menuitems;

@@ -8,7 +8,6 @@ const Usuarios = Loadable(lazy(() => import('../views/pages/Usuarios/usuarios'))
 const Personas = Loadable(lazy(() => import('../views/pages/personas/personas')));
 const Actividades = Loadable(lazy(() => import('../views/pages/Actividades/actividades')));
 const ActividadesDocumentos = Loadable(lazy(() => import('../views/pages/Actividades/actividadesDocumentos')));
-const Documentos = Loadable(lazy(() => import('../views/pages/Documentos/DashDocumentos')));
 const Memoria = Loadable(lazy(() => import('../views/pages/Documentos/Memoria')));
 const EditarMemoria = Loadable(lazy(() => import('../views/pages/Documentos/EditarMemoria')));
 const VerMemoria = Loadable(lazy(() => import('../views/pages/Documentos/VerMemoria')));
@@ -236,7 +235,6 @@ const Router = [
       { path: '/actividades/documentos/:id/anticipo-gastos', element: <AnticipoGastos /> },
       { path: '/actividades/documentos/:id/anticipo-gastos/cambios', element: <EditarAnticipoGasto />},
       { path: '/actividades/documentos/:id/anticipo-gastos/detalles', element: <VerAnticipoGastos /> },
-      { path: '/documentos', element: <Documentos /> },
       { path: '/pages/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },
