@@ -1,5 +1,6 @@
 import {
   Alert,
+  Button,
   Grid,
   Table,
   TableBody,
@@ -141,6 +142,13 @@ const VerPresupuestoForm = ({ id }) => {
         disabled
         fullWidth
       />
+      <br />
+      <Button variant="contained" color="success" style={{ marginTop: '20px' }}>
+        Aprobar documento
+      </Button>
+      <Button variant="contained" color="error" style={{ marginTop: '20px', marginLeft: '10px' }}>
+        Solicitar correcciones
+      </Button>
     </ParentCard>
   );
 };

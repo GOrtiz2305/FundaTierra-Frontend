@@ -1,18 +1,20 @@
 import {
-    Alert,
-    Button,
-    Typography
+  Alert,
+  Button,
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
 import CustomTextField from '../theme-elements/CustomTextField';
   
-  const RubrosEditarForm = ({ id }) => {
+  const RubrosEditarForm = () => {
+     const { id } = useParams(); // Obtener el id de la URL
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [initialData, setInitialData] = useState(null);
@@ -33,6 +35,11 @@ import CustomTextField from '../theme-elements/CustomTextField';
     }));
   
     useEffect(() => {
+      if (!id) {
+        setError('ID no proporcionado');
+        setLoading(false);
+        return;
+      }
       const fetchData = async () => {
         try {
           const response = await fetch(`${URL}rubros/${id}`);
@@ -62,7 +69,7 @@ import CustomTextField from '../theme-elements/CustomTextField';
         });
   
         if (response.ok) {
-          navigate('/rubros');
+          navigate('/rubros/nueva');
           alert('Rubro actualizado con éxito');
         } else {
           alert('Error al actualizar el rubro');
@@ -74,12 +81,12 @@ import CustomTextField from '../theme-elements/CustomTextField';
     };
   
     const validationSchema = yup.object({
-      nombre: yup.string().required('El nombre del rubro es necesario'),
+      nombre_rubro: yup.string().required('El nombre del rubro es necesario'),
     });
   
     const formik = useFormik({
       initialValues: initialData || {
-        nombre: '',
+        nombre_rubro: '',
       },
       validationSchema,
       onSubmit: (values) => {
@@ -90,19 +97,19 @@ import CustomTextField from '../theme-elements/CustomTextField';
   
     if (loading) return <Alert severity="info">Cargando datos...</Alert>;
     if (error) return <Alert severity="error">{error}</Alert>;
+    if (!id) return <Alert severity="error">ID no proporcionado</Alert>;
   
     return (
       <ParentCard title='Editar Rubro'>
         <form onSubmit={formik.handleSubmit}>
-          <CustomFormLabel htmlFor="nombre">Nombre del Rubro</CustomFormLabel>
+          <CustomFormLabel htmlFor="nombre_rubro">Nombre del Rubro</CustomFormLabel>
           <CustomTextField
-            id="nombre"
-            name="nombre"
+            name="nombre_rubro"
             variant="outlined"
             onChange={formik.handleChange}
-            value={formik.values.nombre}
-            error={formik.touched.nombre && Boolean(formik.errors.nombre)}
-            helperText={formik.touched.nombre && formik.errors.nombre}
+            value={formik.values.nombre_rubro}
+            error={formik.touched.nombre_rubro && Boolean(formik.errors.nombre_rubro)}
+            helperText={formik.touched.nombre_rubro && formik.errors.nombre_rubro}
             onBlur={formik.handleBlur}
             fullWidth
           />

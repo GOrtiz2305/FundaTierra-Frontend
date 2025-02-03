@@ -8,7 +8,8 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  TableBody
+  TableBody,
+  Button
 } from '@mui/material';
 import ParentCard from '../../shared/ParentCard';
 import { URL } from "../../../../config";
@@ -172,6 +173,13 @@ const VerAgendaForm = ({ id }) => {
           )}
         </TableBody>
       </Table>
+      <br />
+      <Button variant="contained" color="success" style={{ marginTop: '20px' }}>
+        Aprobar documento
+      </Button>
+      <Button variant="contained" color="error" style={{ marginTop: '20px', marginLeft: '10px' }}>
+        Solicitar correcciones
+      </Button>
     </ParentCard>
   );
 };

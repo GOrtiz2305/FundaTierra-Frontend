@@ -1,11 +1,14 @@
 import {
+  IconAperture,
+  IconBriefcase,
   IconFolder,
   IconHome,
-  IconNotes,
   IconMap2,
+  IconNotes,
   IconUsers,
-  IconBriefcase,
-  IconAperture,
+  IconUserPlus,
+  IconLine,
+  IconList,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -49,23 +52,23 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'lineas Estretegicas',
-    icon: IconAperture,
-    href: '/pages/LineasEstrategicas',
+    title: 'Lineas estrategicas',
+    icon: IconLine,
+    href: '/lineasEstregicas/nueva',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
     title: 'Cooperantes',
-    icon: IconAperture,
-    href: '/pages/Cooperantes',
+    icon: IconUserPlus,
+    href: '/cooperante/nueva',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
     title: 'Rubros',
-    icon: IconAperture,
-    href: '/pages/Rubros',
+    icon: IconList,
+    href: '/Rubros/nueva',
     chipColor: 'secondary',
   },
   {
@@ -76,7 +79,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Proyectos',
     icon: IconFolder,
-    href: '/pages/proyectos',
+    href: '/proyectos',
     chipColor: 'secondary',
   },
     {

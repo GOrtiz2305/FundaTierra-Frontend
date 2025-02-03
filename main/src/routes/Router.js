@@ -2,7 +2,6 @@ import React, { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 
-import path from 'path-browserify';
 const DepartamentosMunicipios = Loadable(lazy(() => import('../views/pages/DeparmetosMunicipios/departamentosmunicipios')));
 const Usuarios = Loadable(lazy(() => import('../views/pages/Usuarios/usuarios')));
 const Personas = Loadable(lazy(() => import('../views/pages/personas/personas')));
@@ -12,7 +11,6 @@ const Memoria = Loadable(lazy(() => import('../views/pages/Documentos/Memoria'))
 const EditarMemoria = Loadable(lazy(() => import('../views/pages/Documentos/EditarMemoria')));
 const VerMemoria = Loadable(lazy(() => import('../views/pages/Documentos/VerMemoria')));
 const ProyectosVer = Loadable(lazy(() => import('../views/pages/Documentos/ProyectosVer')));
-const Proyectos = Loadable(lazy(() => import('../views/pages/Proyectos/proyectos')));
 const Agenda = Loadable(lazy(() => import('../views/pages/Documentos/agenda')));
 const Presupuesto = Loadable(lazy(() => import('../views/pages/Documentos/Presupuesto')));
 const VerAgenda = Loadable(lazy(() => import('../views/pages/Documentos/VerAgenda')));
@@ -22,6 +20,7 @@ const EditarPresupuesto = Loadable(lazy(() => import('../views/pages/Documentos/
 const AnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/AnticipoGastos')));
 const VerAnticipoGastos = Loadable(lazy(() => import('../views/pages/Documentos/VerAnticipoGastos')));
 const EditarAnticipoGasto = Loadable(lazy (() => import('../views/pages/Documentos/EditarAnticipoGasto'))) ;
+const Proyectos = Loadable (lazy(() => import('../views/pages/Proyectos/proyectos')));
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
@@ -239,8 +238,7 @@ const Router = [
       { path: '/actividades/documentos/:id/anticipo-gastos', element: <AnticipoGastos /> },
       { path: '/actividades/documentos/:id/anticipo-gastos/cambios', element: <EditarAnticipoGasto />},
       { path: '/actividades/documentos/:id/anticipo-gastos/detalles', element: <VerAnticipoGastos /> },
-      { path: '/pages/proyectos', element: <Proyectos/>},
-      { path: '/pages/proyectos', element: <Proyectos/>},
+      { path: '/proyectos', element: <Proyectos/>},
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },
       { path: '/proyectos/detalle/:id', element:<ProyectosVer/>},
