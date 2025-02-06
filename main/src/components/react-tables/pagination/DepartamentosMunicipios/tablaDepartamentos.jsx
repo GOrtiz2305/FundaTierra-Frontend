@@ -92,22 +92,22 @@ const DepartamentosPaginationTable = () => {
                 />
             ),
         }),
-        columnHelper.accessor('createdAt', {
-            header: () => 'Fecha Creación',
-            cell: info => (
-                <Typography variant="subtitle1" color="textSecondary">
-                    {new Date(info.getValue()).toLocaleDateString()}
-                </Typography>
-            ),
-        }),
-        columnHelper.accessor('updatedAt', {
-            header: () => 'Fecha Actualización',
-            cell: info => (
-                <Typography variant="subtitle1" color="textSecondary">
-                    {new Date(info.getValue()).toLocaleDateString()}
-                </Typography>
-            ),
-        }),
+        // columnHelper.accessor('createdAt', {
+        //     header: () => 'Fecha Creación',
+        //     cell: info => (
+        //         <Typography variant="subtitle1" color="textSecondary">
+        //             {new Date(info.getValue()).toLocaleDateString()}
+        //         </Typography>
+        //     ),
+        // }),
+        // columnHelper.accessor('updatedAt', {
+        //     header: () => 'Fecha Actualización',
+        //     cell: info => (
+        //         <Typography variant="subtitle1" color="textSecondary">
+        //             {new Date(info.getValue()).toLocaleDateString()}
+        //         </Typography>
+        //     ),
+        // }),
         
         {
             id: 'acciones',
