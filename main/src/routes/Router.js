@@ -40,10 +40,13 @@ const ActividadesEditar = Loadable(lazy(() => import('../views/pages/Actividades
 const ActividadesCrear = Loadable(lazy(() => import('../views/pages/Actividades/actividadesCrear')));
 const ProyectosEditar = Loadable(lazy(() => import('../views/pages/Proyectos/proyectosEditar')));
 const ProyectosCrear = Loadable(lazy(() => import('../views/pages/Proyectos/proyectosCrear')));
+const Cooperante = Loadable(lazy(()=> import('../views/pages/Cooperantes/cooperantes')));
 const CooperanteCrear = Loadable(lazy(()=> import ('../views/pages/Cooperantes/cooperanteCrear')));
 const CooperanteEditar = Loadable(lazy(()=> import ('../views/pages/Cooperantes/cooperanteEditar')));
+const LineasEstrategicas = Loadable (lazy (() => import('../views/pages/LineasEstrategicas/lineasEstrategicas')));
 const LineasEstrategicasCrear = Loadable(lazy(()=> import ('../views/pages/LineasEstrategicas/lineasEstrategicasCrear')));
 const LineasEstrategicasEditar = Loadable(lazy(()=> import ('../views/pages/LineasEstrategicas/lineasEstrategicasEditar')));
+const Rubro = Loadable (lazy(()=> import('../views/pages/Rubros/rubros')));
 const RubroCrear = Loadable(lazy(()=> import ('../views/pages/Rubros/rubroCrear')));
 const RubroEditar = Loadable(lazy(()=> import ('../views/pages/Rubros/rubroEditar')));
 /* ****Apps*****r*/
@@ -242,12 +245,15 @@ const Router = [
       { path: '/proyectos/nueva', element: <ProyectosCrear /> },
       { path: '/proyectos/cambios/:id', element: <ProyectosEditar /> },
       { path: '/proyectos/detalle/:id', element:<ProyectosVer/>},
+      { path: '/cooperante', element: <Cooperante />},
       { path: '/cooperante/nueva', element: <CooperanteCrear /> },
       { path: '/cooperante/cambios/:id', element: <CooperanteEditar /> },
-      { path: '/lineasEstregicas/nueva', element: <LineasEstrategicasCrear /> },
-      { path: '/lineasEstregicas/cambios/:id', element: <LineasEstrategicasEditar /> },
-      { path: '/Rubros/nueva', element: <RubroCrear /> },
-      { path: '/Rubros/cambios/:id', element: <RubroEditar /> },
+      { path: '/lineasEstrategicas', element: <LineasEstrategicas/>},
+      { path: '/lineasEstrategicas/nueva', element: <LineasEstrategicasCrear /> },
+      { path: '/lineasEstrategicas/cambios/:id', element: <LineasEstrategicasEditar /> },
+      { path: '/rubros', element: <Rubro /> },
+      { path: '/rubros/nueva', element: <RubroCrear /> },
+      { path: '/rubros/cambios/:id', element: <RubroEditar /> },
       { path: '/forms/form-elements/autocomplete', element: <MuiAutoComplete /> },
       { path: '/forms/form-elements/button', element: <MuiButton /> },
       { path: '/forms/form-elements/checkbox', element: <MuiCheckbox /> },
