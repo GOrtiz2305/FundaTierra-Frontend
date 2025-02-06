@@ -7,7 +7,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  TextField,
+  TextField
 } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -20,143 +20,78 @@ import CustomTextField from '../theme-elements/CustomTextField';
 
 const ProyectosOrdinaryForm = () => {
   const navigate = useNavigate();
-  const [conversionRate, setConversionRate] = useState(0.11); // Tasa de conversión por defecto
+  const [conversionRate, setConversionRate] = useState(0.11);
   const [cooperantesOptions, setCooperantesOptions] = useState([]);
   const [lineasEstrategicasOptions, setLineasEstrategicasOptions] = useState([]);
 
   useEffect(() => {
-    const fetchConversionRate = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`https://api.exchangerate-api.com/v4/latest/GTQ`);
-        const data = await response.json();
-        if (data && data.rates && data.rates.EUR) {
-          setConversionRate(data.rates.EUR);
-        } else {
-          console.error('Error al obtener la tasa de conversión.');
-          alert('No se pudo obtener la tasa de conversión');
-        }
+        const [cooperantesRes, lineasRes] = await Promise.all([
+          fetch(`${URL}cooperante`),
+          fetch(`${URL}lineasEstrategicas`),
+        ]);
+
+        if (!cooperantesRes.ok || !lineasRes.ok) throw new Error('Error en la carga de datos');
+
+        const cooperantesData = await cooperantesRes.json();
+        const lineasData = await lineasRes.json();
+
+        setCooperantesOptions(cooperantesData);
+        setLineasEstrategicasOptions(lineasData);
       } catch (error) {
-        console.error('Error al llamar a la API de conversión:', error);
-        alert('Hubo un problema al obtener la tasa de conversión');
+        console.error('Error al obtener datos:', error);
+        alert('Hubo un problema al obtener los datos');
       }
     };
 
-    fetchConversionRate();
-  }, []);
-
-  useEffect(() => {
-    const fetchCooperantes = async () => {
-      try {
-        const response = await fetch(`${URL}cooperante`);
-        if (!response.ok) throw new Error('Error al obtener los cooperantes');
-        const data = await response.json();
-        setCooperantesOptions(data);
-      } catch (error) {
-        console.error('Error al obtener los cooperantes:', error);
-        alert('Hubo un problema al obtener los cooperantes');
-      }
-    };
-
-    fetchCooperantes();
-  }, []);
-
-  useEffect(() => {
-    const fetchLineasEstrategicas = async () => {
-      try {
-        const response = await fetch(`${URL}lineasEstrategicas`);
-        if (!response.ok) throw new Error('Error al obtener las líneas estratégicas');
-        const data = await response.json();
-        setLineasEstrategicasOptions(data);
-      } catch (error) {
-        console.error('Error al obtener las líneas estratégicas:', error);
-        alert('Hubo un problema al obtener las líneas estratégicas');
-      }
-    };
-
-    fetchLineasEstrategicas();
+    fetchData();
   }, []);
 
   const handleSave = async (values) => {
     try {
-      // Primero, crea el proyecto solo cuando los datos sean válidos
-      const dataToSend = {
-        ...values,
-        id_usuario: 3, // ID del usuario
-        id_estado: 1,  // Estado inicial
-      };
-
       const responseProyecto = await fetch(`${URL}proyectos`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...values, id_usuario: 3, id_estado: 1 }),
       });
 
-      if (!responseProyecto.ok) {
-        throw new Error('Error al crear el proyecto');
-      }
+      if (!responseProyecto.ok) throw new Error('Error al crear el proyecto');
 
       const proyectoCreado = await responseProyecto.json();
-      const idProyecto = proyectoCreado.id; // Obtén el ID del proyecto creado
+      const idProyecto = proyectoCreado.id;
 
-      // Luego, envía los cooperantes
-      const cooperantesEnviar = values.cooperantes.map((idCooperantes) => ({
-        id_cooperante: Number(idCooperantes),
-        id_proyecto: idProyecto,  // Usa el ID del proyecto creado
-      }));
-
-      const responseCooperantes = await fetch(`${URL}proyectoCooperantes`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(cooperantesEnviar),
-      });
-
-      if (!responseCooperantes.ok) {
-        throw new Error('Error al guardar los cooperantes');
+      if (values.cooperantes.length > 0) {
+        await fetch(`${URL}proyectoCooperantes/${idProyecto}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values.cooperantes.map(id => ({ id_cooperante: Number(id), id_proyecto: idProyecto }))),
+        });
       }
 
-      // Finalmente, envía las líneas estratégicas
-      const lineasEstrategicasEnviar = values.lineas_estrategicas.map((idLinea) => ({
-        id_linea_estrategica: Number(idLinea),
-        id_proyecto: idProyecto,  // Usa el ID del proyecto creado
-      }));
-
-      const responseLineas = await fetch(`${URL}proyectoLinea`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(lineasEstrategicasEnviar),
-      });
-
-      if (!responseLineas.ok) {
-        throw new Error('Error al guardar las líneas estratégicas');
+      if (values.lineas_estrategicas.length > 0) {
+        await fetch(`${URL}proyectoLinea/${idProyecto}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values.lineas_estrategicas.map(id => ({ id_linea_estrategica: Number(id), id_proyecto: idProyecto }))),
+        });
       }
 
       alert('Proyecto creado con éxito');
       navigate('/proyectos');
     } catch (error) {
-      console.error('Error al llamar a la API:', error);
-      alert('Hubo un problema al guardar los datos del proyecto');
+      console.error('Error al guardar el proyecto:', error);
+      alert('Hubo un problema al guardar el proyecto');
     }
   };
 
   const validationSchema = yup.object({
     nombre: yup.string().required('El nombre del proyecto es necesario'),
     alias: yup.string().required('El alias es necesario'),
-    cooperantes: yup.array().min(1, 'Seleccione al menos un cooperante').required('Los cooperantes son necesarios'),
-    lineas_estrategicas: yup.array().min(1, 'Seleccione al menos una línea estratégica').required('Las líneas estratégicas son necesarias'),
     descripcion: yup.string().required('La descripción es necesaria'),
     fecha_inicio: yup.date().required('La fecha de inicio es necesaria'),
-    fecha_fin: yup.date().required('La fecha final es necesaria'),
-    presupuesto_quetzales: yup
-      .number()
-      .typeError('El presupuesto debe ser un número')
-      .positive('Debe ser un número positivo')
-      .required('El presupuesto en quetzales es necesario'),
+    fecha_fin: yup.date().min(yup.ref('fecha_inicio'), 'La fecha final debe ser posterior a la fecha de inicio').required('La fecha final es necesaria'),
+    presupuesto_quetzales: yup.number().positive('Debe ser un número positivo').required('El presupuesto en quetzales es necesario'),
   });
 
   const formik = useFormik({
@@ -172,9 +107,7 @@ const ProyectosOrdinaryForm = () => {
       presupuesto_euros: '',
     },
     validationSchema,
-    onSubmit: (values) => {
-      handleSave(values);
-    },
+    onSubmit: handleSave,
   });
 
   const handleQuetzalesChange = (event) => {
@@ -182,7 +115,7 @@ const ProyectosOrdinaryForm = () => {
     formik.setFieldValue('presupuesto_quetzales', valueInQuetzales);
 
     if (!isNaN(valueInQuetzales) && valueInQuetzales !== '') {
-      const valueInEuros = (valueInQuetzales * conversionRate).toFixed(2); // Redondear a 2 decimales
+      const valueInEuros = (valueInQuetzales * conversionRate).toFixed(2);
       formik.setFieldValue('presupuesto_euros', valueInEuros);
     } else {
       formik.setFieldValue('presupuesto_euros', '');
@@ -191,33 +124,33 @@ const ProyectosOrdinaryForm = () => {
 
   return (
     <ParentCard title="Formulario de proyectos - Información general">
-      <form onSubmit={formik.handleSubmit}>
-        {/* Nombre y Alias */}
+      <form onSubmit={formik.handleSubmit} autoComplete="on">
         <CustomFormLabel htmlFor="nombre">Nombre del Proyecto</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"
           variant="outlined"
           fullWidth
+          autoComplete="project-name"
           value={formik.values.nombre}
           onChange={formik.handleChange}
           error={formik.touched.nombre && Boolean(formik.errors.nombre)}
           helperText={formik.touched.nombre && formik.errors.nombre}
         />
+
         <CustomFormLabel htmlFor="alias">Alias</CustomFormLabel>
         <CustomTextField
           id="alias"
           name="alias"
           variant="outlined"
           fullWidth
+          autoComplete="project-alias"
           value={formik.values.alias}
           onChange={formik.handleChange}
           error={formik.touched.alias && Boolean(formik.errors.alias)}
           helperText={formik.touched.alias && formik.errors.alias}
         />
-
-        {/* Cooperantes y Líneas Estratégicas */}
-        <Grid container spacing={2}>
+<Grid container spacing={2}>
           <Grid item xs={6}>
             <CustomFormLabel htmlFor="cooperantes">Cooperantes</CustomFormLabel>
             <FormControl fullWidth>
@@ -228,14 +161,15 @@ const ProyectosOrdinaryForm = () => {
                 name="cooperantes"
                 multiple
                 value={formik.values.cooperantes}
-                onChange={(e) => formik.setFieldValue("cooperantes", e.target.value)}
+                onChange={formik.handleChange}
                 input={<OutlinedInput id="select-multiple-chip" label="Seleccione los cooperantes" />}
                 renderValue={(selected) => (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {selected.map((cooperanteId) => {
-                      const cooperante = cooperantesOptions.find((r) => r.id === cooperanteId);
-                      return <Chip key={cooperanteId} label={cooperante ? cooperante.nombre_donante : ''} />;
-                    })}
+                  <div>
+                    {selected.map((value) => {
+                      const cooperante = cooperantesOptions.find(coop => coop.id === value);
+                      return cooperante ? <Chip key={value} label={cooperante.nombre_donante} /> : null;
+
+                })}
                   </div>
                 )}
               >
@@ -263,9 +197,10 @@ const ProyectosOrdinaryForm = () => {
                 renderValue={(selected) => (
                   <div>
                     {selected.map((value) => {
-                      const linea = lineasEstrategicasOptions.find((r) => r.id === value);
-                      return <Chip key={value} label={linea ? linea.nombre : ''} />;
-                    })}
+                      const linea = lineasEstrategicasOptions.find(linea => linea.id === value);
+                      return linea ? <Chip key={value} label={linea.nombre} /> : null;
+
+                })}
                   </div>
                 )}
               >
@@ -279,7 +214,21 @@ const ProyectosOrdinaryForm = () => {
           </Grid>
         </Grid>
 
-        {/* Fechas y presupuesto */}
+        <CustomFormLabel htmlFor="descripcion">Descripción</CustomFormLabel>
+        <CustomTextField
+          id="descripcion"
+          name="descripcion"
+          variant="outlined"
+          fullWidth
+          multiline
+          rows={4}
+          autoComplete="description"
+          value={formik.values.descripcion}
+          onChange={formik.handleChange}
+          error={formik.touched.descripcion && Boolean(formik.errors.descripcion)}
+          helperText={formik.touched.descripcion && formik.errors.descripcion}
+        />
+       
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <CustomFormLabel htmlFor="fecha_inicio">Fecha de Inicio</CustomFormLabel>
@@ -289,6 +238,7 @@ const ProyectosOrdinaryForm = () => {
               type="date"
               variant="outlined"
               fullWidth
+              autoComplete="start-date"
               value={formik.values.fecha_inicio}
               onChange={formik.handleChange}
               error={formik.touched.fecha_inicio && Boolean(formik.errors.fecha_inicio)}
@@ -305,6 +255,7 @@ const ProyectosOrdinaryForm = () => {
               type="date"
               variant="outlined"
               fullWidth
+              autoComplete="end-date"
               value={formik.values.fecha_fin}
               onChange={formik.handleChange}
               error={formik.touched.fecha_fin && Boolean(formik.errors.fecha_fin)}
@@ -323,6 +274,7 @@ const ProyectosOrdinaryForm = () => {
               type="number"
               variant="outlined"
               fullWidth
+              autoComplete="budget-gtq"
               value={formik.values.presupuesto_quetzales}
               onChange={handleQuetzalesChange}
               error={formik.touched.presupuesto_quetzales && Boolean(formik.errors.presupuesto_quetzales)}
@@ -338,18 +290,18 @@ const ProyectosOrdinaryForm = () => {
               type="number"
               variant="outlined"
               fullWidth
+              autoComplete="budget-eur"
               value={formik.values.presupuesto_euros}
               disabled
             />
           </Grid>
         </Grid>
 
-        {/* Botón Guardar */}
         <Button
           type="submit"
           color="primary"
           variant="contained"
-          disabled={!formik.isValid || formik.isSubmitting}
+          disabled={formik.isSubmitting}
           sx={{ mt: 2 }}
         >
           Guardar
@@ -360,4 +312,3 @@ const ProyectosOrdinaryForm = () => {
 };
 
 export default ProyectosOrdinaryForm;
-
