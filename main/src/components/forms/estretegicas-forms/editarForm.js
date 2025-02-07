@@ -18,6 +18,7 @@ const LineasEstrategicasEditarForm = () => {
   useEffect(() => {
     const fetchLineaEstrategica = async () => {
       try {
+        console.log("Hola")
         const response = await axios.get(`${URL}lineasEstrategicas/${id}`);
         setLineaEstrategica(response.data);
         setLoading(false);
@@ -40,7 +41,7 @@ const LineasEstrategicasEditarForm = () => {
       try {
         await axios.put(`${URL}lineasEstrategicas/${id}`, values);
         setAlert({ type: 'success', message: 'Línea estratégica actualizada con éxito' });
-        setTimeout(() => navigate('/lineasEstregicas/nueva'), 1500); // Redirigir tras éxito
+        setTimeout(() => navigate(-1), 1500); // Redirigir tras éxito
       } catch (error) {
         console.error("Error al obtener la línea estratégica:", error.message);
         if (error.response) {
@@ -63,7 +64,7 @@ const LineasEstrategicasEditarForm = () => {
       <form onSubmit={formik.handleSubmit}>
         <Typography variant='subtitle1' fontWeight={600}>Nombre</Typography>
         <CustomTextField
-          id='3'
+          id='nombre'
           name='nombre'
           variant='outlined'
           fullWidth

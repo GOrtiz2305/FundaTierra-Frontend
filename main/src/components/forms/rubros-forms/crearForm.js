@@ -1,14 +1,10 @@
 import {
-  Alert,
   Button,
-  List,
-  ListItem,
-  ListItemText,
   Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 import { URL } from "../../../../config";
@@ -17,8 +13,7 @@ import CustomTextField from '../theme-elements/CustomTextField';
 
 const RubrosForm = () => {
   const navigate = useNavigate();
-  const [rubros, setRubros] = useState([]);
-  const [alert, setAlert] = useState(null); // Estado para manejar alertas
+  const [rubros, setCooperantes] = useState([]);
 
   const CustomFormLabel = styled((props) => (
     <Typography
@@ -34,28 +29,25 @@ const RubrosForm = () => {
     display: 'block',
   }));
 
-  // Función para obtener la lista de rubros
+  // Función para obtener la lista de cooperantes
   const fetchRubros = async () => {
     try {
       const response = await fetch(`${URL}rubros`);
       if (response.ok) {
         const data = await response.json();
-        setRubros(data);
+        setCooperantes(data);
       } else {
-        console.error('Error al obtener los rubros');
+        console.error('Error al obtener los cooperantes');
       }
     } catch (error) {
       console.error('Error al llamar a la API:', error);
     }
   };
 
-  // Obtener la lista de rubros al cargar el componente
-  useEffect(() => {
-    fetchRubros();
-  }, []);
 
-  // Función para guardar un nuevo rubro
-  const handleSave = async (values, { resetForm }) => {
+
+  // Función para guardar un nuevo cooperante
+  const handleSave = async (values) => {
     try {
       const response = await fetch(`${URL}rubros`, {
         method: 'POST',
@@ -66,28 +58,28 @@ const RubrosForm = () => {
       });
 
       if (response.ok) {
-        fetchRubros(); // Actualizar el listado de rubros
-        resetForm(); // Limpiar el formulario
-        setAlert({ type: 'success', message: 'Rubro creado con éxito' }); // Mostrar alerta de éxito
+        alert('Rubro creado con éxito');
+        navigate('/rubros');
+        
       } else {
-        setAlert({ type: 'error', message: 'Error al crear el rubro' }); // Mostrar alerta de error
+        alert('Error al crear el rubro');
       }
     } catch (error) {
       console.error('Error al llamar a la API:', error);
-      setAlert({ type: 'error', message: 'Error al llamar a la API' }); // Mostrar alerta de error
+      alert('Error al llamar a la API');
     }
   };
 
   // Validación del formulario
   const validationSchema = yup.object({
-    nombre_rubro: yup.string().required('El nombre del rubro es necesario'),
+    nombre_rubro: yup.string().required('El nombre del cooperante es necesario'),
   });
 
   // Configuración de Formik
   const formik = useFormik({
     initialValues: {
       nombre_rubro: '',
-    },
+      },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
       handleSave(values, { resetForm });
@@ -95,24 +87,18 @@ const RubrosForm = () => {
     },
   });
 
-  // Función para manejar la edición de un rubro
+  // Función para manejar la edición de un cooperante
   const handleEdit = (id) => {
-    navigate(`/Rubros/cambios/${id}`);
+    navigate(`/rubros/cambios/${id}`);
   };
 
   return (
-    <ParentCard title='Formulario de Rubros'>
-      {/* Mostrar alertas */}
-      {alert && (
-        <Alert variant="filled" severity={alert.type} onClose={() => setAlert(null)}>
-          {alert.message}
-        </Alert>
-      )}
-
-      {/* Formulario para crear un rubro */}
+    <ParentCard title='Formulario de Rubro'>
+      {/* Formulario para crear un cooperante */}
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre_rubro">Nombre del rubro</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del Rubro</CustomFormLabel>
         <CustomTextField
+          id="nombre_donante"
           name="nombre_rubro"
           variant="outlined"
           onChange={formik.handleChange}
@@ -122,7 +108,7 @@ const RubrosForm = () => {
           onBlur={formik.handleBlur}
           fullWidth
         />
-
+        
         <br /><br />
         <div>
           <Button
@@ -136,25 +122,8 @@ const RubrosForm = () => {
         </div>
       </form>
 
-      {/* Listado de rubros */}
-      <br /><br />
-      <Typography variant="h6">Listado de Rubros</Typography>
-      <List>
-        {rubros.map((rubro) => (
-          <ListItem key={rubro.id}>
-            <ListItemText primary={rubro.nombre_rubro} />
-           <Button
-                         variant="contained"
-                         color="secondary"
-                         onClick={() => handleEdit(rubro.id)}
-                       >
-                         Editar
-                       </Button>
-          </ListItem>
-        ))}
-      </List>
+     
     </ParentCard>
   );
 };
-
 export default RubrosForm;
