@@ -5,6 +5,8 @@ import {
   MenuItem,
   Autocomplete,
   TextField,
+  Grid,
+  Select,
 } from '@mui/material';
 import CustomTextField from '../theme-elements/CustomTextField';
 import ParentCard from '../../shared/ParentCard';
@@ -17,15 +19,37 @@ import axios from 'axios';
 
 const AgregarPersonaForm = () => {
   const [municipios, setMunicipios] = useState([]);
+  const [departamentos, setDepartamentos] = useState([]);
   const navigate = useNavigate();
 
+  const CustomFormLabel = styled((props) => (
+    <Typography
+      variant="subtitle1"
+      fontWeight={600}
+      {...props}
+      component="label"
+      htmlFor={props.htmlFor}
+    />
+  ))(() => ({
+    marginBottom: '5px',
+    marginTop: '25px',
+    display: 'block',
+  }));
+
+  const CustomSelect = styled((props) => <Select {...props} />)(({ }) => ({}));
+
   useEffect(() => {
-    const fetchMunicipios = async () => {
+    const fetchDepartamentos = async () => {
       try {
-        const response = await axios.get(`${URL}municipios`);
-        setMunicipios(response.data);
+        const response = await fetch(`${URL}departamentos`);
+        if (response.ok) {
+          const data = await response.json();
+          setDepartamentos(data);
+        } else {
+          console.error('Error al obtener los departamentos');
+        }
       } catch (error) {
-        console.error('Error al obtener los municipios:', error);
+        console.error('Error al llamar a la API:', error);
       }
     };
 
@@ -42,23 +66,23 @@ const AgregarPersonaForm = () => {
       }
     };
 
-    fetchMunicipios();
+    fetchDepartamentos();
     fetchDirecciones();
   }, []);
 
-  const CustomFormLabel = styled((props) => (
-    <Typography
-      variant="subtitle1"
-      fontWeight={600}
-      {...props}
-      component="label"
-      htmlFor={props.htmlFor}
-    />
-  ))(() => ({
-    marginBottom: '5px',
-    marginTop: '25px',
-    display: 'block',
-  }));
+  const obtenerMunicipios = async (id_departamento) => {
+    try {
+      const response = await fetch(`${URL}municipios/departamento/${id_departamento}`);
+      if (response.ok) {
+        const data = await response.json();
+        setMunicipios(data);
+      } else {
+        console.error('Error al obtener los municipios');
+      }
+    } catch (error) {
+      console.error('Error al llamar a la API:', error);
+    }
+  };
 
   const validationSchemaDireccion = yup.object({
     detalle: yup.string().required('El detalle de la dirección es obligatorio'),
@@ -94,7 +118,7 @@ const AgregarPersonaForm = () => {
           const direccionData = await response.json();
           formik.setFieldValue('id_direccion', direccionData.id);
           alert('Dirección creada con éxito');
-          
+
           // Después de crear la dirección, enviamos la persona
           handleSave(formik.values);
         } else {
@@ -118,10 +142,10 @@ const AgregarPersonaForm = () => {
       });
 
       if (response.ok) {
-        alert('Persona creada con éxito');
+        //console.log('Persona creada con éxito');
         navigate('/personas');
       } else {
-        alert('Error al crear la persona');
+        console.error('Error al crear la persona');
       }
     } catch (error) {
       console.error('Error al llamar a la API:', error);
@@ -152,6 +176,8 @@ const AgregarPersonaForm = () => {
       correo_electronico: '',
       id_direccion: null,
       estado: true,
+      id_municipio: '',
+      id_departamento: '',
     },
     validationSchema: validationSchemaPersona,
     onSubmit: (values) => {
@@ -165,114 +191,147 @@ const AgregarPersonaForm = () => {
   return (
     <ParentCard title="Formulario para Agregar Persona">
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre</CustomFormLabel>
-        <CustomTextField
-          id="nombre"
-          name="nombre"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.nombre}
-          error={formik.touched.nombre && Boolean(formik.errors.nombre)}
-          helperText={formik.touched.nombre && formik.errors.nombre}
-          onBlur={formik.handleBlur}
-          fullWidth
-        />
-
-        <CustomFormLabel htmlFor="apellido">Apellido</CustomFormLabel>
-        <CustomTextField
-          id="apellido"
-          name="apellido"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.apellido}
-          error={formik.touched.apellido && Boolean(formik.errors.apellido)}
-          helperText={formik.touched.apellido && formik.errors.apellido}
-          onBlur={formik.handleBlur}
-          fullWidth
-        />
-
-        <CustomFormLabel htmlFor="sexo">Sexo</CustomFormLabel>
-        <CustomTextField
-          id="sexo"
-          name="sexo"
-          select
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.sexo}
-          error={formik.touched.sexo && Boolean(formik.errors.sexo)}
-          helperText={formik.touched.sexo && formik.errors.sexo}
-          onBlur={formik.handleBlur}
-          fullWidth
-        >
-          <MenuItem value="Masculino">Masculino</MenuItem>
-          <MenuItem value="Femenino">Femenino</MenuItem>
-          <MenuItem value="Otro">Otro</MenuItem>
-        </CustomTextField>
-
-        <CustomFormLabel htmlFor="telefono">Teléfono</CustomFormLabel>
-        <CustomTextField
-          id="telefono"
-          name="telefono"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.telefono}
-          error={formik.touched.telefono && Boolean(formik.errors.telefono)}
-          helperText={formik.touched.telefono && formik.errors.telefono}
-          onBlur={formik.handleBlur}
-          fullWidth
-        />
-
-        <CustomFormLabel htmlFor="correo_electronico">
-          Correo Electrónico
-        </CustomFormLabel>
-        <CustomTextField
-          id="correo_electronico"
-          name="correo_electronico"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.correo_electronico}
-          error={formik.touched.correo_electronico && Boolean(formik.errors.correo_electronico)}
-          helperText={formik.touched.correo_electronico && formik.errors.correo_electronico}
-          onBlur={formik.handleBlur}
-          fullWidth
-        />
-
-        <CustomFormLabel htmlFor="detalle">
-          Dirección
-        </CustomFormLabel>
-        <CustomTextField
-          id="detalle"
-          name="detalle"
-          variant="outlined"
-          onChange={formikDireccion.handleChange}
-          value={formikDireccion.values.detalle}
-          error={formikDireccion.touched.detalle && Boolean(formikDireccion.errors.detalle)}
-          helperText={formikDireccion.touched.detalle && formikDireccion.errors.detalle}
-          onBlur={formikDireccion.handleBlur}
-          fullWidth
-        />
-
-        <CustomFormLabel htmlFor="id_municipio">Municipio</CustomFormLabel>
-        <Autocomplete
-          id="id_municipio"
-          options={municipios}
-          getOptionLabel={(option) => option?.nombre || ''}
-          value={formikDireccion.values.id_municipio}
-          onChange={(event, newValue) =>
-            formikDireccion.setFieldValue('id_municipio', newValue)
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={5}>
+            <CustomFormLabel htmlFor="nombre">Nombre</CustomFormLabel>
+            <CustomTextField
+              id="nombre"
+              name="nombre"
               variant="outlined"
-              error={formikDireccion.touched.id_municipio && Boolean(formikDireccion.errors.id_municipio)}
-              helperText={formikDireccion.touched.id_municipio && formikDireccion.errors.id_municipio}
-              onBlur={formikDireccion.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.nombre}
+              error={formik.touched.nombre && Boolean(formik.errors.nombre)}
+              helperText={formik.touched.nombre && formik.errors.nombre}
+              onBlur={formik.handleBlur}
+              fullWidth
             />
-          )}
-          fullWidth
-        />
-
+          </Grid>
+          <Grid item xs={12} sm={5}>
+            <CustomFormLabel htmlFor="apellido">Apellido</CustomFormLabel>
+            <CustomTextField
+              id="apellido"
+              name="apellido"
+              variant="outlined"
+              onChange={formik.handleChange}
+              value={formik.values.apellido}
+              error={formik.touched.apellido && Boolean(formik.errors.apellido)}
+              helperText={formik.touched.apellido && formik.errors.apellido}
+              onBlur={formik.handleBlur}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <CustomFormLabel htmlFor="sexo">Sexo</CustomFormLabel>
+            <CustomTextField
+              id="sexo"
+              name="sexo"
+              select
+              variant="outlined"
+              onChange={formik.handleChange}
+              value={formik.values.sexo}
+              error={formik.touched.sexo && Boolean(formik.errors.sexo)}
+              helperText={formik.touched.sexo && formik.errors.sexo}
+              onBlur={formik.handleBlur}
+              fullWidth
+            >
+              <MenuItem value="Masculino">Masculino</MenuItem>
+              <MenuItem value="Femenino">Femenino</MenuItem>
+              <MenuItem value="Otro">Otro</MenuItem>
+            </CustomTextField>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="telefono">Teléfono</CustomFormLabel>
+            <CustomTextField
+              id="telefono"
+              name="telefono"
+              variant="outlined"
+              onChange={formik.handleChange}
+              value={formik.values.telefono}
+              error={formik.touched.telefono && Boolean(formik.errors.telefono)}
+              helperText={formik.touched.telefono && formik.errors.telefono}
+              onBlur={formik.handleBlur}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="correo_electronico">
+              Correo Electrónico
+            </CustomFormLabel>
+            <CustomTextField
+              id="correo_electronico"
+              name="correo_electronico"
+              variant="outlined"
+              onChange={formik.handleChange}
+              value={formik.values.correo_electronico}
+              error={formik.touched.correo_electronico && Boolean(formik.errors.correo_electronico)}
+              helperText={formik.touched.correo_electronico && formik.errors.correo_electronico}
+              onBlur={formik.handleBlur}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={3}>
+            <CustomFormLabel htmlFor="id_departamento">Departamento</CustomFormLabel>
+            <CustomSelect
+              id="id_departamento"
+              name="id_departamento"
+              value={formik.values.id_departamento}
+              onChange={(e) => {
+                formik.handleChange(e);
+                obtenerMunicipios(e.target.value);
+              }}
+              fullWidth
+              variant="outlined"
+            >
+              {departamentos.map((departamento) => (
+                <MenuItem key={departamento.id} value={departamento.id}>
+                  {departamento.nombre}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <CustomFormLabel htmlFor="id_municipio">Municipio</CustomFormLabel>
+            <Autocomplete
+              id="id_municipio"
+              options={municipios}
+              getOptionLabel={(option) => option?.nombre || ''}
+              value={formikDireccion.values.id_municipio}
+              onChange={(event, newValue) =>
+                formikDireccion.setFieldValue('id_municipio', newValue)
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  error={formikDireccion.touched.id_municipio && Boolean(formikDireccion.errors.id_municipio)}
+                  helperText={formikDireccion.touched.id_municipio && formikDireccion.errors.id_municipio}
+                  onBlur={formikDireccion.handleBlur}
+                />
+              )}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="detalle">
+              Dirección
+            </CustomFormLabel>
+            <CustomTextField
+              id="detalle"
+              name="detalle"
+              variant="outlined"
+              onChange={formikDireccion.handleChange}
+              value={formikDireccion.values.detalle}
+              error={formikDireccion.touched.detalle && Boolean(formikDireccion.errors.detalle)}
+              helperText={formikDireccion.touched.detalle && formikDireccion.errors.detalle}
+              onBlur={formikDireccion.handleBlur}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
         <div style={{ marginTop: '25px' }}>
           <Button
             color="primary"

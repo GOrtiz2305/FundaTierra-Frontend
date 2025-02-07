@@ -36,11 +36,11 @@ const Modern = () => {
           </Grid>
         </Grid>
         {/* column */}
-        <Grid item xs={12} lg={4}>
+        {/* <Grid item xs={12} lg={4}>
           <EmployeeSalary />
-        </Grid>
+        </Grid> */}
         {/* column */}
-        <Grid item xs={12} lg={4}>
+        {/* <Grid item xs={12} lg={4}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <Customers />
@@ -52,19 +52,19 @@ const Modern = () => {
               <Social />
             </Grid>
           </Grid>
-        </Grid>
+        </Grid> */}
         {/* column */}
-        <Grid item xs={12} lg={4}>
+        {/* <Grid item xs={12} lg={4}>
           <SellingProducts />
-        </Grid>
+        </Grid> */}
         {/* column */}
-        <Grid item xs={12} lg={4}>
+        {/* <Grid item xs={12} lg={4}>
           <WeeklyStats />
-        </Grid>
+        </Grid> */}
         {/* column */}
-        <Grid item xs={12} lg={8}>
+        {/* <Grid item xs={12} lg={8}>
           <TopPerformers />
-        </Grid>
+        </Grid> */}
       </Grid>
       {/* column */}
     </Box>

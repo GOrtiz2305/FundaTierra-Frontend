@@ -6,6 +6,9 @@ import {
   IconMap2,
   IconNotes,
   IconUsers,
+  IconUserPlus,
+  IconLine,
+  IconList,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -50,21 +53,21 @@ const Menuitems = [
   {
     id: uniqueId(),
     title: 'lineas Estretegicas',
-    icon: IconAperture,
+    icon: IconLine,
     href: '/LineasEstrategicas',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
     title: 'Cooperantes',
-    icon: IconAperture,
+    icon: IconUserPlus,
     href: '/cooperante',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
     title: 'Rubros',
-    icon: IconAperture,
+    icon: IconList,
     href: '/rubros',
     chipColor: 'secondary',
   },

@@ -23,6 +23,7 @@ const Usuarios = () => {
             >
                 Gestión de Usuarios
             </Typography>
+            <br />
             <Button
                 variant="contained"
                 color="primary"
@@ -38,7 +39,7 @@ const Usuarios = () => {
             >
                 Ver Usuarios Desactivados
             </Button>
-
+            <br /><br />
             <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
                 <DialogTitle>Usuarios Desactivados</DialogTitle>
                 <DialogContent>
