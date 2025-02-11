@@ -1,14 +1,10 @@
 import {
-  Alert,
   Button,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 import { URL } from "../../../../config";
@@ -48,13 +44,10 @@ const CooperanteForm = () => {
     }
   };
 
-  // Obtener la lista de cooperantes al cargar el componente
-  useEffect(() => {
-    fetchCooperantes();
-  }, []);
+
 
   // Función para guardar un nuevo cooperante
-  const handleSave = async (values, { resetForm }) => {
+  const handleSave = async (values) => {
     try {
       const response = await fetch(`${URL}cooperante`, {
         method: 'POST',
@@ -65,15 +58,11 @@ const CooperanteForm = () => {
       });
 
       if (response.ok) {
-        fetchCooperantes(); // Actualizar la lista de cooperantes
-        resetForm(); // Limpiar el formulario
-        <Alert variant="filled" severity="success">
-          Cooperante creado con éxito
-        </Alert>
+        alert('Cooperante creado con éxito');
+        navigate('/cooperante');
+        
       } else {
-        <Alert variant='filled' severity='error'>
-          Error al crear el cooperante
-        </Alert>
+        alert('Error al crear el cooperante');
       }
     } catch (error) {
       console.error('Error al llamar a la API:', error);
@@ -90,6 +79,7 @@ const CooperanteForm = () => {
   const formik = useFormik({
     initialValues: {
       nombre_donante: '',
+      alias: '',
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -114,12 +104,23 @@ const CooperanteForm = () => {
           variant="outlined"
           onChange={formik.handleChange}
           value={formik.values.nombre_donante}
-          error={formik.touched.nombre_donante && Boolean(formik.errors.nombre_donante)}
+          error={formik.touched.cooperante && Boolean(formik.errors.nombre_donante)}
           helperText={formik.touched.nombre_donante && formik.errors.nombre_donante}
           onBlur={formik.handleBlur}
           fullWidth
         />
-
+        <CustomFormLabel htmlFor="alias">Alias del cooperante</CustomFormLabel>
+        <CustomTextField
+          id="alias"
+          name="alias"
+          variant="outlined"
+          onChange={formik.handleChange}
+          value={formik.values.alias}
+          error={formik.touched.alias && Boolean(formik.errors.alias)}
+          helperText={formik.touched.alias && formik.errors.alias}
+          onBlur={formik.handleBlur}
+          fullWidth
+        />
         <br /><br />
         <div>
           <Button
@@ -133,24 +134,7 @@ const CooperanteForm = () => {
         </div>
       </form>
 
-      {/* Listado de cooperantes */}
-      <br /><br />
-      <Typography variant="h6">Listado de Cooperantes</Typography>
-      <List>
-        {cooperantes.map((cooperante) => (
-          <ListItem key={cooperante.id}>
-            <ListItemText primary={cooperante.nombre_donante} />
-            {/* Botón "Editar" en lugar del ícono */}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleEdit(cooperante.id)}
-            >
-              Editar
-            </Button>
-          </ListItem>
-        ))}
-      </List>
+     
     </ParentCard>
   );
 };

@@ -52,23 +52,23 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Lineas estrategicas',
+    title: 'lineas Estretegicas',
     icon: IconLine,
-    href: '/lineasEstregicas/nueva',
+    href: '/LineasEstrategicas',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
     title: 'Cooperantes',
     icon: IconUserPlus,
-    href: '/cooperante/nueva',
+    href: '/cooperante',
     chipColor: 'secondary',
   },
   {
     id: uniqueId(),
     title: 'Rubros',
     icon: IconList,
-    href: '/Rubros/nueva',
+    href: '/rubros',
     chipColor: 'secondary',
   },
   {
