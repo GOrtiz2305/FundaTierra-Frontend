@@ -2,7 +2,7 @@ import { Button, Chip, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, S
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; // Usar useParams para obtener el id del proyecto
+import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { URL } from "../../../../config";
 import ParentCard from '../../shared/ParentCard';
@@ -11,7 +11,7 @@ import CustomTextField from '../theme-elements/CustomTextField';
 
 const ProyectosEditarForm = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Obtenemos el id del proyecto de la URL
+  const { id } = useParams();
   const [conversionRate, setConversionRate] = useState(0.11);
   const [loading, setLoading] = useState(true);
   const [cooperantesOptions, setCooperantesOptions] = useState([]);
@@ -29,7 +29,6 @@ const ProyectosEditarForm = () => {
     presupuesto_euros: '',
   });
 
-  // Obtener datos del proyecto
   useEffect(() => {
     const fetchProyecto = async () => {
       try {
@@ -38,8 +37,7 @@ const ProyectosEditarForm = () => {
         setProyecto({
           ...proyectoData,
           cooperantes: Array.isArray(proyectoData.cooperantes) ? proyectoData.cooperantes : [],
-        lineas_estrategicas: Array.isArray(proyectoData.lineas_estrategicas) ? proyectoData.lineas_estrategicas : [],
-          presupuesto_euros: (proyectoData.presupuesto_quetzales * conversionRate).toFixed(2),
+          lineas_estrategicas: Array.isArray(proyectoData.lineas_estrategicas) ? proyectoData.lineas_estrategicas : [],
         });
         setLoading(false);
       } catch (error) {
@@ -50,30 +48,11 @@ const ProyectosEditarForm = () => {
     fetchProyecto();
   }, [id, conversionRate]);
 
-  // Obtener la tasa de conversión desde la API
-  useEffect(() => {
-    const fetchConversionRate = async () => {
-      try {
-        const response = await fetch(`https://api.exchangerate.host/latest?base=GTQ&symbols=EUR`);
-        const data = await response.json();
-        if (data && data.rates && data.rates.EUR) {
-          setConversionRate(data.rates.EUR);
-        } else {
-          console.error('Error al obtener la tasa de conversión.');
-        }
-      } catch (error) {
-        console.error('Error al llamar a la API de conversión:', error);
-      }
-    };
-    fetchConversionRate();
-  }, []);
-
-  // Obtener las opciones de cooperantes y líneas estratégicas
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-       const cooperantesResponse = await axios.get(`${URL}cooperante`); // Cambia esto a la URL correcta
-        const lineasEstrategicasResponse = await axios.get(`${URL}lineasEstrategicas`); // Cambia esto a la URL correcta
+        const cooperantesResponse = await axios.get(`${URL}cooperante`);
+        const lineasEstrategicasResponse = await axios.get(`${URL}lineasEstrategicas`);
 
         setCooperantesOptions(cooperantesResponse.data);
         setLineasEstrategicasOptions(lineasEstrategicasResponse.data);
@@ -81,11 +60,9 @@ const ProyectosEditarForm = () => {
         console.error('Error al obtener las opciones de cooperantes y líneas estratégicas:', error);
       }
     };
-
     fetchOptions();
   }, []);
 
-  // Actualizar valores de Formik cuando el proyecto se actualice
   const formik = useFormik({
     initialValues: proyecto,
     enableReinitialize: true,
@@ -104,6 +81,8 @@ const ProyectosEditarForm = () => {
         .required('El presupuesto en quetzales es necesario'),
     }),
     onSubmit: async (values) => {
+      console.log("Enviando datos del proyecto:", values);
+
       try {
         const dataToSend = {
           ...values,
@@ -132,13 +111,12 @@ const ProyectosEditarForm = () => {
     },
   });
 
-  // Actualizar presupuesto en euros al cambiar el valor en quetzales
   const handleQuetzalesChange = (event) => {
     const valueInQuetzales = event.target.value;
     formik.setFieldValue('presupuesto_quetzales', valueInQuetzales);
 
     if (!isNaN(valueInQuetzales) && valueInQuetzales !== '') {
-      const valueInEuros = (valueInQuetzales * conversionRate).toFixed(2); // Redondear a 2 decimales
+      const valueInEuros = (valueInQuetzales * conversionRate).toFixed(2);
       formik.setFieldValue('presupuesto_euros', valueInEuros);
     } else {
       formik.setFieldValue('presupuesto_euros', '');
@@ -192,8 +170,7 @@ const ProyectosEditarForm = () => {
                     {selected.map((value) => {
                       const cooperante = cooperantesOptions.find(coop => coop.id === value);
                       return cooperante ? <Chip key={value} label={cooperante.nombre_donante} /> : null;
-
-                })}
+                    })}
                   </div>
                 )}
               >
@@ -223,8 +200,7 @@ const ProyectosEditarForm = () => {
                     {selected.map((value) => {
                       const linea = lineasEstrategicasOptions.find(linea => linea.id === value);
                       return linea ? <Chip key={value} label={linea.nombre} /> : null;
-
-                })}
+                    })}
                   </div>
                 )}
               >
@@ -238,7 +214,6 @@ const ProyectosEditarForm = () => {
           </Grid>
         </Grid>
 
-        {/* Campos de formulario restantes */}
         <CustomFormLabel htmlFor="descripcion">Descripción</CustomFormLabel>
         <CustomTextField
           id="descripcion"
@@ -285,33 +260,43 @@ const ProyectosEditarForm = () => {
           </Grid>
         </Grid>
 
-        <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en Quetzales</CustomFormLabel>
-        <CustomTextField
-          id="presupuesto_quetzales"
-          name="presupuesto_quetzales"
-          type="number"
-          variant="outlined"
-          fullWidth
-          value={formik.values.presupuesto_quetzales}
-          onChange={handleQuetzalesChange}
-          error={formik.touched.presupuesto_quetzales && Boolean(formik.errors.presupuesto_quetzales)}
-          helperText={formik.touched.presupuesto_quetzales && formik.errors.presupuesto_quetzales}
-        />
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en Quetzales</CustomFormLabel>
+            <CustomTextField
+              id="presupuesto_quetzales"
+              name="presupuesto_quetzales"
+              type="number"
+              fullWidth
+              value={formik.values.presupuesto_quetzales}
+              onChange={handleQuetzalesChange}
+              error={formik.touched.presupuesto_quetzales && Boolean(formik.errors.presupuesto_quetzales)}
+              helperText={formik.touched.presupuesto_quetzales && formik.errors.presupuesto_quetzales}
+            />
+          </Grid>
 
-        <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en Euros</CustomFormLabel>
-        <CustomTextField
-          id="presupuesto_euros"
-          name="presupuesto_euros"
-          type="number"
-          variant="outlined"
-          fullWidth
-          value={formik.values.presupuesto_euros}
-          onChange={formik.handleChange}
-          error={formik.touched.presupuesto_euros && Boolean(formik.errors.presupuesto_euros)}
-          helperText={formik.touched.presupuesto_euros && formik.errors.presupuesto_euros}
-        />
+          <Grid item xs={6}>
+            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en Euros</CustomFormLabel>
+            <CustomTextField
+              id="presupuesto_euros"
+              name="presupuesto_euros"
+              type="number"
+              fullWidth
+              value={formik.values.presupuesto_euros}
+              onChange={formik.handleChange}
+              error={formik.touched.presupuesto_euros && Boolean(formik.errors.presupuesto_euros)}
+              helperText={formik.touched.presupuesto_euros && formik.errors.presupuesto_euros}
+            />
+          </Grid>
+        </Grid>
 
-        <Button color="primary" variant="contained" fullWidth type="submit">
+        <Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          type="submit"
+          onClick={() => console.log(formik.values)}
+        >
           Actualizar Proyecto
         </Button>
       </form>
@@ -320,5 +305,3 @@ const ProyectosEditarForm = () => {
 };
 
 export default ProyectosEditarForm;
-
-

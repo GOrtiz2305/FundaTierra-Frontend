@@ -37,6 +37,7 @@ const DepartamentosMunicipios = () => {
             >
                 Gestión de Departamentos
             </Typography>
+            <br />
             <Button
                 variant="contained"
                 color="primary"
@@ -52,7 +53,7 @@ const DepartamentosMunicipios = () => {
             >
                 Ver Departamenos Desactivados
             </Button>
-
+            <br /><br />
             <Dialog open={openModal2} onClose={handleCloseModal2} fullWidth maxWidth="md">
                 <DialogTitle>Departamentos Desactivados</DialogTitle>
                 <DialogContent>
@@ -65,7 +66,7 @@ const DepartamentosMunicipios = () => {
                 </DialogActions>
             </Dialog>
             <DepartamentosPaginationTable />
-
+            <br /><br />
             <Typography
                 variant="h3"
                 component="div"
@@ -74,6 +75,7 @@ const DepartamentosMunicipios = () => {
             >
                 Gestión de Municipios
             </Typography>
+            <br />
             <Button
                 variant="contained"
                 color="primary"
@@ -89,7 +91,7 @@ const DepartamentosMunicipios = () => {
             >
                 Ver Municipios Desactivados
             </Button>
-
+            <br /><br />
             <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
                 <DialogTitle>Municipios Desactivados</DialogTitle>
                 <DialogContent>
