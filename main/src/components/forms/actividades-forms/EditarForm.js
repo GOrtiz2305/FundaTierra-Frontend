@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
 } from '@mui/material';
 import CustomTextField from '../theme-elements/CustomTextField';
@@ -10,6 +15,7 @@ import ParentCard from '../../shared/ParentCard';
 import { URL } from "../../../../config";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import CustomSelect from '../theme-elements/CustomSelect';
 
 const ActividadesEditarForm = ({ id }) => {
   const [proyectos, setProyectos] = useState([]);
@@ -117,14 +123,99 @@ const ActividadesEditarForm = ({ id }) => {
   return (
     <ParentCard title='Formulario de Actividades - Actualización de datos'>
       <form onSubmit={handleUpdate}>
-        <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
-        <CustomTextField
-          id="fecha_inicio"
-          type="date"
-          fullWidth
-          value={data.fecha_inicio}
-          onChange={handleInputChange}
-        />
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
+            <CustomTextField
+              id="fecha_inicio"
+              type="date"
+              fullWidth
+              value={data.fecha_inicio}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="id_proyecto">Proyecto</CustomFormLabel>
+            <Select
+              id="id_proyecto"
+              fullWidth
+              variant="outlined"
+              value={data.id_proyectos}
+              onChange={(e) => setData({ ...data, id_proyectos: e.target.value })}
+              disabled
+            >
+              {proyectos.map((proyecto) => (
+                <MenuItem key={proyecto.id} value={proyecto.id}>
+                  {proyecto.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            {/* <CustomFormLabel htmlFor="id_encargado">Encargado</CustomFormLabel>
+            <CustomSelect
+              id="id_encargado"
+              name="id_encargado"
+              value={formik.values.id_encargado}
+              onChange={formik.handleChange}
+              fullWidth
+              variant="outlined"
+            >
+              {usuarios.map((usuario) => (
+                <MenuItem key={usuario.id} value={usuario.id}>
+                  {usuario.persona.nombre} {usuario.persona.apellido}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+            {formik.errors.id_encargado && (
+              <FormHelperText error>
+                {formik.errors.id_encargado}
+              </FormHelperText>
+            )} */}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="colaboradores">Colaboradores</CustomFormLabel>
+            <FormControl fullWidth>
+              <InputLabel id="colaboradores-label">Seleccione los colaboradores</InputLabel>
+              <Select
+                labelId="colaboradores-label"
+                id="colaboradores"
+                name="colaboradores"
+                multiple
+                value={anticipoGastos.rubros || []}
+                onChange={(e) =>
+                  setAnticipoGastos({
+                    ...anticipoGastos,
+                    rubros: e.target.value, // Actualiza el estado con los rubros seleccionados
+                  })
+                }
+                input={<OutlinedInput id="select-multiple-chip" label="Seleccione los rubros" />}
+                renderValue={(selected) => (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {selected.map((rubroId) => {
+                      const rubro = rubrosOptions.find((r) => r.id === rubroId);
+                      return <Chip key={rubroId} label={rubro ? rubro.nombre_rubro : ''} />;
+                    })}
+                  </div>
+                )}
+              >
+                {rubrosOptions.map((rubro) => (
+                  <MenuItem key={rubro.id} value={rubro.id}>
+                    {rubro.nombre_rubro}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+          </Grid>
+        </Grid>
         <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
         <CustomTextField
           id="nombre"
@@ -143,20 +234,7 @@ const ActividadesEditarForm = ({ id }) => {
           value={data.descripcion}
           onChange={handleInputChange}
         />
-        <CustomFormLabel htmlFor="id_proyecto">Proyecto</CustomFormLabel>
-        <Select
-          id="id_proyecto"
-          fullWidth
-          variant="outlined"
-          value={data.id_proyectos}
-          onChange={(e) => setData({ ...data, id_proyectos: e.target.value })}
-        >
-          {proyectos.map((proyecto) => (
-            <MenuItem key={proyecto.id} value={proyecto.id}>
-              {proyecto.nombre}
-            </MenuItem>
-          ))}
-        </Select>
+
         <CustomFormLabel htmlFor="id_direccion">Dirección</CustomFormLabel>
         <Select
           id="id_direccion"
