@@ -1,5 +1,4 @@
 import {
-  IconAperture,
   IconBriefcase,
   IconFolder,
   IconHome,
