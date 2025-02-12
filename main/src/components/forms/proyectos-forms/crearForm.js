@@ -59,6 +59,7 @@ const ProyectosOrdinaryForm = () => {
       if (!responseProyecto.ok) throw new Error('Error al crear el proyecto');
 
       const proyectoCreado = await responseProyecto.json();
+      console.log(proyectoCreado)
       const idProyecto = proyectoCreado.id;
 
       if (values.cooperantes.length > 0) {
