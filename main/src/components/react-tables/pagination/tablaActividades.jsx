@@ -37,6 +37,7 @@ import CustomTextField from '../../forms/theme-elements/CustomTextField';
 
 const columnHelper = createColumnHelper();
 
+
 const columns = [
 
     columnHelper.accessor('usuario.username', {
@@ -111,6 +112,46 @@ const ActividadesPaginationTable = () => {
     const [data, setData] = useState(() => []);
     const [columnFilters, setColumnFilters] = useState([])
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = React.useState(""); // Para el término de búsqueda
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value); // Actualiza el término de búsqueda
+        const Buscar = event.target.value
+        const conjuntoLetras = /[A-Za-z]/
+        const fechaRegex1 = /^\d{4}$/
+        const fechaRegex2 = /^\d{4}-(0[1-9]|1[0-2])$/
+        const fechaRegex3 = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/
+        const numeroDecimalRegex = /^[0-9]+(\.[0-9]+)?$/
+
+        console.log(Buscar)
+
+        if(conjuntoLetras.test(Buscar)) {
+            console.log("Primer IF")
+        setColumnFilters([
+            {
+                id: 'nombre', // Filtra por el campo 'nombre'
+                value: event.target.value
+            }
+        ]); 
+        } else if (fechaRegex1.test(Buscar) || fechaRegex2.test(Buscar) || fechaRegex3.test(Buscar)) {
+            console.log("Segundo IF")
+            setColumnFilters([
+                {
+                    id: 'fecha_inicio', // Filtra por el campo 'nombre'
+                    value: event.target.value
+                }
+            ]);
+        } else if (numeroDecimalRegex.test(Buscar)) {
+            console.log("Tercero IF")
+            setColumnFilters([
+                {
+                    id: 'presupuesto', // Filtra por el campo 'nombre'
+                    value: event.target.value
+                }
+            ]);
+        }
+
+    };
 
     useEffect(() => {
         const fetchActividades = async () => {
@@ -180,6 +221,12 @@ const ActividadesPaginationTable = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box>
+                        <CustomTextField
+                            label="Buscar por nombre"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            fullWidth
+                        />
                         <TableContainer>
                             <Table
                                 sx={{
