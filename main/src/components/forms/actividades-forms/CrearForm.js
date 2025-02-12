@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
 import {
+  Alert,
   Button,
   FormHelperText,
   MenuItem,
   Select,
-  Typography,
-  Alert
+  Typography
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import { URL } from "../../../../config";
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from "../../../../config";
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const ActividadesOrdinaryForm = () => {
   const [proyectos, setProyectos] = useState([]);
@@ -136,7 +136,7 @@ const ActividadesOrdinaryForm = () => {
           fullWidth
         />
 
-        <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"

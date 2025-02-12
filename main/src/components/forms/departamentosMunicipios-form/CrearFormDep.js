@@ -73,7 +73,7 @@ const CrearDepartamentoForm = () => {
   return (
     <ParentCard title="Formulario de Creación de Departamento">
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre del Departamento</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del departamento</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"

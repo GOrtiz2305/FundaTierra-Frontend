@@ -27,6 +27,16 @@ const ProyectosEditarForm = () => {
     fecha_fin: '',
     presupuesto_quetzales: '',
     presupuesto_euros: '',
+    proyectoCooperantes:[
+      {
+        cooperante:{}
+      }
+    ],
+    proyectoLineas:[
+      {
+        linea_Estrategica:{}
+      }
+    ],
   });
 
   useEffect(() => {
@@ -49,17 +59,43 @@ const ProyectosEditarForm = () => {
   }, [id, conversionRate]);
 
   useEffect(() => {
-    const fetchOptions = async () => {
-      try {
-        const cooperantesResponse = await axios.get(`${URL}cooperante`);
-        const lineasEstrategicasResponse = await axios.get(`${URL}lineasEstrategicas`);
-
-        setCooperantesOptions(cooperantesResponse.data);
-        setLineasEstrategicasOptions(lineasEstrategicasResponse.data);
+     const fetchCooperantes = async () => {
+                try {
+                    const response = await fetch(`${URL}cooperante`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCooperantesOptions(data);
+                    } else {
+                        console.error('Error al obtener los cooperantes');
+                    }
+                } catch (error) {
+                    console.error('Error al llamar a la API:', error);
+                }
+            };
+    const fetchLineas = async () => {
+      
+        try {
+          const response = await fetch(`${URL}lineasEstrategicas`);
+          if (response.ok) {
+              const data = await response.json();
+              setLineasEstrategicasOptions(data);
+          } else {
+              console.error('Error al obtener las lineas estrategicas ');
+          }
       } catch (error) {
-        console.error('Error al obtener las opciones de cooperantes y líneas estratégicas:', error);
+          console.error('Error al llamar a la API:', error);
       }
+       // const cooperantesResponse = await axios.get(`${URL}cooperante`);
+       // const lineasEstrategicasResponse = await axios.get(`${URL}lineasEstrategicas`);
+
+        //setCooperantesOptions(cooperantesResponse.data);
+        //setLineasEstrategicasOptions(lineasEstrategicasResponse.data);
+      //} catch (error) {
+       // console.error('Error al obtener las opciones de cooperantes y líneas estratégicas:', error);
+      
     };
+    fetchCooperantes();
+    fetchLineas();
     fetchOptions();
   }, []);
 
@@ -126,9 +162,9 @@ const ProyectosEditarForm = () => {
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <ParentCard title="Editar Proyecto - Actualizar datos">
+    <ParentCard title="Editar proyecto - actualizar datos">
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre del Proyecto</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del proyecto</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"
@@ -184,7 +220,7 @@ const ProyectosEditarForm = () => {
           </Grid>
 
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="lineas_estrategicas">Líneas Estratégicas</CustomFormLabel>
+            <CustomFormLabel htmlFor="lineas_estrategicas">Líneas estratégicas</CustomFormLabel>
             <FormControl fullWidth>
               <InputLabel id="lineas-estrategicas-label">Seleccione las líneas estratégicas</InputLabel>
               <Select
@@ -230,7 +266,7 @@ const ProyectosEditarForm = () => {
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="fecha_inicio">Fecha de Inicio</CustomFormLabel>
+            <CustomFormLabel htmlFor="fecha_inicio">Fecha de inicio</CustomFormLabel>
             <CustomTextField
               id="fecha_inicio"
               name="fecha_inicio"
@@ -245,7 +281,7 @@ const ProyectosEditarForm = () => {
           </Grid>
 
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="fecha_fin">Fecha de Fin</CustomFormLabel>
+            <CustomFormLabel htmlFor="fecha_fin">Fecha de fin</CustomFormLabel>
             <CustomTextField
               id="fecha_fin"
               name="fecha_fin"
@@ -262,7 +298,7 @@ const ProyectosEditarForm = () => {
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en Quetzales</CustomFormLabel>
+            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en quetzales</CustomFormLabel>
             <CustomTextField
               id="presupuesto_quetzales"
               name="presupuesto_quetzales"
@@ -276,7 +312,7 @@ const ProyectosEditarForm = () => {
           </Grid>
 
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en Euros</CustomFormLabel>
+            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en euros</CustomFormLabel>
             <CustomTextField
               id="presupuesto_euros"
               name="presupuesto_euros"
@@ -297,7 +333,7 @@ const ProyectosEditarForm = () => {
           type="submit"
           onClick={() => console.log(formik.values)}
         >
-          Actualizar Proyecto
+          Actualizar proyecto
         </Button>
       </form>
     </ParentCard>

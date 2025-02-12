@@ -62,6 +62,15 @@ const ProyectosPaginationTable = () => {
     const handleViewDetails = (id) => {
         navigate(`/proyectos/detalle/${id}`);  // Redirige a la página de detalles con el id
     };
+    const handleDelete = async (row) => {
+        console.log(row)
+        try {
+            await axios.put(`${URL}proyectos/eliminar/${row.id}`);
+            setData((prevData) => prevData.filter((item) => item.id !== row.id));
+        } catch (error) {
+            console.error("Error al eliminar el Proyecto:", error);
+        }
+    };
 
     // Definir las columnas antes de usarlas en useReactTable
     const columns = [
@@ -89,8 +98,16 @@ const ProyectosPaginationTable = () => {
                 </Typography>
             ),
         }),
-        columnHelper.accessor('presupuesto', {
-            header: () => 'Presupuestos',
+        columnHelper.accessor('presupuesto_quetzales', {
+            header: () => 'Presupuesto Q',
+            cell: info => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {info.getValue()}
+                </Typography>
+            ),
+        }),
+        columnHelper.accessor('presupuesto_euros', {
+            header: () => 'Presupuestos E',
             cell: info => (
                 <Typography variant="subtitle1" color="textSecondary">
                     {info.getValue()}
@@ -155,8 +172,9 @@ const ProyectosPaginationTable = () => {
                     <Button
                         variant="contained"
                         color="error"
-                        onClick={() => handleDelete(row.original)}
+                        onClick={() => handleDelete(row.original.id)}
                         startIcon={<IconTrash width={18} />}
+                    
                     >
                         Borrar
                     </Button>
@@ -330,4 +348,6 @@ const ProyectosPaginationTable = () => {
 };
 
 export default ProyectosPaginationTable;
+
+
 

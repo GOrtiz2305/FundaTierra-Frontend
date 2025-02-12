@@ -485,7 +485,7 @@ const AnticipoGastosForm = () => {
                     Gran total: Q{calculateTotal()}
                 </Typography>
                 <br />
-                <Alert severity="warning">Al superar el monto de Q10,000.00 en anticipos de gastos, se necesitará autorización de Coordinación ejecutiva para realizar cheques</Alert>
+                <Alert severity="warning">Al superar el monto de Q10,000.00 en anticipos de gastos, se necesitará autorización de coordinación ejecutiva para realizar cheques</Alert>
                 <Button
                     type="submit"
                     variant="contained"
@@ -493,7 +493,7 @@ const AnticipoGastosForm = () => {
                     style={{ marginTop: '20px' }}
                     disabled={!formik.isValid || formik.isSubmitting}
                 >
-                    Guardar Agenda
+                    Guardar agenda
                 </Button>
             </form>
             <br />

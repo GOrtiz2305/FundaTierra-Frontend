@@ -103,7 +103,7 @@ const CooperanteEditarForm = () => {
   return (
     <ParentCard title='Editar cooperante'>
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre_donante">Nombre del Cooperante</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre_donante">Nombre del cooperante</CustomFormLabel>
         <CustomTextField
           name="nombre_donante"
           variant="outlined"

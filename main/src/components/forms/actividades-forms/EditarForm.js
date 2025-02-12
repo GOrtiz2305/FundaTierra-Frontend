@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import {
   Button,
   MenuItem,
   Select,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import CustomFormLabel from '../theme-elements/CustomFormLabel';
-import ParentCard from '../../shared/ParentCard';
-import { URL } from "../../../../config";
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { URL } from "../../../../config";
+import ParentCard from '../../shared/ParentCard';
+import CustomFormLabel from '../theme-elements/CustomFormLabel';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const ActividadesEditarForm = ({ id }) => {
   const [proyectos, setProyectos] = useState([]);
@@ -125,7 +125,7 @@ const ActividadesEditarForm = ({ id }) => {
           value={data.fecha_inicio}
           onChange={handleInputChange}
         />
-        <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
         <CustomTextField
           id="nombre"
           variant="outlined"
