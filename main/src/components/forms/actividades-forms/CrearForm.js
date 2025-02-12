@@ -1,12 +1,25 @@
 import {
+  Alert,
   Button,
   Select,
   Typography
+  Typography,
+  Alert,
+  Grid,
+  FormControl,
+  OutlinedInput,
+  Chip,
+  InputLabel
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from "../../../../config";
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
+import { id } from 'date-fns/locale';
 
 const ActividadesOrdinaryForm = () => {
   const [proyectos, setProyectos] = useState([]);
@@ -175,6 +188,155 @@ const ActividadesOrdinaryForm = () => {
           fullWidth
         />
 
+        <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
+            <CustomTextField
+              type="date"
+              id="fecha_inicio"
+              name="fecha_inicio"
+              onChange={formik.handleChange}
+              value={formik.values.fecha_inicio}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="id_proyectos">Proyecto</CustomFormLabel>
+            <CustomSelect
+              id="id_proyectos"
+              name="id_proyectos"
+              value={formik.values.id_proyectos}
+              onChange={formik.handleChange}
+              fullWidth
+              variant="outlined"
+            >
+              {proyectos.map((proyecto) => (
+                <MenuItem key={proyecto.id} value={proyecto.id}>
+                  {proyecto.nombre}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+            {formik.errors.id_proyectos && (
+              <FormHelperText error>
+                {formik.errors.id_proyectos}
+              </FormHelperText>
+            )}
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="id_encargado">Encargado</CustomFormLabel>
+            <CustomSelect
+              id="id_encargado"
+              name="id_encargado"
+              value={formik.values.id_encargado}
+              onChange={formik.handleChange}
+              fullWidth
+              variant="outlined"
+            >
+              {usuarios.map((usuario) => (
+                <MenuItem key={usuario.id} value={usuario.id}>
+                  {usuario.persona.nombre} {usuario.persona.apellido}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+            {formik.errors.id_encargado && (
+              <FormHelperText error>
+                {formik.errors.id_encargado}
+              </FormHelperText>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="usuarios">Colaboradores</CustomFormLabel>
+            <FormControl fullWidth>
+              <InputLabel id="usuarios-label">Seleccione a los colaboradores involucrados</InputLabel>
+              <Select
+                labelId="usuarios-label"
+                id="usuarios"
+                name="usuarios"
+                multiple
+                value={formik.values.usuarios || []}
+                onChange={(e) => {
+                  formik.setFieldValue("usuarios", e.target.value); // Actualiza correctamente los valores seleccionados
+                }}
+                input={<OutlinedInput id="select-multiple-chip" label="Seleccione los colaboradores" />}
+                renderValue={(selected) => (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {selected.map((usuarioId) => {
+                      const usuario = usuarios.find((r) => r.id === usuarioId);
+                      return <Chip key={usuarioId} label={usuario ? usuario.username : ''} />;
+                    })}
+                  </div>
+                )}
+              >
+                {usuarios.map((usuario) => (
+                  <MenuItem key={usuario.id} value={usuario.id}>
+                    {usuario.persona.nombre} {usuario.persona.apellido}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={3}>
+            <CustomFormLabel htmlFor="id_departamento">Departamento</CustomFormLabel>
+            <CustomSelect
+              id="id_departamento"
+              name="id_departamento"
+              value={formik.values.id_departamento}
+              onChange={(e) => {
+                formik.handleChange(e);
+                obtenerMunicipios(e.target.value);
+              }}
+              fullWidth
+              variant="outlined"
+            >
+              {departamentos.map((departamento) => (
+                <MenuItem key={departamento.id} value={departamento.id}>
+                  {departamento.nombre}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <CustomFormLabel htmlFor="id_municipio">Municipio</CustomFormLabel>
+            <CustomSelect
+              id="id_municipio"
+              name="id_municipio"
+              value={formik.values.id_municipio}
+              onChange={formik.handleChange}
+              fullWidth
+              variant="outlined"
+            >
+              {municipios.map((municipio) => (
+                <MenuItem key={municipio.id} value={municipio.id}>
+                  {municipio.nombre}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+            {formik.errors.id_municipio && (
+              <FormHelperText error>
+                {formik.errors.id_municipio}
+              </FormHelperText>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <CustomFormLabel htmlFor="detalle">Dirección</CustomFormLabel>
+            <CustomTextField
+              id="detalle"
+              name="detalle"
+              variant="outlined"
+              onChange={formik.handleChange}
+              value={formik.values.detalle}
+              error={formik.touched.detalle && Boolean(formik.errors.detalle)}
+              helperText={formik.touched.detalle && formik.errors.detalle}
+              onBlur={formik.handleBlur}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
         <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
         <CustomTextField
           id="nombre"
