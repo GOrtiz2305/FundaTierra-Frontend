@@ -67,16 +67,27 @@ const MunicipiosPaginationTable = () => {
 
     const columns = [
         columnHelper.accessor('nombre', {
-            header: 'Nombre',
-            cell: (info) => (
+            header: () => 'Nombre',
+            cell: info => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {info.getValue()}
+                </Typography>
+            ),
+        }),
+        columnHelper.accessor('departamento.nombre', {
+            header: () => 'Departamento',
+            cell: info => (
                 <Typography variant="subtitle1" color="textSecondary">
                     {info.getValue()}
                 </Typography>
             ),
         }),
         columnHelper.accessor('estado', {
-            header: 'Estado',
-            cell: (info) => (
+            header: () => 'Estado',
+            meta: {
+                filterVariant: 'checkbox', // 'checkbox' | 'radio' | 'select' | 'multiselect'
+            },
+            cell: info => (
                 <Chip
                     sx={{
                         bgcolor: info.getValue() ? 'success.light' : 'error.light',
@@ -122,11 +133,14 @@ const MunicipiosPaginationTable = () => {
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        debugTable: true,
+        debugHeaders: true,
+        debugColumns: false,
     });
 
     const handleDownload = () => {
-        const headers = ["nombre", "estado"];
-        const rows = data.map((item) => [item.nombre, item.estado ? 'Activo' : 'Inactivo']);
+        const headers = ["nombre", "departamento", "estado"];
+        const rows = data.map((item) => [item.nombre, item.departamento.nombre, item.estado ? 'Activo' : 'Inactivo']);
 
         const csvContent = [
             headers.join(","),
@@ -156,9 +170,23 @@ const MunicipiosPaginationTable = () => {
                                         <TableRow key={headerGroup.id}>
                                             {headerGroup.headers.map((header) => (
                                                 <TableCell key={header.id}>
-                                                    {header.isPlaceholder
-                                                        ? null
-                                                        : flexRender(header.column.columnDef.header, header.getContext())}
+                                                    <Typography
+                                                        variant="h6"
+                                                        mb={1}
+                                                        className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+                                                        onClick={header.column.getToggleSortingHandler()}
+                                                    >
+                                                        {header.isPlaceholder
+                                                            ? null
+                                                            : flexRender(header.column.columnDef.header, header.getContext())
+                                                        }
+                                                        {(() => {
+                                                            const sortState = header.column.getIsSorted();
+                                                            if (sortState === 'asc') return ' 🔼';
+                                                            if (sortState === 'desc') return ' 🔽';
+                                                            return null;
+                                                        })()}
+                                                    </Typography>
                                                 </TableCell>
                                             ))}
                                         </TableRow>

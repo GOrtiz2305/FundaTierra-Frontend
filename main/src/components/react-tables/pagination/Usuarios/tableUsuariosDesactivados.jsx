@@ -61,7 +61,7 @@ const UsuariosPaginationTable = () => {
         setLoading(true);
         try {
             await axios.put(`${URL}usuarios/activar/${id}`);
-            setData((prevData) => prevData.map((item) => 
+            setData((prevData) => prevData.map((item) =>
                 item.id === id ? { ...item, estado: true } : item
             ));
         } catch (error) {
@@ -75,6 +75,9 @@ const UsuariosPaginationTable = () => {
         setFilteredData(
             data.filter((usuario) =>
                 !usuario.estado && usuario.username.toLowerCase().includes(searchQuery.toLowerCase())
+                || usuario.persona.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+                || usuario.persona.apellido.toLowerCase().includes(searchQuery.toLowerCase())
+                || usuario.role.nombre.toLowerCase().includes(searchQuery.toLowerCase())
             )
         );
     }, [searchQuery, data]);
@@ -82,6 +85,26 @@ const UsuariosPaginationTable = () => {
     const columns = [
         columnHelper.accessor('username', {
             header: 'Nombre Usuario',
+            cell: (info) => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {info.getValue()}
+                </Typography>
+            ),
+        }),
+        columnHelper.accessor('persona.nombre', {
+            header: () => 'Colaborador',
+            cell: (info) => {
+                const nombre = info.row.original.persona.nombre; // Obtener el nombre
+                const apellido = info.row.original.persona.apellido; // Obtener el apellido
+                return (
+                    <Typography variant="subtitle1" color="textSecondary">
+                        {`${nombre} ${apellido}`} {/* Concatenar nombre y apellido */}
+                    </Typography>
+                );
+            },
+        }),
+        columnHelper.accessor('role.nombre', {
+            header: 'Rol',
             cell: (info) => (
                 <Typography variant="subtitle1" color="textSecondary">
                     {info.getValue()}

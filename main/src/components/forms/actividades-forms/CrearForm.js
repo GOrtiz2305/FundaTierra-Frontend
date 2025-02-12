@@ -1,8 +1,5 @@
 import {
-  Alert,
   Button,
-  FormHelperText,
-  MenuItem,
   Select,
   Typography
 } from '@mui/material';
@@ -10,14 +7,12 @@ import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import * as yup from 'yup';
-import { URL } from "../../../../config";
-import ParentCard from '../../shared/ParentCard';
-import CustomTextField from '../theme-elements/CustomTextField';
 
 const ActividadesOrdinaryForm = () => {
   const [proyectos, setProyectos] = useState([]);
-  const [direcciones, setDirecciones] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+  const [municipios, setMunicipios] = useState([]);
+  const [departamentos, setDepartamentos] = useState([]);
   const navigate = useNavigate();
 
   const CustomFormLabel = styled((props) => (
@@ -51,22 +46,37 @@ const ActividadesOrdinaryForm = () => {
       }
     };
 
-    const fetchDirecciones = async () => {
+    const fetchDepartamentos = async () => {
       try {
-        const response = await fetch(`${URL}direcciones`);
+        const response = await fetch(`${URL}departamentos`);
         if (response.ok) {
           const data = await response.json();
-          setDirecciones(data);
+          setDepartamentos(data);
         } else {
-          console.error('Error al obtener las direcciones');
+          console.error('Error al obtener los departamentos');
         }
       } catch (error) {
         console.error('Error al llamar a la API:', error);
       }
     };
 
+    const fetchUsuarios = async () => {
+      try {
+        const response = await fetch(`${URL}usuarios`);
+        if (response.ok) {
+          const data = await response.json();
+          setUsuarios(data);
+        } else {
+          console.error('Error al obtener los usuarios');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
+    };
+
+    fetchUsuarios();
     fetchProyectos();
-    fetchDirecciones();
+    fetchDepartamentos();
   }, []);
 
   const handleSave = async (values) => {
@@ -86,15 +96,25 @@ const ActividadesOrdinaryForm = () => {
         body: JSON.stringify(dataToSend),
       });
 
-      if (response.ok) {
+      //Guardar direccion
+      const dataToSendDireccion = {
+        detalle: values.detalle,
+        id_municipio: values.id_municipio
+      };
+
+      const responseDireccion = await fetch(`${URL}direcciones`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSendDireccion),
+      });
+
+      if (response.ok && responseDireccion.ok) {
         navigate('/actividades');
-        <Alert variant="filled" severity="success">
-          Actividad creada con éxito
-        </Alert>
-      } else {
-        <Alert variant='filled' severity='error'>
-          Error al crear la actividad
-        </Alert>
+      }
+      else {
+        console.error('Error al guardar la actividad');
       }
     } catch (error) {
       console.error('Error al llamar a la API:', error);
@@ -102,10 +122,26 @@ const ActividadesOrdinaryForm = () => {
     }
   };
 
+  const obtenerMunicipios = async (id_departamento) => {
+    try {
+      const response = await fetch(`${URL}municipios/departamento/${id_departamento}`);
+      if (response.ok) {
+        const data = await response.json();
+        setMunicipios(data);
+      } else {
+        console.error('Error al obtener los municipios');
+      }
+    } catch (error) {
+      console.error('Error al llamar a la API:', error);
+    }
+  };
+
   const validationSchema = yup.object({
     nombre: yup.string().required('El nombre de la actividad es necesario'),
     id_proyectos: yup.string().required('El proyecto es necesario'),
+    id_encargado: yup.string().required('El encargado es necesario'),
     id_direccion: yup.string().required('La dirección es necesaria'),
+    id_municipio: yup.string().required('El municipio es necesario'),
   });
 
   const formik = useFormik({
@@ -115,6 +151,9 @@ const ActividadesOrdinaryForm = () => {
       id_direccion: '',
       descripcion: '',
       fecha_inicio: '',
+      id_encargado: '',
+      id_municipio: '',
+      id_departamento: '',
     },
     validationSchema,
     onSubmit: (values) => {
@@ -136,7 +175,7 @@ const ActividadesOrdinaryForm = () => {
           fullWidth
         />
 
-        <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"
@@ -160,48 +199,6 @@ const ActividadesOrdinaryForm = () => {
           value={formik.values.descripcion}
           fullWidth
         />
-
-        <CustomFormLabel htmlFor="id_proyectos">Proyecto</CustomFormLabel>
-        <CustomSelect
-          id="id_proyectos"
-          name="id_proyectos"
-          value={formik.values.id_proyectos}
-          onChange={formik.handleChange}
-          fullWidth
-          variant="outlined"
-        >
-          {proyectos.map((proyecto) => (
-            <MenuItem key={proyecto.id} value={proyecto.id}>
-              {proyecto.nombre}
-            </MenuItem>
-          ))}
-        </CustomSelect>
-        {formik.errors.id_proyectos && (
-          <FormHelperText error>
-            {formik.errors.id_proyectos}
-          </FormHelperText>
-        )}
-
-        <CustomFormLabel htmlFor="id_direccion">Dirección</CustomFormLabel>
-        <CustomSelect
-          id="id_direccion"
-          name="id_direccion"
-          value={formik.values.id_direccion}
-          onChange={formik.handleChange}
-          fullWidth
-          variant="outlined"
-        >
-          {direcciones.map((direccion) => (
-            <MenuItem key={direccion.id} value={direccion.id}>
-              {direccion.detalle}
-            </MenuItem>
-          ))}
-        </CustomSelect>
-        {formik.errors.id_direccion && (
-          <FormHelperText error>
-            {formik.errors.id_direccion}
-          </FormHelperText>
-        )}
 
         <br /><br />
         <div>

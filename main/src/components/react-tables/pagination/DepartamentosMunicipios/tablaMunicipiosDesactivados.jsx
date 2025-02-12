@@ -61,7 +61,7 @@ const MunicipiosPaginationTable = () => {
         setLoading(true);
         try {
             await axios.put(`${URL}municipios/activar/${id}`);
-            setData((prevData) => prevData.map((item) => 
+            setData((prevData) => prevData.map((item) =>
                 item.id === id ? { ...item, estado: true } : item
             ));
         } catch (error) {
@@ -75,6 +75,7 @@ const MunicipiosPaginationTable = () => {
         setFilteredData(
             data.filter((municipio) =>
                 !municipio.estado && municipio.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+                || municipio.departamento.nombre.toLowerCase().includes(searchQuery.toLowerCase())
             )
         );
     }, [searchQuery, data]);
@@ -82,6 +83,14 @@ const MunicipiosPaginationTable = () => {
     const columns = [
         columnHelper.accessor('nombre', {
             header: 'Nombre',
+            cell: (info) => (
+                <Typography variant="subtitle1" color="textSecondary">
+                    {info.getValue()}
+                </Typography>
+            ),
+        }),
+        columnHelper.accessor('departamento.nombre', {
+            header: 'Departamento',
             cell: (info) => (
                 <Typography variant="subtitle1" color="textSecondary">
                     {info.getValue()}
