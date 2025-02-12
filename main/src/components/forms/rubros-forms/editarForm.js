@@ -69,7 +69,7 @@ import CustomTextField from '../theme-elements/CustomTextField';
         });
   
         if (response.ok) {
-          navigate('/rubros/nueva');
+          navigate('/rubros');
           alert('Rubro actualizado con éxito');
         } else {
           alert('Error al actualizar el rubro');
