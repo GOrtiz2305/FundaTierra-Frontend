@@ -1,22 +1,21 @@
 import {
-    Alert,
-    Button,
-    FormControl,
-    Grid,
-    InputLabel,
-    MenuItem,
-    OutlinedInput,
-    Select,
-    Snackbar
-  } from '@mui/material';
-  import { useFormik } from 'formik';
-  import React, { useEffect, useState } from 'react';
-  import { useNavigate } from 'react-router';
-  import * as yup from 'yup';
-  import { URL } from '../../../../config';
-  import ParentCard from '../../shared/ParentCard';
-  import CustomFormLabel from '../theme-elements/CustomFormLabel';
-  import CustomTextField from '../theme-elements/CustomTextField';
+  Alert,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Snackbar
+} from '@mui/material';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomFormLabel from '../theme-elements/CustomFormLabel';
+import CustomTextField from '../theme-elements/CustomTextField';
   
   const CrearMunicipioForm = () => {
     const navigate = useNavigate();
@@ -78,7 +77,7 @@ import {
     return (
       <ParentCard title="Crear Municipio">
         <form onSubmit={formik.handleSubmit}>
-          <CustomFormLabel htmlFor="nombre">Nombre del Municipio</CustomFormLabel>
+          <CustomFormLabel htmlFor="nombre">Nombre del municipio</CustomFormLabel>
           <CustomTextField
             id="nombre"
             name="nombre"

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import {
+  Alert,
   Button,
-  FormHelperText,
-  MenuItem,
   Select,
+  Typography
   Typography,
   Grid,
   FormControl,
@@ -11,13 +10,15 @@ import {
   Chip,
   InputLabel
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import { URL } from "../../../../config";
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from "../../../../config";
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
+import { id } from 'date-fns/locale';
 
 const ActividadesOrdinaryForm = () => {
   const [proyectos, setProyectos] = useState([]);
@@ -197,6 +198,17 @@ const ActividadesOrdinaryForm = () => {
   return (
     <ParentCard title='Formulario de Actividades - Información general'>
       <form onSubmit={formik.handleSubmit}>
+        <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
+        <CustomTextField
+          type="date"
+          id="fecha_inicio"
+          name="fecha_inicio"
+          onChange={formik.handleChange}
+          value={formik.values.fecha_inicio}
+          fullWidth
+        />
+
+        <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>

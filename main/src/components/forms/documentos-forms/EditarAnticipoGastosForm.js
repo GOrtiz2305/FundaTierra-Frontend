@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
 import { useNavigate } from 'react-router';
@@ -513,7 +514,7 @@ const EditarAnticipoGastosForm = ({ id }) => {
                     Gran total: Q{calculateTotal()}
                 </Typography>
                 <br />
-                <Alert severity="warning">Al superar el monto de Q10,000.00 en anticipos de gastos, se necesitará autorización de Coordinación ejecutiva para realizar cheques</Alert>
+                <Alert severity="warning">Al superar el monto de Q10,000.00 en anticipos de gastos, se necesitará autorización de coordinación ejecutiva para realizar cheques</Alert>
                 <br />
                 <Button type="submit" variant="contained" color="primary">
                     Guardar
