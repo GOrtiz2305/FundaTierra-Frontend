@@ -79,8 +79,6 @@ const ProyectosOrdinaryForm = () => {
       fetchCooperantes();
   }, []);
 
-
- 
     const formik = useFormik({
       initialValues: {
         nombre: '',
@@ -100,8 +98,6 @@ const ProyectosOrdinaryForm = () => {
     });
   const handleSave = async (values) => {
       try {
-        
-
           // Se guarda el documento principal
           const responseProyecto = await fetch(`${URL}proyectos`, {
               method: 'POST',

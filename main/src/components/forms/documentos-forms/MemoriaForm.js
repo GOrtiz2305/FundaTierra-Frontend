@@ -100,8 +100,6 @@ const MemoriaForm = () => {
         hombres_participantes: values.hombres_participantes,
         mujeres_participantes: values.mujeres_participantes,
         ninos_participantes: values.ninos_participantes,
-        responsable: values.responsable,
-        cargo: values.cargo,
         objetivo_general: values.objetivo_general,
         agenda: values.agenda,
         desarrollo_agenda: values.desarrollo_agenda,
@@ -160,8 +158,6 @@ const MemoriaForm = () => {
     mujeres_participantes: yup.number()
       .typeError('El número de participantes debe ser un valor numérico')
       .required('El número de participantes es necesario'),
-    responsable: yup.string().required('El responsable es necesario'),
-    cargo: yup.string().required('El cargo es necesario'),
     objetivo_general: yup.string().required('El objetivo general es necesario'),
     agenda: yup.string().required('La agenda es necesaria'),
     desarrollo_agenda: yup.string().required('El desarrollo de la agenda es necesario'),
@@ -178,8 +174,6 @@ const MemoriaForm = () => {
       hombres_participantes: '',
       mujeres_participantes: '',
       ninos_participantes: '',
-      responsable: '',
-      cargo: '',
       objetivo_general: '',
       agenda: '',
       desarrollo_agenda: '',
@@ -353,30 +347,6 @@ const MemoriaForm = () => {
               error={formik.touched.ninos_participantes && Boolean(formik.errors.ninos_participantes)}
               helperText={formik.touched.ninos_participantes && formik.errors.ninos_participantes}
               onBlur={formik.handleBlur}
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={3} mb={3}>
-          <Grid item lg={6} md={12} sm={12}>
-            <CustomFormLabel htmlFor="responsable">Responsable</CustomFormLabel>
-            <CustomTextField
-              id="responsable"
-              name="responsable"
-              variant="outlined"
-              onChange={formik.handleChange}
-              value={formik.values.responsable}
-              fullWidth
-            />
-          </Grid>
-          <Grid item lg={6} md={12} sm={12}>
-            <CustomFormLabel htmlFor="cargo">Cargo</CustomFormLabel>
-            <CustomTextField
-              id="cargo"
-              name="cargo"
-              variant="outlined"
-              onChange={formik.handleChange}
-              value={formik.values.cargo}
               fullWidth
             />
           </Grid>

@@ -29,8 +29,6 @@ const VerMemoriaForm = ({ id }) => {
     participantes_total: 0,
     hombres_participantes: 0,
     mujeres_participantes: 0,
-    responsable: '',
-    cargo: '',
     objetivo_general: '',
     agenda: '',
     desarrollo_agenda: '',
@@ -235,30 +233,6 @@ const VerMemoriaForm = ({ id }) => {
               name="ninos_participantes"
               variant="outlined"
               value={memoria.contenido.ninos_participantes}
-              fullWidth
-              disabled
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={3} mb={3}>
-          <Grid item lg={6} md={12} sm={12}>
-            <CustomFormLabel htmlFor="responsable">Responsable</CustomFormLabel>
-            <CustomTextField
-              id="responsable"
-              name="responsable"
-              variant="outlined"
-              value={memoria.contenido.responsable}
-              fullWidth
-              disabled
-            />
-          </Grid>
-          <Grid item lg={6} md={12} sm={12}>
-            <CustomFormLabel htmlFor="cargo">Cargo</CustomFormLabel>
-            <CustomTextField
-              id="cargo"
-              name="cargo"
-              variant="outlined"
-              value={memoria.contenido.cargo}
               fullWidth
               disabled
             />

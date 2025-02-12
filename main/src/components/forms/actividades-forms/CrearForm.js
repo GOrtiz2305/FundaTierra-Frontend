@@ -4,7 +4,6 @@ import {
   Select,
   Typography
   Typography,
-  Alert,
   Grid,
   FormControl,
   OutlinedInput,
@@ -94,23 +93,8 @@ const ActividadesOrdinaryForm = () => {
 
   const handleSave = async (values) => {
     try {
-      // Añadir id_usuario e id_estado a values antes de enviarlo
-      const dataToSend = {
-        ...values,
-        id_usuario: 3, // Define aquí el valor de id_usuario
-        id_estado: 1   // Define aquí el valor de id_estado
-      };
-
-      const response = await fetch(`${URL}actividades`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
-      });
-
       //Guardar direccion
-      const dataToSendDireccion = {
+      const dataPorEnviarDireccion = {
         detalle: values.detalle,
         id_municipio: values.id_municipio
       };
@@ -120,10 +104,46 @@ const ActividadesOrdinaryForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dataToSendDireccion),
+        body: JSON.stringify(dataPorEnviarDireccion),
       });
 
-      if (response.ok && responseDireccion.ok) {
+      const dataDireccion = await responseDireccion.json();
+      const idDireccion = dataDireccion.id;
+
+      // Añadir id_usuario e id_estado a values antes de enviarlo
+      const dataPorEnviar = {
+        ...values,
+        id_usuario: 3, // Define aquí el valor de id_usuario
+        id_estado: 1,   // Define aquí el valor de id_estado
+        id_direccion: idDireccion
+      };
+
+      const response = await fetch(`${URL}actividades`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataPorEnviar),
+      });
+
+      const dataActividad = await response.json();
+      const idActividad = dataActividad.id;
+
+      //Colaboradores de la actividad
+      const colaboradoresPorEnviar = formik.values.usuarios.map((idColaborador) => ({
+        id_colaborador: Number(idColaborador),
+        id_actividad: Number(idActividad),
+      }));
+
+      const responseColaboradores = await fetch(`${URL}actividadColaboradores`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(colaboradoresPorEnviar),
+      });
+
+      if (response.ok && responseDireccion.ok && responseColaboradores.ok) {
         navigate('/actividades');
       }
       else {
@@ -153,7 +173,7 @@ const ActividadesOrdinaryForm = () => {
     nombre: yup.string().required('El nombre de la actividad es necesario'),
     id_proyectos: yup.string().required('El proyecto es necesario'),
     id_encargado: yup.string().required('El encargado es necesario'),
-    id_direccion: yup.string().required('La dirección es necesaria'),
+    detalle: yup.string().required('La dirección es necesaria'),
     id_municipio: yup.string().required('El municipio es necesario'),
   });
 
@@ -161,7 +181,7 @@ const ActividadesOrdinaryForm = () => {
     initialValues: {
       nombre: '',
       id_proyectos: '',
-      id_direccion: '',
+      detalle: '',
       descripcion: '',
       fecha_inicio: '',
       id_encargado: '',
@@ -265,7 +285,7 @@ const ActividadesOrdinaryForm = () => {
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {selected.map((usuarioId) => {
                       const usuario = usuarios.find((r) => r.id === usuarioId);
-                      return <Chip key={usuarioId} label={usuario ? usuario.username : ''} />;
+                      return <Chip key={usuarioId} label={usuario ? usuario.persona.nombre : ''} />;
                     })}
                   </div>
                 )}

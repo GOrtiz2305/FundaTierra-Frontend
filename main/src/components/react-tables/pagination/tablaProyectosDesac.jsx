@@ -22,8 +22,9 @@ const ProyectosPaginationTable = () => {
         const fetchProyectos = async () => {
             try {
                 const response = await axios.get(`${URL}proyectos`);
-                const proyectosFinalizados = response.data.filter(proyecto => proyecto.id_estado === 1);
+                const proyectosFinalizados = response.data.filter(proyecto => proyecto.id_estado === 2);
                 setData(proyectosFinalizados);
+                console.log(proyectosFinalizados)
             } catch (error) {
                 console.error("Error al obtener proyectos:", error);
             }
@@ -77,15 +78,6 @@ const ProyectosPaginationTable = () => {
     const handleViewDetails = (id) => {
         navigate(`/proyectos/detalle/${id}`);
     };
-    const handleDelete = async (row) => {
-        console.log(row)
-        try {
-            await axios.put(`${URL}proyectos/eliminar/${row.id}`);
-            setData((prevData) => prevData.filter((item) => item.id !== row.id));
-        } catch (error) {
-            console.error("Error al eliminar el Proyecto:", error);
-        }
-    };
 
     const columns = [
         columnHelper.accessor('nombre', {
@@ -100,21 +92,9 @@ const ProyectosPaginationTable = () => {
             header: () => 'Fecha fin',
             cell: (info) => <Typography variant="subtitle1" color="textSecondary">{info.getValue()}</Typography>,
         }),
-        columnHelper.accessor('presupuesto_quetzales', {
-            header: () => 'Presupuesto Q',
-            cell: info => (
-                <Typography variant="subtitle1" color="textSecondary">
-                    {info.getValue()}
-                </Typography>
-            ),
-        }),
-        columnHelper.accessor('presupuesto_euros', {
-            header: () => 'Presupuestos E',
-            cell: info => (
-                <Typography variant="subtitle1" color="textSecondary">
-                    {info.getValue()}
-                </Typography>
-            ),
+        columnHelper.accessor('presupuesto', {
+            header: () => 'Presupuesto',
+            cell: (info) => <Typography variant="subtitle1" color="textSecondary">{info.getValue()}</Typography>,
         }),
         columnHelper.accessor('estado_proyecto.nombre', {
             header: () => 'Estado',
@@ -135,30 +115,7 @@ const ProyectosPaginationTable = () => {
             header: () => 'Acciones',
             cell: ({ row }) => (
                 <Stack direction="row" spacing={1}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleEdit(row.original.id)}  // Pasar el id aquí
-                        startIcon={<IconPencil width={18} />}
-                    >
-                        Editar
-                    </Button>
-                    <Button
-                         variant="contained"
-                         color="info"
-                         onClick={() => handleViewDetails(row.original.id)}
-                    >
-                        Ver Detalles
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => handleDelete(row.original.id)}
-                        startIcon={<IconTrash width={18} />}
-                    
-                    >
-                        Borrar
-                    </Button>
+                    <Button variant="contained" color="primary" onClick={() => handleEdit(row.original.id)} startIcon={<IconPencil width={18} />}>Activar</Button>
                 </Stack>
             ),
         },
@@ -210,7 +167,6 @@ const ProyectosPaginationTable = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box>
-                        {/* Campo de búsqueda */}
                         <CustomTextField
                             label="Buscar por nombre"
                             value={searchTerm}
