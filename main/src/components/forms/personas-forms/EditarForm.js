@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Typography,
   Alert,
-  MenuItem,
   Autocomplete,
+  Button,
+  Grid,
+  MenuItem,
   Select,
   TextField,
-  Grid
+  Typography
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const EditarPersonaForm = () => {
   const { id } = useParams();
@@ -367,7 +367,7 @@ const EditarPersonaForm = () => {
             type="submit"
             disabled={!formik.isValid || formik.isSubmitting}
           >
-            Guardar Cambios
+            Guardar cambios
           </Button>
         </div>
       </form>

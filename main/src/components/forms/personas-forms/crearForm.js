@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Button,
-  Typography,
-  MenuItem,
   Autocomplete,
-  TextField,
+  Button,
   Grid,
+  MenuItem,
   Select,
+  TextField,
+  Typography,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
-import { URL } from '../../../../config';
 import axios from 'axios';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const AgregarPersonaForm = () => {
   const [municipios, setMunicipios] = useState([]);
@@ -253,7 +253,7 @@ const AgregarPersonaForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <CustomFormLabel htmlFor="correo_electronico">
-              Correo Electrónico
+              Correo electrónico
             </CustomFormLabel>
             <CustomTextField
               id="correo_electronico"

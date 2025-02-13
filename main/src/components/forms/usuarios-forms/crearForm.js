@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Button,
   Typography,
-  Alert,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
-import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
-import { URL } from '../../../../config';
 import Autocomplete from '@mui/material/Autocomplete';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const CrearUsuarioForm = () => {
   const navigate = useNavigate();
@@ -116,9 +116,9 @@ const CrearUsuarioForm = () => {
   });
 
   return (
-    <ParentCard title="Formulario de Creación de Usuario">
+    <ParentCard title="Formulario de creación de usuario">
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="username">Nombre de Usuario</CustomFormLabel>
+        <CustomFormLabel htmlFor="username">Nombre de usuario</CustomFormLabel>
         <CustomTextField
           id="username"
           name="username"
@@ -145,7 +145,7 @@ const CrearUsuarioForm = () => {
           fullWidth
         />
 
-        <CustomFormLabel htmlFor="id_persona">Seleccionar Persona</CustomFormLabel>
+        <CustomFormLabel htmlFor="id_persona">Seleccionar persona</CustomFormLabel>
         <Autocomplete
           id="id_persona"
           options={personas}
@@ -165,7 +165,7 @@ const CrearUsuarioForm = () => {
           )}
         />
 
-        <CustomFormLabel htmlFor="id_rol">Seleccionar Rol</CustomFormLabel>
+        <CustomFormLabel htmlFor="id_rol">Seleccionar rol</CustomFormLabel>
         <Autocomplete
           id="id_rol"
           options={roles}

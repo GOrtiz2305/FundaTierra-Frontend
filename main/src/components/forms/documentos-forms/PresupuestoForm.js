@@ -129,13 +129,13 @@ const PresupuestoForm = () => {
   return (
     <ParentCard title="Formulario de Presupuesto">
       <form onSubmit={formik.handleSubmit}>
-        <Alert severity="info">I. Detalle del Presupuesto</Alert>
+        <Alert severity="info">I. Detalle del presupuesto</Alert>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Unidades</TableCell>
               <TableCell>Descripción</TableCell>
-              <TableCell>Costo Unitario</TableCell>
+              <TableCell>Costo unitario</TableCell>
               <TableCell>Total</TableCell>
             </TableRow>
           </TableHead>
@@ -184,11 +184,11 @@ const PresupuestoForm = () => {
           </TableBody>
         </Table>
         <Button onClick={addItem} variant="contained" color="secondary" style={{ marginTop: '10px' }}>
-          Agregar Item
+          Agregar item
         </Button>
 
         <Alert severity="info" style={{ marginTop: '20px' }}>
-          II. Información General
+          II. Información general
         </Alert>
         <Grid container spacing={3} mb={3}>
           <Grid item lg={6} md={12}>

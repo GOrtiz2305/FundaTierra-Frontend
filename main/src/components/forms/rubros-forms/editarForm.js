@@ -100,9 +100,9 @@ import CustomTextField from '../theme-elements/CustomTextField';
     if (!id) return <Alert severity="error">ID no proporcionado</Alert>;
   
     return (
-      <ParentCard title='Editar Rubro'>
+      <ParentCard title='Editar rubro'>
         <form onSubmit={formik.handleSubmit}>
-          <CustomFormLabel htmlFor="nombre_rubro">Nombre del Rubro</CustomFormLabel>
+          <CustomFormLabel htmlFor="nombre_rubro">Nombre del rubro</CustomFormLabel>
           <CustomTextField
             name="nombre_rubro"
             variant="outlined"
