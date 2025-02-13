@@ -1,12 +1,14 @@
 import React from 'react'
 import AgendaForm from '../../../components/forms/documentos-forms/AgendaForm'
-import { useParams } from 'react-router';
+import { useParams, useLocation } from 'react-router';
 
 const Agenda = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const nombre = location.state?.nombreActividad || 'Sin nombre';
 
   return (
-    <AgendaForm id={id}/>
+    <AgendaForm id={id} nombreActividad={nombre}/>
   )
 }
 

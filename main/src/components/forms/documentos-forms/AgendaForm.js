@@ -17,9 +17,12 @@ import { useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
+import { useLocation } from "react-router-dom";
 
 const AgendaForm = () => {
   const id = useParams();
+  const location = useLocation();
+  const nombreActividad = location.state?.nombreActividad || "Sin nombre";
   const [agendaItems, setAgendaItems] = useState([]);
   const navigate = useNavigate();
 
@@ -90,7 +93,7 @@ const AgendaForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      actividad: '',
+      actividad: nombreActividad,
       lugar: '',
       fecha: '',
       proyecto: '',

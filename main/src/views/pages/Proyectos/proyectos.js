@@ -21,7 +21,7 @@ const Proyectos = () => {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={tabIndex} onChange={handleTabChange} aria-label="Proyectos Tabs">
                     <Tab label="Proyectos activos" />
-                    <Tab label="Proyectos desactivados" />
+                    <Tab label="Proyectos finalizados" />
                 </Tabs>
             </Box>
 
