@@ -53,7 +53,7 @@ const VerPresupuestoForm = ({ id }) => {
   }, [id]);
 
   return (
-    <ParentCard title="Formulario de Presupuesto">
+    <ParentCard title="Formulario de presupuesto">
       <Alert severity="info">I. Detalle del presupuesto</Alert>
       <Table>
         <TableHead>

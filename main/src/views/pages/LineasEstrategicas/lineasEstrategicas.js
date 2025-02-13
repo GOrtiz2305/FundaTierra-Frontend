@@ -23,7 +23,7 @@ const LineasEstategicas = () => {
                 align="center"
                 sx={{ flexGrow: 1, marginBottom: '5px' }}
             >
-                Gestión de Lineas Estrategicas
+                Gestión de lineas estrategicas
             </Typography>
             <Button
                 variant="contained"
@@ -38,11 +38,11 @@ const LineasEstategicas = () => {
                 onClick={handleOpenModal2}
                 sx={{ marginBottom: '5px' }}
             >
-                Ver Lienas Estrategicas Desactivadas
+                Ver lineas estrategicas desactivadas
             </Button>
 
             <Dialog open={openModal2} onClose={handleCloseModal2} fullWidth maxWidth="md">
-                <DialogTitle>Lineas Estrategicas Desactivadas</DialogTitle>
+                <DialogTitle>Lineas estrategicas desactivadas</DialogTitle>
                 <DialogContent>
                     <LineasDesactivadoPaginationTable />
                 </DialogContent>

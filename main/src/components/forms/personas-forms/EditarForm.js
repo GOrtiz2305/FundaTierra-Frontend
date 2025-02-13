@@ -208,7 +208,7 @@ const EditarPersonaForm = () => {
   }
 
   return (
-    <ParentCard title="Formulario de Edición de Persona">
+    <ParentCard title="Formulario de edición de persona">
       <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={5}>

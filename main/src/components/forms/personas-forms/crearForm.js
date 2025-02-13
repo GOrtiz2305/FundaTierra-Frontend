@@ -185,7 +185,7 @@ const AgregarPersonaForm = () => {
   });
 
   return (
-    <ParentCard title="Formulario para Agregar Persona">
+    <ParentCard title="Formulario para agregar persona">
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={5}>

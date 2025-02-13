@@ -176,7 +176,7 @@ const VerAnticipoGastosForm = ({ id }) => {
     }, [anticipoGastos.id]);
 
     return (
-        <ParentCard title="Anticipo de Gastos">
+        <ParentCard title="Anticipo de gastos">
             <Grid container spacing={3} mb={3}>
                 <Grid item lg={6} md={12}>
                     <CustomFormLabel>Fecha:</CustomFormLabel>

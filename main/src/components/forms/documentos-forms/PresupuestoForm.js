@@ -127,7 +127,7 @@ const PresupuestoForm = () => {
   };
 
   return (
-    <ParentCard title="Formulario de Presupuesto">
+    <ParentCard title="Formulario de presupuesto">
       <form onSubmit={formik.handleSubmit}>
         <Alert severity="info">I. Detalle del presupuesto</Alert>
         <Table>

@@ -72,7 +72,7 @@ const LineasEstrategicasForm = () => {
   });
 
   return (
-    <ParentCard title="Formulario de Creación de Lineas Estrategicas">
+    <ParentCard title="Formulario de creación de lineas estrategicas">
       <form onSubmit={formik.handleSubmit}>
         <CustomFormLabel htmlFor="nombre">Nombre de la linea estrategica</CustomFormLabel>
         <CustomTextField

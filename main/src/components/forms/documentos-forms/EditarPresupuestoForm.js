@@ -165,7 +165,7 @@ const EditarPresupuestoForm = ({ id }) => {
   };
 
   return (
-    <ParentCard title="Formulario de Presupuesto">
+    <ParentCard title="Formulario de presupuesto">
       <form onSubmit={handleUpdate}>
         <Alert severity="info">I. Detalle del presupuesto</Alert>
         <Table>

@@ -139,7 +139,7 @@ const VerProyecto = () => {
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <ParentCard title="Ver Proyecto">
+    <ParentCard title="Ver proyecto">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <CustomFormLabel htmlFor="nombre">Nombre del Proyecto</CustomFormLabel>
@@ -196,9 +196,9 @@ const VerProyecto = () => {
         </Grid>
 
         <Grid item xs={6}>
-          <CustomFormLabel htmlFor="lineas_estrategicas">Líneas Estratégicas</CustomFormLabel>
+          <CustomFormLabel htmlFor="lineas_estrategicas">Líneas estratégicas</CustomFormLabel>
           <FormControl fullWidth>
-            <InputLabel id="lineas-estrategicas-label">Líneas Estratégicas</InputLabel>
+            <InputLabel id="lineas-estrategicas-label">Líneas estratégicas</InputLabel>
             <Select
               labelId="lineas-estrategicas-label"
               id="lineas_estrategicas"
@@ -241,7 +241,7 @@ const VerProyecto = () => {
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="fecha_inicio">Fecha de Inicio</CustomFormLabel>
+            <CustomFormLabel htmlFor="fecha_inicio">Fecha de inicio</CustomFormLabel>
             <CustomTextField
               id="fecha_inicio"
               name="fecha_inicio"
@@ -254,7 +254,7 @@ const VerProyecto = () => {
           </Grid>
 
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="fecha_fin">Fecha de Fin</CustomFormLabel>
+            <CustomFormLabel htmlFor="fecha_fin">Fecha de fin</CustomFormLabel>
             <CustomTextField
               id="fecha_fin"
               name="fecha_fin"
@@ -269,7 +269,7 @@ const VerProyecto = () => {
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en Quetzales</CustomFormLabel>
+            <CustomFormLabel htmlFor="presupuesto_quetzales">Presupuesto en quetzales</CustomFormLabel>
             <CustomTextField
               id="presupuesto_quetzales"
               name="presupuesto_quetzales"
@@ -281,7 +281,7 @@ const VerProyecto = () => {
           </Grid>
 
           <Grid item xs={6}>
-            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en Euros</CustomFormLabel>
+            <CustomFormLabel htmlFor="presupuesto_euros">Presupuesto en euros</CustomFormLabel>
             <CustomTextField
               id="presupuesto_euros"
               name="presupuesto_euros"

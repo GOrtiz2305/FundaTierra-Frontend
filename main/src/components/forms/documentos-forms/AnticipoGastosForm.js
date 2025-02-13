@@ -287,7 +287,7 @@ const AnticipoGastosForm = () => {
     });
 
     return (
-        <ParentCard title="Anticipo de Gastos">
+        <ParentCard title="Anticipo de gastos">
             <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3} mb={3}>
                     <Grid item lg={6} md={12}>

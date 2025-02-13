@@ -4,13 +4,10 @@ import {
   Button,
   ButtonGroup,
   Grid,
-  MenuItem,
-  Select,
-  Typography,
-  Input,
+  Typography
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useDrivePicker from 'react-google-drive-picker';
 import { useNavigate } from 'react-router';
 import { URL } from '../../../../config';
@@ -299,7 +296,7 @@ const DashDocumentos = ({ id, nombreActividad}) => {
             />
           </Grid>
           <Grid item lg={6} md={12} sm={12}>
-            <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
+            <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
             <CustomTextField
               id="nombre"
               variant="outlined"

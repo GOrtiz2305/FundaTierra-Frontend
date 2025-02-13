@@ -21,7 +21,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
-import { useNavigate } from 'react-router';
 
 const EditarAnticipoGastosForm = ({ id }) => {
 
@@ -316,7 +315,7 @@ const EditarAnticipoGastosForm = ({ id }) => {
     };
 
     return (
-        <ParentCard title="Anticipo de Gastos">
+        <ParentCard title="Anticipo de gastos">
             <form onSubmit={handleUpdate}>
                 <Grid container spacing={3} mb={3}>
                     <Grid item lg={6} md={12}>

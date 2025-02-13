@@ -14,8 +14,8 @@ import { useNavigate } from 'react-router';
 import { URL } from "../../../../config";
 import ParentCard from '../../shared/ParentCard';
 import CustomFormLabel from '../theme-elements/CustomFormLabel';
-import CustomTextField from '../theme-elements/CustomTextField';
 import CustomSelect from '../theme-elements/CustomSelect';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const ActividadesEditarForm = ({ id }) => {
   const [proyectos, setProyectos] = useState([]);
@@ -235,7 +235,7 @@ const ActividadesEditarForm = ({ id }) => {
   }
 
   return (
-    <ParentCard title='Formulario de Actividades - Actualización de datos'>
+    <ParentCard title='Formulario de actividades - Actualización de datos'>
       <form onSubmit={handleUpdate}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -324,7 +324,7 @@ const ActividadesEditarForm = ({ id }) => {
             </FormControl>
           </Grid>
         </Grid>
-        <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
         <CustomTextField
           id="nombre"
           variant="outlined"

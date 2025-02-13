@@ -139,7 +139,7 @@ const EditarMunicipioForm = ({ id }) => {
   }
 
   return (
-    <ParentCard title="Formulario de Edición de Municipio">
+    <ParentCard title="Formulario de edición de municipio">
       {successMessage && <Alert severity="info">{successMessage}</Alert>}
       <form onSubmit={formik.handleSubmit}>
         <CustomFormLabel htmlFor="nombre">Nombre del municipio</CustomFormLabel>

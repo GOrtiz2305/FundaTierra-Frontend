@@ -23,7 +23,7 @@ const Rubros = () => {
                 align="center"
                 sx={{ flexGrow: 1, marginBottom: '5px' }}
             >
-                Gestión de Rubros
+                Gestión de rubros
             </Typography>
             <Button
                 variant="contained"
@@ -38,11 +38,11 @@ const Rubros = () => {
                 onClick={handleOpenModal2}
                 sx={{ marginBottom: '5px' }}
             >
-                Ver Rubros Desactivados
+                Ver rubros desactivados
             </Button>
 
             <Dialog open={openModal2} onClose={handleCloseModal2} fullWidth maxWidth="md">
-                <DialogTitle>Rubros Desactivados</DialogTitle>
+                <DialogTitle>Rubros dataesactivados</DialogTitle>
                 <DialogContent>
                     <RubrosDesactivadoPaginationTable />
                 </DialogContent>

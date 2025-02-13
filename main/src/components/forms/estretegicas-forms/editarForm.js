@@ -55,7 +55,7 @@ const LineasEstrategicasEditarForm = () => {
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <ParentCard title='Editar línea rstratégica'>
+    <ParentCard title='Editar línea estratégica'>
       {alert && (
         <Alert variant='filled' severity={alert.type} onClose={() => setAlert(null)}>
           {alert.message}

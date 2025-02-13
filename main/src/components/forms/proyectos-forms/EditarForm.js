@@ -225,7 +225,7 @@ const ProyectosEditarForm = () => {
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <ParentCard title="Editar proyecto - actualizar datos">
+    <ParentCard title="Editar proyecto - Actualizar datos">
       <form onSubmit={formik.handleSubmit}>
         <CustomFormLabel htmlFor="nombre">Nombre del Proyecto</CustomFormLabel>
         <CustomTextField

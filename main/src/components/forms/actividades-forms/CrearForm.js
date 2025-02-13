@@ -196,7 +196,7 @@ const ActividadesOrdinaryForm = () => {
   });
 
   return (
-    <ParentCard title='Formulario de Actividades - Información general'>
+    <ParentCard title='Formulario de actividades - Información general'>
       <form onSubmit={formik.handleSubmit}>
         <CustomFormLabel htmlFor="fecha_inicio">Fecha</CustomFormLabel>
         <CustomTextField
@@ -357,7 +357,7 @@ const ActividadesOrdinaryForm = () => {
             />
           </Grid>
         </Grid>
-        <CustomFormLabel htmlFor="nombre">Nombre de la Actividad</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre de la actividad</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"

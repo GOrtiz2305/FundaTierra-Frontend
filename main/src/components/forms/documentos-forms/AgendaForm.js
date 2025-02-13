@@ -14,10 +14,10 @@ import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import { useLocation } from "react-router-dom";
 import * as yup from 'yup';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
-import { useLocation } from "react-router-dom";
 
 const AgendaForm = () => {
   const id = useParams();
@@ -122,7 +122,7 @@ const AgendaForm = () => {
   };
 
   return (
-    <ParentCard title="Formulario de Agenda">
+    <ParentCard title="Formulario de agenda">
       <form onSubmit={formik.handleSubmit}>
         <Alert severity="info">I. Detalles de la actividad</Alert>
         <Grid container spacing={3} mb={3}>

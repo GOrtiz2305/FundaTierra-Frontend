@@ -1,4 +1,4 @@
-import { Button, Typography} from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import React from 'react';
 import PersonasTable from '../../../components/react-tables/pagination/Personas/tablaPersonas';
 
@@ -11,7 +11,7 @@ const Personas = () => {
                 align="center"
                 sx={{ flexGrow: 1, marginBottom: '5px' }}
             >
-                Gestión de Personas
+                Gestión de personas
             </Typography>
             <Button
                 variant="contained"
