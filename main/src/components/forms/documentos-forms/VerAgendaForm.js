@@ -1,19 +1,19 @@
-import React, { useState, useEffect, memo } from 'react';
 import {
-  Typography,
   Alert,
+  Button,
   Grid,
-  TextField,
   Table,
+  TableBody,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
-  Button
+  TextField,
+  Typography
 } from '@mui/material';
-import ParentCard from '../../shared/ParentCard';
-import { URL } from "../../../../config";
 import { styled } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
+import { URL } from "../../../../config";
+import ParentCard from '../../shared/ParentCard';
 
 const VerAgendaForm = ({ id }) => {
   const [actividad, setActividad] = useState(
@@ -85,7 +85,7 @@ const VerAgendaForm = ({ id }) => {
 
   return (
     <ParentCard title="Agenda">
-      <Alert severity="info">I. Detalles de la Actividad</Alert>
+      <Alert severity="info">I. Detalles de la actividad</Alert>
       <Grid container spacing={3} mb={3}>
         <Grid item lg={6} md={12}>
           <CustomFormLabel htmlFor="actividad">Actividad</CustomFormLabel>
@@ -130,12 +130,12 @@ const VerAgendaForm = ({ id }) => {
         </Grid>
       </Grid>
 
-      <Alert severity="info">II. Puntos de la Agenda</Alert>
+      <Alert severity="info">II. Puntos de la agenda</Alert>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>Horario</TableCell>
-            <TableCell>Punto de Agenda</TableCell>
+            <TableCell>Punto de agenda</TableCell>
             <TableCell>Responsable</TableCell>
           </TableRow>
         </TableHead>

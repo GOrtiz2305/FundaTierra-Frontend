@@ -342,7 +342,7 @@ const VerAnticipoGastosForm = ({ id }) => {
                 Gran total: Q{anticipoGastos.contenido.total}
             </Typography>
             <br />
-            <Alert severity="warning">Al superar el monto de Q10,000.00 en anticipos de gastos, se necesitará autorización de Coordinación ejecutiva para realizar cheques</Alert>
+            <Alert severity="warning">Al superar el monto de Q10,000.00 en anticipos de gastos, se necesitará autorización de coordinación ejecutiva para realizar cheques</Alert>
             <br />
             <br />
             <Button variant="contained" color="success" style={{ marginTop: '20px' }}>

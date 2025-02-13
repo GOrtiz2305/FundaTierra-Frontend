@@ -54,7 +54,7 @@ const VerPresupuestoForm = ({ id }) => {
 
   return (
     <ParentCard title="Formulario de Presupuesto">
-      <Alert severity="info">I. Detalle del Presupuesto</Alert>
+      <Alert severity="info">I. Detalle del presupuesto</Alert>
       <Table>
         <TableHead>
           <TableRow>
@@ -106,7 +106,7 @@ const VerPresupuestoForm = ({ id }) => {
       </Table>
 
       <Alert severity="info" style={{ marginTop: '20px' }}>
-        II. Información General
+        II. Información general
       </Alert>
       <Grid container spacing={3} mb={3}>
         <Grid item lg={6} md={12}>

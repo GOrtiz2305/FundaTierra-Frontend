@@ -93,10 +93,10 @@ const RubrosForm = () => {
   };
 
   return (
-    <ParentCard title='Formulario de Rubro'>
+    <ParentCard title='Formulario de rubro'>
       {/* Formulario para crear un cooperante */}
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre del Rubro</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del rubro</CustomFormLabel>
         <CustomTextField
           id="nombre_donante"
           name="nombre_rubro"
