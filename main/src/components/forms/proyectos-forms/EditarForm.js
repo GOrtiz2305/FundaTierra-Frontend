@@ -17,7 +17,7 @@ const ProyectosEditarForm = () => {
   const [cooperantesOptions, setCooperantesOptions] = useState([]);
   const [lineasEstrategicasOptions, setLineasEstrategicasOptions] = useState([]);
   const [proyectoCooperante, setProyectoCooperante] = useState([]);
-  const [proyectoLineas, setProyectoLineas] = useState ([]);
+  const [proyectoLineas, setProyectoLineas] = useState([]);
   const [proyecto, setProyecto] = useState({
     nombre: '',
     alias: '',
@@ -28,14 +28,14 @@ const ProyectosEditarForm = () => {
     fecha_fin: '',
     presupuesto_quetzales: '',
     presupuesto_euros: '',
-    proyectoCooperantes:[
+    proyectoCooperantes: [
       {
-        cooperante:{}
+        cooperante: {}
       }
     ],
-    proyectoLineas:[
+    proyectoLineas: [
       {
-        linea_Estrategica:{}
+        linea_Estrategica: {}
       }
     ],
   });
@@ -60,86 +60,78 @@ const ProyectosEditarForm = () => {
   }, [id, conversionRate]);
 
   useEffect(() => {
-     const fetchCooperantes = async () => {
-                try {
-                    const response = await fetch(`${URL}cooperante`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setCooperantesOptions(data);
-                    } else {
-                        console.error('Error al obtener los cooperantes');
-                    }
-                } catch (error) {
-                    console.error('Error al llamar a la API:', error);
-                }
-            };
-    const fetchLineas = async () => {
-      
-        try {
-          const response = await fetch(`${URL}lineasEstrategicas`);
-          if (response.ok) {
-              const data = await response.json();
-              setLineasEstrategicasOptions(data);
-          } else {
-              console.error('Error al obtener las lineas estrategicas ');
-          }
+    const fetchCooperantes = async () => {
+      try {
+        const response = await fetch(`${URL}cooperante`);
+        if (response.ok) {
+          const data = await response.json();
+          setCooperantesOptions(data);
+        } else {
+          console.error('Error al obtener los cooperantes');
+        }
       } catch (error) {
-          console.error('Error al llamar a la API:', error);
+        console.error('Error al llamar a la API:', error);
       }
-       // const cooperantesResponse = await axios.get(`${URL}cooperante`);
-       // const lineasEstrategicasResponse = await axios.get(`${URL}lineasEstrategicas`);
-
-        //setCooperantesOptions(cooperantesResponse.data);
-        //setLineasEstrategicasOptions(lineasEstrategicasResponse.data);
-      //} catch (error) {
-       // console.error('Error al obtener las opciones de cooperantes y líneas estratégicas:', error);
-      
     };
+    const fetchLineas = async () => {
+
+      try {
+        const response = await fetch(`${URL}lineasEstrategicas`);
+        if (response.ok) {
+          const data = await response.json();
+          setLineasEstrategicasOptions(data);
+        } else {
+          console.error('Error al obtener las lineas estrategicas ');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
+    };
+
     fetchCooperantes();
     fetchLineas();
   }, []);
-  useEffect (()=> {
+
+  useEffect(() => {
     const fetchProyectoLineas = async () => {
-       try {
-                      const response = await fetch(`${URL}proyectoLinea/proyecto/${id}`);
-                      if (response.ok) {
-                          const data = await response.json();
-                          setProyectoLineas(data);
-                          console.log('ee',data);
-                          // Sincronizar lineas seleccionados con los IDs de proyectoRubros
-                          setProyecto((prevState) => ({
-                              ...prevState,
-                              lineas_estrategicas: data.map((linea) => linea.id_linea_estrategica), // Extrae solo los IDs
-                          }));
-                      } else {
-                          console.error('Error al obtener los rubros');
-                      }
-                  } catch (error) {
-                      console.error('Error al llamar a la API:', error);
-                  }
+      try {
+        const response = await fetch(`${URL}proyectoLinea/proyecto/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProyectoLineas(data);
+          // Sincronizar lineas seleccionados con los IDs de proyectoRubros
+          setProyecto((prevState) => ({
+            ...prevState,
+            lineas_estrategicas: data.map((linea) => linea.id_linea_estrategica), // Extrae solo los IDs
+          }));
+        } else {
+          console.error('Error al obtener los rubros');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
     };
     const fetchProyectoCooperantes = async () => {
       try {
-                     const response = await fetch(`${URL}proyectoCooperantes/proyecto/${id}`);
-                     if (response.ok) {
-                         const data = await response.json();
-                         setProyectoCooperante(data);
-                         console.log(data);
-                         // Sincronizar rubros seleccionados con los IDs de proyectoRubros
-                         setProyecto((prevState) => ({
-                             ...prevState,
-                             cooperantes: data.map((cooperante) => cooperante.id_cooperante), // Extrae solo los IDs
-                         }));
-                     } else {
-                         console.error('Error al obtener los rubros');
-                     }
-                 } catch (error) {
-                     console.error('Error al llamar a la API:', error);
-                 }
-   };
-   fetchProyectoLineas ();
-   fetchProyectoCooperantes();
-  },  []);
+        const response = await fetch(`${URL}proyectoCooperantes/proyecto/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProyectoCooperante(data);
+          // Sincronizar rubros seleccionados con los IDs de proyectoRubros
+          setProyecto((prevState) => ({
+            ...prevState,
+            cooperantes: data.map((cooperante) => cooperante.id_cooperante), // Extrae solo los IDs
+          }));
+        } else {
+          console.error('Error al obtener los rubros');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
+    };
+    fetchProyectoLineas();
+    fetchProyectoCooperantes();
+  }, []);
 
   const formik = useFormik({
     initialValues: proyecto,
@@ -159,7 +151,6 @@ const ProyectosEditarForm = () => {
         .required('El presupuesto en quetzales es necesario'),
     }),
     onSubmit: async (values) => {
-      console.log("Enviando datos del proyecto:", values);
 
       try {
         const dataToSend = {
@@ -176,66 +167,48 @@ const ProyectosEditarForm = () => {
           body: JSON.stringify(dataToSend),
         });
 
-        if (response.ok) {
+        const proyectoData = await response.json();
+        const idProyecto = proyectoData.id;
+        //Se guardan las lineas
+        const LineasEstrategicasPorEnviar = formik.values.lineas_estrategicas.map((idLineas) => ({
+          id_linea_estrategica: Number(idLineas),
+          id_proyectos: Number(idProyecto),
+        }));
+
+        const responseLineas = await fetch(`${URL}proyectoLinea/proyecto/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(LineasEstrategicasPorEnviar),
+        });
+
+        const CooperantesPorEnviar = formik.values.cooperantes.map((idCooperante) => ({
+          id_cooperante: Number(idCooperante),
+          id_proyecto: Number(idProyecto),
+        }));
+        const responseCooperantes = await fetch(`${URL}proyectoCooperantes/proyecto/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(CooperantesPorEnviar),
+
+        });
+
+        if (response.ok && responseCooperantes.ok && responseLineas.ok) {
           alert('Proyecto actualizado con éxito');
-          
+          navigate('/proyectos');
         } else {
           alert('Error al actualizar el proyecto');
         }
-     
-      const proyectoData = await response.json();
-      console.log("Proyecto editado:", proyectoData);
-      const idProyecto = proyectoData.id; 
-      //Se guardan las lineas
-      const LineasEstrategicasPorEnviar = formik.values.lineas_estrategicas.map((idLineas) => ({
-        id_linea_estrategica: Number(idLineas),
-          id_proyectos: Number(idProyecto),
-          
-      }));
-      const responseLineas = await fetch(`${URL}proyectoLinea/proyecto/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(LineasEstrategicasPorEnviar),
-            });
 
-            if (responseLineas.ok) {
-              alert('Lineas estrategicas editadas con exito')
-            } else {
-                alert('Error al guardar las lineas estrategicas')
-            }
-            const CooperantesPorEnviar = formik.values.cooperantes.map((idCooperante) => ({
-              id_cooperante: Number(idCooperante),
-              id_proyecto: Number(idProyecto),
-            }));
-            const responseCooperantes = await fetch(`${URL}proyectoCooperantes/proyecto/${id}`, {
-              method: 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(CooperantesPorEnviar),
-              
-          });
-
-          if (responseCooperantes.ok) {
-              alert('Cooperantes editados con exito')
-          } else {
-              alert('Error al guardar las lineas estrategicas')
-          }
-          navigate('/proyectos');
-          } catch (error) {
-            console.error('Error al llamar a la API:', error);
-            alert('Error al llamar a la API');
-          }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+        alert('Error al llamar a la API');
+      }
     },
   });
-
-
-
-
-
-
 
   const handleQuetzalesChange = (event) => {
     const valueInQuetzales = event.target.value;
@@ -415,13 +388,12 @@ const ProyectosEditarForm = () => {
             />
           </Grid>
         </Grid>
-
+        <br />
         <Button
           color="primary"
           variant="contained"
           fullWidth
           type="submit"
-          onClick={() => console.log(formik.values)}
         >
           Actualizar Proyecto
         </Button>

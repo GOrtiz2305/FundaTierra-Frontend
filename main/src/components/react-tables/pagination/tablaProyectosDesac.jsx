@@ -23,7 +23,7 @@ const ProyectosPaginationTable = () => {
         const day = String(date.getDate()).padStart(2, '0'); // Día con dos dígitos
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes con dos dígitos
         const year = date.getFullYear(); // Año
-    
+
         return `${day}/${month}/${year}`;
     };
 
@@ -37,7 +37,7 @@ const ProyectosPaginationTable = () => {
                     fecha_inicio: formatDate(proyecto.fecha_inicio),
                     fecha_fin: formatDate(proyecto.fecha_fin),
                 }));
-    
+
                 setData(proyectosConFechasFormateadas);
             } catch (error) {
                 console.error("Error al obtener proyectos:", error);
@@ -48,9 +48,9 @@ const ProyectosPaginationTable = () => {
 
     const handleSearchChange = (event) => {
         const Buscar = event.target.value.trim(); // Evita espacios en blanco al inicio y final
-    
+
         setSearchTerm(Buscar); // Actualiza el término de búsqueda
-    
+
         if (Buscar === "") {
             setColumnFilters([])
         } else {
@@ -60,7 +60,7 @@ const ProyectosPaginationTable = () => {
             const fechaRegex2 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\//
             const fechaRegex3 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
             const numeroDecimalRegex = /^[0-9]+(\.[0-9]+)?$/
-    
+
             if (conjuntoLetras.test(Buscar) || numeroDecimalRegex.test(Buscar)) {
                 setColumnFilters([
                     {
@@ -107,8 +107,12 @@ const ProyectosPaginationTable = () => {
             header: () => 'Fecha fin',
             cell: (info) => <Typography variant="subtitle1" color="textSecondary">{info.getValue()}</Typography>,
         }),
-        columnHelper.accessor('presupuesto', {
-            header: () => 'Presupuesto',
+        columnHelper.accessor('presupuesto_quetzales', {
+            header: () => 'Presupuesto Q',
+            cell: (info) => <Typography variant="subtitle1" color="textSecondary">{info.getValue()}</Typography>,
+        }),
+        columnHelper.accessor('presupuesto_euros', {
+            header: () => 'Presupuesto €',
             cell: (info) => <Typography variant="subtitle1" color="textSecondary">{info.getValue()}</Typography>,
         }),
         columnHelper.accessor('estado_proyecto.nombre', {
@@ -125,15 +129,15 @@ const ProyectosPaginationTable = () => {
                 />
             ),
         }),
-        {
-            id: 'acciones',
-            header: () => 'Acciones',
-            cell: ({ row }) => (
-                <Stack direction="row" spacing={1}>
-                    <Button variant="contained" color="primary" onClick={() => handleEdit(row.original.id)} startIcon={<IconPencil width={18} />}>Activar</Button>
-                </Stack>
-            ),
-        },
+        // {
+        //     id: 'acciones',
+        //     header: () => 'Acciones',
+        //     cell: ({ row }) => (
+        //         <Stack direction="row" spacing={1}>
+        //             <Button variant="contained" color="primary" onClick={() => handleEdit(row.original.id)} startIcon={<IconPencil width={18} />}>Activar</Button>
+        //         </Stack>
+        //     ),
+        // },
     ];
 
     const table = useReactTable({
