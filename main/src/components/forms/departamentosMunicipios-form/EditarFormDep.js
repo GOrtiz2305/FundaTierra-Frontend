@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Typography,
   Alert,
+  Button,
   Checkbox,
+  Typography,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
+import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import * as yup from 'yup';
 import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const EditarDepartamentoForm = ({ id }) => {
   const navigate = useNavigate();
@@ -110,7 +110,7 @@ const EditarDepartamentoForm = ({ id }) => {
     <ParentCard title="Formulario de Edición de Departamento">
       {successMessage && <Alert severity="info">{successMessage}</Alert>}
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre del Departamento</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del departamento</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"
@@ -138,7 +138,7 @@ const EditarDepartamentoForm = ({ id }) => {
             type="submit"
             disabled={!formik.isValid || formik.isSubmitting}
           >
-            Guardar Cambios
+            Guardar cambios
           </Button>
         </div>
       </form>

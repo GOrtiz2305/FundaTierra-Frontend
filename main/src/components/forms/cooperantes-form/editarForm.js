@@ -69,7 +69,7 @@ const CooperanteEditarForm = () => {
       });
 
       if (response.ok) {
-        navigate('/cooperante/nueva');
+        navigate('/cooperante');
         alert('Cooperante actualizado con éxito');
       } else {
         alert('Error al actualizar el cooperante');
@@ -87,6 +87,7 @@ const CooperanteEditarForm = () => {
   const formik = useFormik({
     initialValues: initialData || {
       nombre_donante: '',
+      alias: '',
     },
     validationSchema,
     onSubmit: (values) => {
@@ -102,7 +103,7 @@ const CooperanteEditarForm = () => {
   return (
     <ParentCard title='Editar cooperante'>
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre_donante">Nombre del Cooperante</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre_donante">Nombre del cooperante</CustomFormLabel>
         <CustomTextField
           name="nombre_donante"
           variant="outlined"
@@ -113,7 +114,17 @@ const CooperanteEditarForm = () => {
           onBlur={formik.handleBlur}
           fullWidth
         />
-
+ <CustomFormLabel htmlFor="alias">Alias del cooperante</CustomFormLabel>
+        <CustomTextField
+          name="alias"
+          variant="outlined"
+          onChange={formik.handleChange}
+          value={formik.values.alias}
+          error={formik.touched.alias && Boolean(formik.errors.alias)}
+          helperText={formik.touched.alias && formik.errors.alias}
+          onBlur={formik.handleBlur}
+          fullWidth
+        />
         <br /><br />
         <div>
           <Button

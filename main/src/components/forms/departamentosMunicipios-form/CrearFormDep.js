@@ -1,16 +1,16 @@
-import React from 'react';
 import {
+  Alert,
   Button,
   Typography,
-  Alert,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
+import { useFormik } from 'formik';
+import React from 'react';
 import { useNavigate } from 'react-router';
+import * as yup from 'yup';
 import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const CrearDepartamentoForm = () => {
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const CrearDepartamentoForm = () => {
   return (
     <ParentCard title="Formulario de Creación de Departamento">
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre del Departamento</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del departamento</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"

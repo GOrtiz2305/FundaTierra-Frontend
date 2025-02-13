@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Typography,
   Alert,
+  Button,
   Checkbox,
-  TextField,
-  MenuItem,
-  Select,
   FormControl,
   InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
+import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import * as yup from 'yup';
 import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const EditarMunicipioForm = ({ id }) => {
   const navigate = useNavigate();
@@ -142,7 +142,7 @@ const EditarMunicipioForm = ({ id }) => {
     <ParentCard title="Formulario de Edición de Municipio">
       {successMessage && <Alert severity="info">{successMessage}</Alert>}
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="nombre">Nombre del Municipio</CustomFormLabel>
+        <CustomFormLabel htmlFor="nombre">Nombre del municipio</CustomFormLabel>
         <CustomTextField
           id="nombre"
           name="nombre"
@@ -197,7 +197,7 @@ const EditarMunicipioForm = ({ id }) => {
             type="submit"
             disabled={!formik.isValid || formik.isSubmitting}
           >
-            Guardar Cambios
+            Guardar cambios
           </Button>
         </div>
       </form>

@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Button,
-  Typography,
-  MenuItem,
   Autocomplete,
-  TextField,
+  Button,
   Grid,
+  MenuItem,
   Select,
+  TextField,
+  Typography,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
-import { URL } from '../../../../config';
 import axios from 'axios';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const AgregarPersonaForm = () => {
   const [municipios, setMunicipios] = useState([]);
@@ -56,7 +56,6 @@ const AgregarPersonaForm = () => {
     const fetchDirecciones = async () => {
       try {
         const response = await axios.get(`${URL}direcciones`);
-        console.log(response.data)
         const sortedDirecciones = response.data.sort((a, b) => b.id - a.id)
         const lastDireccionId = sortedDirecciones[0]?.id || 0;
         const nextDireccionId = lastDireccionId + 1;
@@ -118,8 +117,6 @@ const AgregarPersonaForm = () => {
           const direccionData = await response.json();
           formik.setFieldValue('id_direccion', direccionData.id);
           alert('Dirección creada con éxito');
-
-          // Después de crear la dirección, enviamos la persona
           handleSave(formik.values);
         } else {
           alert('Error al crear la dirección');
@@ -142,7 +139,6 @@ const AgregarPersonaForm = () => {
       });
 
       if (response.ok) {
-        //console.log('Persona creada con éxito');
         navigate('/personas');
       } else {
         console.error('Error al crear la persona');
@@ -184,7 +180,7 @@ const AgregarPersonaForm = () => {
       const payload = {
         ...values,
       };
-      formikDireccion.submitForm();  // Llamamos al submit de formikDireccion primero
+      formikDireccion.submitForm();
     },
   });
 
@@ -257,7 +253,7 @@ const AgregarPersonaForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <CustomFormLabel htmlFor="correo_electronico">
-              Correo Electrónico
+              Correo electrónico
             </CustomFormLabel>
             <CustomTextField
               id="correo_electronico"

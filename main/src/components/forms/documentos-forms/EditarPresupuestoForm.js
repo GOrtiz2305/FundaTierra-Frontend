@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
@@ -167,13 +167,13 @@ const EditarPresupuestoForm = ({ id }) => {
   return (
     <ParentCard title="Formulario de Presupuesto">
       <form onSubmit={handleUpdate}>
-        <Alert severity="info">I. Detalle del Presupuesto</Alert>
+        <Alert severity="info">I. Detalle del presupuesto</Alert>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Unidades</TableCell>
               <TableCell>Descripción</TableCell>
-              <TableCell>Costo Unitario</TableCell>
+              <TableCell>Costo unitario</TableCell>
               <TableCell>Total</TableCell>
             </TableRow>
           </TableHead>
@@ -231,10 +231,10 @@ const EditarPresupuestoForm = ({ id }) => {
           </TableBody>
         </Table>
         <Button onClick={addPresupuestoItem} variant="contained" color="secondary" style={{ marginTop: '10px' }}>
-          Agregar Item
+          Agregar item
         </Button>
         <Alert severity="info" style={{ marginTop: '20px' }}>
-          II. Información General
+          II. Información general
         </Alert>
         <Grid container spacing={3} mb={3}>
           <Grid item lg={6} md={12}>

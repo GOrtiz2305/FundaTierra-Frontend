@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Typography,
   Alert,
+  Button,
   Checkbox,
+  Typography,
 } from '@mui/material';
-import CustomTextField from '../theme-elements/CustomTextField';
-import ParentCard from '../../shared/ParentCard';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { styled } from '@mui/material/styles';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useFormik } from 'formik';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import { URL } from '../../../../config';
+import ParentCard from '../../shared/ParentCard';
+import CustomTextField from '../theme-elements/CustomTextField';
 
 const EditarUsuarioForm = () => {
   const { id } = useParams();
@@ -99,9 +99,9 @@ const EditarUsuarioForm = () => {
   }
 
   return (
-    <ParentCard title="Formulario de Edición de Usuario">
+    <ParentCard title="Formulario de edición de usuario">
       <form onSubmit={formik.handleSubmit}>
-        <CustomFormLabel htmlFor="username">Nombre de Usuario</CustomFormLabel>
+        <CustomFormLabel htmlFor="username">Nombre de usuario</CustomFormLabel>
         <CustomTextField
           id="username"
           name="username"
@@ -121,7 +121,7 @@ const EditarUsuarioForm = () => {
 
         <div style={{ marginTop: '25px' }}>
           <Button color="primary" variant="contained" type="submit">
-            Guardar Cambios
+            Guardar cambios
           </Button>
         </div>
       </form>

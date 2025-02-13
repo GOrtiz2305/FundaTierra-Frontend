@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Button,
-  Typography,
   Alert,
+  Button,
   Grid,
-  TextField,
   Table,
+  TableBody,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody
+  TextField,
+  Typography
 } from '@mui/material';
-import ParentCard from '../../shared/ParentCard';
-import { URL } from "../../../../config";
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import { URL } from "../../../../config";
+import ParentCard from '../../shared/ParentCard';
 
 const EditarAgendaForm = ({ id }) => {
 
@@ -205,7 +205,7 @@ const EditarAgendaForm = ({ id }) => {
   return (
     <ParentCard title="Agenda">
       <form onSubmit={handleUpdate}>
-        <Alert severity="info">I. Detalles de la Actividad</Alert>
+        <Alert severity="info">I. Detalles de la actividad</Alert>
         <Grid container spacing={3} mb={3}>
           <Grid item lg={6} md={12}>
             <CustomFormLabel htmlFor="actividad">Actividad</CustomFormLabel>
@@ -253,12 +253,12 @@ const EditarAgendaForm = ({ id }) => {
           </Grid>
         </Grid>
 
-        <Alert severity="info">II. Puntos de la Agenda</Alert>
+        <Alert severity="info">II. Puntos de la agenda</Alert>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Horario</TableCell>
-              <TableCell>Punto de Agenda</TableCell>
+              <TableCell>Punto de agenda</TableCell>
               <TableCell>Responsable</TableCell>
             </TableRow>
           </TableHead>
@@ -310,7 +310,7 @@ const EditarAgendaForm = ({ id }) => {
         </Table>
 
         <Button onClick={addAgendaItem} variant="contained" color="secondary" style={{ marginTop: '10px' }}>
-          Agregar Punto
+          Agregar punto
         </Button>
         <br /><br />
         <Button
@@ -320,7 +320,7 @@ const EditarAgendaForm = ({ id }) => {
           style={{ marginTop: '20px' }}
           disabled={!formik.isValid || formik.isSubmitting}
         >
-          Guardar Agenda
+          Guardar agenda
         </Button>
       </form>
     </ParentCard>
