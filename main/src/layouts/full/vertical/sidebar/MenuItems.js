@@ -1,5 +1,4 @@
 import {
-  IconAperture,
   IconBriefcase,
   IconFolder,
   IconHome,
@@ -52,7 +51,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'lineas Estretegicas',
+    title: 'Lineas Estratégicas',
     icon: IconLine,
     href: '/LineasEstrategicas',
     chipColor: 'secondary',

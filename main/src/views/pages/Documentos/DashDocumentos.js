@@ -25,8 +25,19 @@ const BoxStyled = styled(Box)(() => ({
 }));
 
 const DashDocumentos = ({ id }) => {
-  const [proyectos, setProyectos] = useState([]);
-  const [direcciones, setDirecciones] = useState([]);
+  const [proyecto, setProyecto] = useState([]);
+  const [direccion, setDireccion] = useState([
+    {
+      id: 0,
+      detalle: "",
+      municipio: {
+        nombre: "",
+        departamento: {
+          nombre: ""
+        }
+      }
+    }
+  ]);
   const [memorias, setMemorias] = useState([]);
   const [agenda, setAgenda] = useState([]);
   const [presupuesto, setPresupuesto] = useState([]);
@@ -161,34 +172,6 @@ const DashDocumentos = ({ id }) => {
       }
     };
 
-    const fetchProyectos = async () => {
-      try {
-        const response = await fetch(`${URL}proyectos`);
-        if (response.ok) {
-          const data = await response.json();
-          setProyectos(data);
-        } else {
-          console.error('Error al obtener los proyectos');
-        }
-      } catch (error) {
-        console.error('Error al llamar a la API:', error);
-      }
-    };
-
-    const fetchDirecciones = async () => {
-      try {
-        const response = await fetch(`${URL}direcciones`);
-        if (response.ok) {
-          const data = await response.json();
-          setDirecciones(data);
-        } else {
-          console.error('Error al obtener las direcciones');
-        }
-      } catch (error) {
-        console.error('Error al llamar a la API:', error);
-      }
-    };
-
     const fetchMemorias = async () => {
       try {
         const response = await fetch(`${URL}api/documentos/${id}/${tipoDocumento}`);
@@ -249,13 +232,44 @@ const DashDocumentos = ({ id }) => {
       fetchActividades();
     }
 
-    fetchProyectos();
-    fetchDirecciones();
     fetchMemorias();
     fetchPresupuesto();
     fetchAgenda();
     fetchAnticipoGastos();
   }, [id, authRes]);
+
+  useEffect(() => {
+    const fetchDireccion = async () => {
+      try {
+        const response = await fetch(`${URL}direcciones/${actividad.id_direccion}`);
+        if (response.ok) {
+          const data = await response.json();
+          setDireccion(data);
+        } else {
+          console.error('Error al obtener la dirección');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
+    };
+
+    const fetchProyecto = async () => {
+      try {
+        const response = await fetch(`${URL}proyectos/${actividad.id_proyectos}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProyecto(data);
+        } else {
+          console.error('Error al obtener los proyectos');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
+    };
+
+    fetchProyecto();
+    fetchDireccion();
+  }, [actividad.id_direccion, actividad.id_proyectos]);
 
   return (
     <>
@@ -298,37 +312,25 @@ const DashDocumentos = ({ id }) => {
             />
 
             <CustomFormLabel htmlFor="id_proyectos">Proyecto</CustomFormLabel>
-            <Select
-              id="id_proyectos"
-              fullWidth
+            <CustomTextField
+              id="proyecto"
               variant="outlined"
-              value={actividad.id_proyectos}
+              value={`${proyecto?.nombre || 'Error al cargar el proyecto'}`}
+              fullWidth
               InputProps={{
                 readOnly: true,
               }}
-            >
-              {proyectos.map((proyecto) => (
-                <MenuItem key={proyecto.id} value={proyecto.id}>
-                  {proyecto.nombre}
-                </MenuItem>
-              ))}
-            </Select>
+            />
             <CustomFormLabel htmlFor="id_direccion">Dirección</CustomFormLabel>
-            <Select
+            <CustomTextField
               id="id_direccion"
-              fullWidth
               variant="outlined"
-              value={actividad.id_direccion}
+              value={`${direccion?.detalle || ''}, ${direccion?.municipio?.nombre || ''}, ${direccion?.municipio?.departamento?.nombre || ''}`}
+              fullWidth
               InputProps={{
                 readOnly: true,
               }}
-            >
-              {direcciones.map((direccion) => (
-                <MenuItem key={direccion.id} value={direccion.id}>
-                  {direccion.detalle}
-                </MenuItem>
-              ))}
-            </Select>
+            />
           </Grid>
         </Grid>
         <Grid container spacing={3} mb={3}>
@@ -427,7 +429,7 @@ const DashDocumentos = ({ id }) => {
       <Grid container spacing={3} textAlign="center">
         <Grid item xs={12} sm={6} lg={3}>
           <BoxStyled
-            onClick={() => {}}
+            onClick={() => { }}
             sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
           >
             <Typography variant="h6">Agenda</Typography>
@@ -469,7 +471,7 @@ const DashDocumentos = ({ id }) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <BoxStyled
-            onClick={() => {}}
+            onClick={() => { }}
             sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
           >
             <Typography variant="h6">Presupuesto</Typography>
@@ -511,7 +513,7 @@ const DashDocumentos = ({ id }) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <BoxStyled
-            onClick={() => {}}
+            onClick={() => { }}
             sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
           >
             <Typography variant="h6">Anticipo de gastos</Typography>
@@ -553,7 +555,7 @@ const DashDocumentos = ({ id }) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <BoxStyled
-            onClick={() => {}}
+            onClick={() => { }}
             sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
           >
             <Typography variant="h6">Memoria</Typography>
@@ -595,7 +597,7 @@ const DashDocumentos = ({ id }) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <BoxStyled
-            onClick={() => {}}
+            onClick={() => { }}
             sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
           >
             <Typography variant="h6">Listado de participantes</Typography>
@@ -615,7 +617,7 @@ const DashDocumentos = ({ id }) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <BoxStyled
-            onClick={() => {}}
+            onClick={() => { }}
             sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
           >
             <Typography variant="h6">Planilla de pagos en efectivo</Typography>
@@ -635,7 +637,7 @@ const DashDocumentos = ({ id }) => {
         </Grid>
         <Grid item xs={12} sm={6} lg={3}>
           <BoxStyled
-            onClick={() => {}}
+            onClick={() => { }}
             sx={{ backgroundColor: 'primary.light', color: 'primary.main' }}
           >
             <Typography variant="h6">Otros</Typography>
@@ -650,11 +652,11 @@ const DashDocumentos = ({ id }) => {
               Agregar
             </Button>
             <Button style={{ width: '33.33%' }}>Ver</Button>
-            <Button style={{ width: '33.33%' }}>Editar</Button>      
+            <Button style={{ width: '33.33%' }}>Editar</Button>
           </ButtonGroup>
         </Grid>
       </Grid>
-      <input type="file" multiple ref={fileInputRef} style={{display:'none'}} onChange={handleFileUpload}/>
+      <input type="file" multiple ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileUpload} />
     </>
   );
 };

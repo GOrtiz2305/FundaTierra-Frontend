@@ -21,6 +21,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
+import { useNavigate } from 'react-router';
 
 const EditarAnticipoGastosForm = ({ id }) => {
 
@@ -290,8 +291,6 @@ const EditarAnticipoGastosForm = ({ id }) => {
                 id_rubro: Number(idRubro),
                 id_proyecto: Number(anticipoGastos.contenido.id_proyectos),
             }));
-
-            console.log("Rubros por enviar:", rubrosPorEnviar);
 
             const responseRubros = await fetch(`${URL}proyectoRubros/proyecto/${anticipoGastos.actividade.id_proyectos}`, {
                 method: 'PUT',

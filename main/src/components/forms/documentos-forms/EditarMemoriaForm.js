@@ -32,8 +32,6 @@ const EditarMemoriaForm = ({ id }) => {
     hombres_participantes: 0,
     mujeres_participantes: 0,
     ninos_participantes: 0,
-    responsable: '',
-    cargo: '',
     objetivo_general: '',
     agenda: '',
     desarrollo_agenda: '',
@@ -145,12 +143,10 @@ const EditarMemoriaForm = ({ id }) => {
     try {
       const dataToSend = {
         contenido: {
-          cargo: memoria.contenido.cargo,
           participantes_total: Number(memoria.contenido.hombres_participantes)+Number(memoria.contenido.mujeres_participantes)+Number(memoria.contenido.ninos_participantes),
           hombres_participantes: memoria.contenido.hombres_participantes,
           mujeres_participantes: memoria.contenido.mujeres_participantes,
           ninos_participantes: memoria.contenido.ninos_participantes,
-          responsable: memoria.contenido.responsable,
           objetivo_general: memoria.contenido.objetivo_general,
           agenda: memoria.contenido.agenda,
           desarrollo_agenda: memoria.contenido.desarrollo_agenda,
@@ -328,30 +324,6 @@ const EditarMemoriaForm = ({ id }) => {
               variant="outlined"
               onChange={handleInputChange}
               value={memoria.contenido.ninos_participantes}
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={3} mb={3}>
-          <Grid item lg={6} md={12} sm={12}>
-            <CustomFormLabel htmlFor="responsable">Responsable</CustomFormLabel>
-            <CustomTextField
-              id="responsable"
-              name="responsable"
-              variant="outlined"
-              onChange={handleInputChange}
-              value={memoria.contenido.responsable}
-              fullWidth
-            />
-          </Grid>
-          <Grid item lg={6} md={12} sm={12}>
-            <CustomFormLabel htmlFor="cargo">Cargo</CustomFormLabel>
-            <CustomTextField
-              id="cargo"
-              name="cargo"
-              variant="outlined"
-              onChange={handleInputChange}
-              value={memoria.contenido.cargo}
               fullWidth
             />
           </Grid>
