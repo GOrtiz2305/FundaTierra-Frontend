@@ -24,7 +24,7 @@ const BoxStyled = styled(Box)(() => ({
   color: 'inherit',
 }));
 
-const DashDocumentos = ({ id }) => {
+const DashDocumentos = ({ id, nombreActividad}) => {
   const [proyecto, setProyecto] = useState([]);
   const [direccion, setDireccion] = useState([
     {
@@ -102,7 +102,7 @@ const DashDocumentos = ({ id }) => {
   };
 
   const handleAgregarAgenda = () => {
-    navigate(`/actividades/documentos/${id}/agenda`);
+    navigate(`/actividades/documentos/${id}/agenda`,{ state: { nombreActividad } });
   };
 
   const handleAgregarPresupuesto = () => {
@@ -161,7 +161,6 @@ const DashDocumentos = ({ id }) => {
         const response = await fetch(`${URL}actividades/${id}`);
         if (response.ok) {
           const data = await response.json();
-          // console.log(data)
           setActividad(data);
         } else {
           console.error('Error al obtener la actividad');
@@ -193,10 +192,10 @@ const DashDocumentos = ({ id }) => {
           const data = await response.json();
           setAgenda(data);
         } else {
-          console.error('Error al obtener la agenda');
+         // console.error('Error al obtener la agenda');
         }
       } catch (error) {
-        console.error('Error al llamar a la API:', error);
+       // console.error('Error al llamar a la API:', error);
       }
     };
 
@@ -207,10 +206,10 @@ const DashDocumentos = ({ id }) => {
           const data = await response.json();
           setPresupuesto(data);
         } else {
-          console.error('Error al obtener el presupuesto');
+         // console.error('Error al obtener el presupuesto');
         }
       } catch (error) {
-        console.error('Error al llamar a la API:', error);
+       // console.error('Error al llamar a la API:', error);
       }
     };
 
@@ -221,10 +220,10 @@ const DashDocumentos = ({ id }) => {
           const data = await response.json();
           setAnticipoGastos(data);
         } else {
-          console.error('Error al obtener el anticipo de gastos');
+        //  console.error('Error al obtener el anticipo de gastos');
         }
       } catch (error) {
-        console.error('Error al llamar a la API:', error);
+        //console.error('Error al llamar a la API:', error);
       }
     };
 
