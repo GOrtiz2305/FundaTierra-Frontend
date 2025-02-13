@@ -18,12 +18,27 @@ const ProyectosPaginationTable = () => {
     const [searchTerm, setSearchTerm] = React.useState(""); // Para el término de búsqueda
     const navigate = useNavigate();
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0'); // Día con dos dígitos
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes con dos dígitos
+        const year = date.getFullYear(); // Año
+    
+        return `${day}/${month}/${year}`;
+    };
+
     React.useEffect(() => {
         const fetchProyectos = async () => {
             try {
                 const response = await axios.get(`${URL}proyectos`);
                 const proyectosFinalizados = response.data.filter(proyecto => proyecto.id_estado === 1);
-                setData(proyectosFinalizados);
+                const proyectosConFechasFormateadas = proyectosFinalizados.map(proyecto => ({
+                    ...proyecto,
+                    fecha_inicio: formatDate(proyecto.fecha_inicio),
+                    fecha_fin: formatDate(proyecto.fecha_fin),
+                }));
+                console.log(proyectosConFechasFormateadas)
+                setData(proyectosConFechasFormateadas);
             } catch (error) {
                 console.error("Error al obtener proyectos:", error);
             }
@@ -32,44 +47,45 @@ const ProyectosPaginationTable = () => {
     }, []);
 
     const handleSearchChange = (event) => {
-        setSearchTerm(event.target.value); // Actualiza el término de búsqueda
-        const Buscar = event.target.value
-        const conjuntoLetras = /[A-Za-z]/
-        const fechaRegex1 = /^\d{4}$/
-        const fechaRegex2 = /^\d{4}-(0[1-9]|1[0-2])$/
-        const fechaRegex3 = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/
-        const numeroDecimalRegex = /^[0-9]+(\.[0-9]+)?$/
-
-        console.log(Buscar)
-
-        if(conjuntoLetras.test(Buscar)) {
-            console.log("Primer IF")
-        setColumnFilters([
-            {
-                id: 'nombre', // Filtra por el campo 'nombre'
-                value: event.target.value
+        const Buscar = event.target.value.trim(); // Evita espacios en blanco al inicio y final
+    
+        setSearchTerm(Buscar); // Actualiza el término de búsqueda
+    
+        if (Buscar === "") {
+            setColumnFilters([])
+        } else {
+            // Si hay un término de búsqueda, aplica filtros adecuados
+            const conjuntoLetras = /[A-Za-z]/
+            const fechaRegex1 = /^(0[1-9]|[12][0-9]|3[01])\//
+            const fechaRegex2 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\//
+            const fechaRegex3 = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
+            const numeroDecimalRegex = /^[0-9]+(\.[0-9]+)?$/
+    
+            if (conjuntoLetras.test(Buscar) || numeroDecimalRegex.test(Buscar)) {
+                setColumnFilters([
+                    {
+                        id: 'alias',
+                        value: Buscar
+                    }
+                ]);
+            } else if (fechaRegex1.test(Buscar) || fechaRegex2.test(Buscar) || fechaRegex3.test(Buscar)) {
+                setColumnFilters([
+                    {
+                        id: 'fecha_inicio',
+                        value: Buscar
+                    }
+                ]);
+            } else if (numeroDecimalRegex.test(Buscar)) {
+                setColumnFilters([
+                    {
+                        id: 'presupuesto',
+                        value: Buscar
+                    }
+                ]);
             }
-        ]); 
-        } else if (fechaRegex1.test(Buscar) || fechaRegex2.test(Buscar) || fechaRegex3.test(Buscar)) {
-            console.log("Segundo IF")
-            setColumnFilters([
-                {
-                    id: 'fecha_inicio', // Filtra por el campo 'nombre'
-                    value: event.target.value
-                }
-            ]);
-        } else if (numeroDecimalRegex.test(Buscar)) {
-            console.log("Tercero IF")
-            setColumnFilters([
-                {
-                    id: 'presupuesto', // Filtra por el campo 'nombre'
-                    value: event.target.value
-                }
-            ]);
         }
-
     };
-
+    
     const handleEdit = (id) => {
         navigate(`/Proyectos/cambios/${id}`);
     };
@@ -79,8 +95,8 @@ const ProyectosPaginationTable = () => {
     };
 
     const columns = [
-        columnHelper.accessor('nombre', {
-            header: () => 'Nombre',
+        columnHelper.accessor('alias', {
+            header: () => 'Nombre (Alias) ',
             cell: (info) => <Typography variant="subtitle1" color="textSecondary">{info.getValue()}</Typography>,
         }),
         columnHelper.accessor('fecha_inicio', {

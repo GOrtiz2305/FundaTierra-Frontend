@@ -118,7 +118,8 @@ const ActividadesPaginationTable = () => {
     const [columnFilters, setColumnFilters] = useState([])
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState("");
-    
+    const [loading, setLoading] = useState(true);
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0'); // Día con dos dígitos
@@ -132,9 +133,8 @@ const ActividadesPaginationTable = () => {
         const fetchActividades = async () => {
             try {
                 const response = await axios.get(`${URL}actividades`);
-
-                const Actividad = response.data.filter(actividad => actividad.id_estado === 2)
-
+                console.log(response.data)
+                const Actividad = response.data.filter(actividad => actividad.id_estado === 3)
                  const ActividadesConFechasFormateadas = Actividad.map(actividad => ({
                     ...actividad,
                     fecha_inicio: formatDate(actividad.fecha_inicio),
@@ -210,8 +210,8 @@ const ActividadesPaginationTable = () => {
         document.body.removeChild(link);
     };
 
-    const handleViewDetails = (id, nombre) => {
-        navigate(`/actividades/documentos/${id}`, { state: { nombre } });
+    const handleViewDetails = (id) => {
+        navigate(`/actividades/documentos/${id}`);  // Redirige a la página de detalles con el id
     };
 
     return (
@@ -290,7 +290,7 @@ const ActividadesPaginationTable = () => {
                                                     <Button
                                                         variant="contained"
                                                         color="info"
-                                                        onClick={() => handleViewDetails(row.original.id, row.original.nombre)}
+                                                        onClick={() => handleViewDetails(row.original.id)}
                                                     >
                                                         Detalles
                                                     </Button>

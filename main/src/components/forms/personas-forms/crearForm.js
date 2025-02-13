@@ -56,7 +56,6 @@ const AgregarPersonaForm = () => {
     const fetchDirecciones = async () => {
       try {
         const response = await axios.get(`${URL}direcciones`);
-        console.log(response.data)
         const sortedDirecciones = response.data.sort((a, b) => b.id - a.id)
         const lastDireccionId = sortedDirecciones[0]?.id || 0;
         const nextDireccionId = lastDireccionId + 1;
@@ -118,8 +117,6 @@ const AgregarPersonaForm = () => {
           const direccionData = await response.json();
           formik.setFieldValue('id_direccion', direccionData.id);
           alert('Dirección creada con éxito');
-
-          // Después de crear la dirección, enviamos la persona
           handleSave(formik.values);
         } else {
           alert('Error al crear la dirección');
@@ -142,7 +139,6 @@ const AgregarPersonaForm = () => {
       });
 
       if (response.ok) {
-        //console.log('Persona creada con éxito');
         navigate('/personas');
       } else {
         console.error('Error al crear la persona');
@@ -184,7 +180,7 @@ const AgregarPersonaForm = () => {
       const payload = {
         ...values,
       };
-      formikDireccion.submitForm();  // Llamamos al submit de formikDireccion primero
+      formikDireccion.submitForm();
     },
   });
 
