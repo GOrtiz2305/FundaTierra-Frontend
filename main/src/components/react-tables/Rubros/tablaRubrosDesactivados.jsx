@@ -31,6 +31,7 @@ import React, { useEffect, useState } from 'react';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import { URL } from "../../../../config";
 const columnHelper = createColumnHelper();
+import { Link } from 'react-router-dom';
 
 const RubrosDesactivadoPaginationTable = () => {
     const [data, setData] = useState([]);
@@ -133,7 +134,7 @@ const RubrosDesactivadoPaginationTable = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <TextField
-                        label="Buscar Cooperante"
+                        label="Buscar rubro"
                         variant="outlined"
                         fullWidth
                         value={searchQuery}

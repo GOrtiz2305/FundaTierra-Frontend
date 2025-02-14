@@ -1,5 +1,5 @@
 import React from 'react'
-import PresupuestoForm from '../../../components/forms/documentos-forms/PresupuestoForm'
+import PresupuestoForm from '../../../components/forms/documentos-forms/Presupuesto/PresupuestoForm'
 import { useParams } from 'react-router';
 
 const Presupuesto = () => {

@@ -4,6 +4,7 @@ import DepartamentosPaginationTable from '../../../components/react-tables/pagin
 import MunicipiosPaginationTable from '../../../components/react-tables/pagination/DepartamentosMunicipios/tableMunicipios';
 import VistaMunicipiosDesactivados from '../../../components/react-tables/pagination/DepartamentosMunicipios/tablaMunicipiosDesactivados';
 import VistaDepartamentosDesactivados from '../../../components/react-tables/pagination/DepartamentosMunicipios/tablaDepartamentosDesactivados';
+import { Link } from 'react-router-dom';
 
 const DepartamentosMunicipios = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -41,7 +42,8 @@ const DepartamentosMunicipios = () => {
             <Button
                 variant="contained"
                 color="primary"
-                href='/DepartamentosMunicipios/crearDepartamentos'
+                component={Link}
+                to='/DepartamentosMunicipios/crearDepartamentos'
                 sx={{ marginBottom: '5px' }}
             >
                 Nuevo
@@ -79,7 +81,8 @@ const DepartamentosMunicipios = () => {
             <Button
                 variant="contained"
                 color="primary"
-                href='/DepartamentosMunicipios/crearMunicipios'
+                component={Link}
+                to='/DepartamentosMunicipios/crearMunicipios'
                 sx={{ marginBottom: '5px' }}
             >
                 Nuevo

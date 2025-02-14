@@ -9,6 +9,7 @@ import CustomTextField from 'src/components/forms/theme-elements/CustomTextField
 import DownloadCard from 'src/components/shared/DownloadCard';
 import { URL } from "../../../../config";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const columnHelper = createColumnHelper();
 
@@ -86,13 +87,6 @@ const ProyectosPaginationTable = () => {
         }
     };
 
-    const handleEdit = (id) => {
-        navigate(`/Proyectos/cambios/${id}`);
-    };
-
-    const handleViewDetails = (id) => {
-        navigate(`/proyectos/detalle/${id}`);
-    };
     const handleDelete = async (row) => {
         console.log(row)
         try {
@@ -154,7 +148,8 @@ const ProyectosPaginationTable = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => handleEdit(row.original.id)}  // Pasar el id aquí
+                        component = {Link}
+                        to={`/Proyectos/cambios/${row.original.id}`}
                         startIcon={<IconPencil width={18} />}
                     >
                         Editar
@@ -162,7 +157,8 @@ const ProyectosPaginationTable = () => {
                     <Button
                         variant="contained"
                         color="info"
-                        onClick={() => handleViewDetails(row.original.id)}
+                        component = {Link}
+                        to={`/proyectos/detalle/${row.original.id}`}
                     >
                         Ver Detalles
                     </Button>

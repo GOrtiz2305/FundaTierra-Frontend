@@ -1,5 +1,6 @@
 import {
   Alert,
+  Autocomplete,
   Button,
   Grid,
   Table,
@@ -16,9 +17,11 @@ import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 import { URL } from '../../../../config';
 import ParentCard from '../../shared/ParentCard';
+import { useFormik } from 'formik';
 
 const EditarPresupuestoForm = ({ id }) => {
 
+  const [subcategorias, setSubcategorias] = useState([]);
   const navigate = useNavigate();
 
   const [presupuesto, setPresupuesto] = useState({
@@ -44,6 +47,18 @@ const EditarPresupuestoForm = ({ id }) => {
     autorizador: yup.string().required('El autorizador es obligatorio'),
   });
 
+  const validationSchemaSubcategoria = yup.object({
+    subcategoria: yup.number()
+      .required('Seleccione una subcategoria'),
+  });
+
+  const formikSubcategoria = useFormik({
+    initialValues: {
+      subcategoria: 0,
+    },
+    validationSchema: validationSchemaSubcategoria
+  });
+
   useEffect(() => {
     const fetchPresupuesto = async () => {
       try {
@@ -59,6 +74,21 @@ const EditarPresupuestoForm = ({ id }) => {
       }
     };
 
+    const fetchSubcategorias = async () => {
+      try {
+        const response = await fetch(`${URL}subcategorias`);
+        if (response.ok) {
+          const data = await response.json();
+          setSubcategorias(data);
+        } else {
+          console.error('Error al obtener las subcategorias');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
+    };
+
+    fetchSubcategorias();
     fetchPresupuesto();
   }, [id]);
 
@@ -123,7 +153,7 @@ const EditarPresupuestoForm = ({ id }) => {
         ...prevPresupuesto.contenido,
         puntos_presupuesto: [
           ...prevPresupuesto.contenido.puntos_presupuesto,
-          { unidades: '', descripcion: '', costoUnitario: '', total: '' },
+          { subcategoria: '', unidades: '', descripcion: '', costoUnitario: '', total: '' },
         ],
       },
     }));
@@ -144,6 +174,13 @@ const EditarPresupuestoForm = ({ id }) => {
     const updatedItems = [...presupuesto.contenido.puntos_presupuesto];
     updatedItems[index][field] = value;
 
+    //Guardar solo el id de la subcategoria
+    if (field === 'subcategoria') {
+      updatedItems[index].subcategoria = value ? value.id : null;
+    } else {
+      updatedItems[index][field] = value;
+    }
+
     // Recalcular el total si se actualizan unidades o costoUnitario
     if (field === 'unidades' || field === 'costoUnitario') {
       const unidades = parseFloat(updatedItems[index].unidades) || 0;
@@ -151,9 +188,10 @@ const EditarPresupuestoForm = ({ id }) => {
       updatedItems[index].total = (unidades * costoUnitario).toFixed(2);
     }
 
+    console.log(updatedItems);
     // Recalcular el total general
     const totalGeneral = updatedItems.reduce((sum, item) => sum + parseFloat(item.total || 0), 0);
-
+    
     setPresupuesto((prevPresupuesto) => ({
       ...prevPresupuesto,
       contenido: {
@@ -171,6 +209,7 @@ const EditarPresupuestoForm = ({ id }) => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Subcategoría</TableCell>
               <TableCell>Unidades</TableCell>
               <TableCell>Descripción</TableCell>
               <TableCell>Costo unitario</TableCell>
@@ -181,7 +220,31 @@ const EditarPresupuestoForm = ({ id }) => {
             {presupuesto.contenido.puntos_presupuesto && presupuesto.contenido.puntos_presupuesto.length > 0 ? (
               presupuesto.contenido.puntos_presupuesto.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell>
+                  <TableCell style={{ width: '20%' }}>
+                    <Autocomplete
+                      id="subcategoria"
+                      options={subcategorias.filter(
+                        (option) => !presupuesto.contenido.puntos_presupuesto.some((p) => p.subcategoria === option.id)
+                      )}
+                      getOptionLabel={(option) => option?.nombre || ''}
+                      value={subcategorias.find((s) => s.id === item.subcategoria) || null}
+                      onChange={(event, newValue) => {
+                        formikSubcategoria.setFieldValue('subcategoria', newValue ? newValue.id : null);
+                        handlePresupuestoItemChange(index, 'subcategoria', newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          error={formikSubcategoria.touched.subcategoria && Boolean(formikSubcategoria.errors.subcategoria)}
+                          helperText={formikSubcategoria.touched.subcategoria && formikSubcategoria.errors.subcategoria}
+                          onBlur={formikSubcategoria.handleBlur}
+                        />
+                      )}
+                      fullWidth
+                    />
+                  </TableCell>
+                  <TableCell style={{ width: '10%' }}>
                     <TextField
                       type="number"
                       value={item.unidades}
@@ -189,14 +252,14 @@ const EditarPresupuestoForm = ({ id }) => {
                       onChange={(e) => handlePresupuestoItemChange(index, 'unidades', e.target.value)}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ width: '30%' }}>
                     <TextField
                       style={{ width: '100%' }}
                       value={item.descripcion}
                       onChange={(e) => handlePresupuestoItemChange(index, 'descripcion', e.target.value)}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ width: '15%' }}>
                     <TextField
                       style={{ width: '100%' }}
                       type="number"
@@ -204,8 +267,8 @@ const EditarPresupuestoForm = ({ id }) => {
                       onChange={(e) => handlePresupuestoItemChange(index, 'costoUnitario', e.target.value)}
                     />
                   </TableCell>
-                  <TableCell>Q{item.total}</TableCell>
-                  <TableCell>
+                  <TableCell style={{ width: '10%' }}>Q{item.total}</TableCell>
+                  <TableCell style={{ width: '15%' }}>
                     <Button
                       variant="contained"
                       color="error"

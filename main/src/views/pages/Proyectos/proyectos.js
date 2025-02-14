@@ -2,6 +2,7 @@ import { Button, Box, Tabs, Tab } from '@mui/material';
 import React, { useState } from 'react';
 import ProyectosPaginationTable from '../../../components/react-tables/pagination/tablaProyectos';
 import ProyectosDesactivadosPaginationTable from '../../../components/react-tables/pagination/tablaProyectosDesac';
+import { Link } from 'react-router-dom';
 
 const Proyectos = () => {
     const [tabIndex, setTabIndex] = useState(0);
@@ -12,7 +13,7 @@ const Proyectos = () => {
 
     return (
         <div>
-            <Button variant="contained" color="primary" href='/proyectos/nueva'>
+            <Button variant="contained" color="primary" component={Link} to='/proyectos/nueva'>
                 Nuevo
             </Button>
             <br /> <br />

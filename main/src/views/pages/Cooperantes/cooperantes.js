@@ -2,6 +2,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography }
 import React, { useState } from 'react';
 import CooperantePaginationTable from '../../../components/react-tables/Cooperantes/tablaCooperantes';
 import CooperantesDesactivadoPaginationTable from '../../../components/react-tables/Cooperantes/tablaCooperatesDesactivado';
+import { Link } from 'react-router-dom';
+
 const Cooperantes = () => {
     const [openModal2, setOpenModal2] = useState(false);
 
@@ -28,7 +30,8 @@ const Cooperantes = () => {
             <Button
                 variant="contained"
                 color="primary"
-                href='/cooperante/nueva'
+                component={Link}
+                to='/cooperante/nueva'
                 sx={{ marginBottom: '5px' }}
             >
                 Nuevo
@@ -53,8 +56,6 @@ const Cooperantes = () => {
                 </DialogActions>
             </Dialog>
             <CooperantePaginationTable />
-
-           
         </div>
     );
 };

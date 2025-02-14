@@ -1,6 +1,7 @@
 import { Button, Typography} from '@mui/material';
 import React from 'react';
 import PersonasTable from '../../../components/react-tables/pagination/Personas/tablaPersonas';
+import { Link } from 'react-router-dom';
 
 const Personas = () => {
     return (
@@ -16,7 +17,8 @@ const Personas = () => {
             <Button
                 variant="contained"
                 color="primary"
-                href='/personas/crear'
+                component={Link}
+                to='/personas/crear'
                 sx={{ marginBottom: '5px' }}
             >
                 Nuevo

@@ -11,7 +11,8 @@ import {
   TableHead,
   Chip,
   Box,
-  AvatarGroup, Grid
+  AvatarGroup, Grid,
+  Alert
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import DownloadCard from 'src/components/shared/DownloadCard';
@@ -164,7 +165,7 @@ const columns = [
   }),
 ];
 
-const RowSelection = () => {
+const AnticipoActividades = () => {
   const [data, _setData] = React.useState(() => [...basics]);
 
   const [rowSelection, setRowSelection] = React.useState({})
@@ -208,7 +209,8 @@ const RowSelection = () => {
   };
 
   return (
-    <DownloadCard title="Row Selection Table" onDownload={handleDownload}>
+    <DownloadCard title="Reporte de Anticipo de Gastos" onDownload={handleDownload}>
+      <Alert severity="info" sx={{ mb: 2 }}>Seleccione las actividades a incluir en el reporte</Alert>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Box>
@@ -253,4 +255,4 @@ const RowSelection = () => {
   );
 };
 
-export default RowSelection;
+export default AnticipoActividades;

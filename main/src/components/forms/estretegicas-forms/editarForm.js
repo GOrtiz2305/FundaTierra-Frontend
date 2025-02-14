@@ -18,7 +18,6 @@ const LineasEstrategicasEditarForm = () => {
   useEffect(() => {
     const fetchLineaEstrategica = async () => {
       try {
-        console.log("Hola")
         const response = await axios.get(`${URL}lineasEstrategicas/${id}`);
         setLineaEstrategica(response.data);
         setLoading(false);

@@ -1,5 +1,6 @@
 import {
   Alert,
+  Autocomplete,
   Button,
   Grid,
   Table,
@@ -12,15 +13,18 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
-import { URL } from '../../../../config';
-import ParentCard from '../../shared/ParentCard';
+import { URL } from '../../../../../config';
+import ParentCard from '../../../shared/ParentCard';
 
 const PresupuestoForm = () => {
   const id = useParams();
   const [items, setItems] = useState([]);
+  const [subcategorias, setSubcategorias] = useState([
+    { id: 0 },
+  ]);
   const navigate = useNavigate();
 
   const CustomFormLabel = styled((props) => (
@@ -30,6 +34,20 @@ const PresupuestoForm = () => {
     marginTop: '25px',
     display: 'block',
   }));
+
+  useEffect(() => {
+    const fetchSubcategorias = async () => {
+      try {
+        const response = await fetch(`${URL}subcategorias`);
+        const data = await response.json();
+        setSubcategorias(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchSubcategorias();
+  }, []);
 
   const validationSchema = yup.object({
     solicitante: yup.string().required('El solicitante es obligatorio'),
@@ -47,7 +65,7 @@ const PresupuestoForm = () => {
       };
 
       const dataNoEncapsulada = {
-        nombre: "Presupuesto" ,
+        nombre: "Presupuesto",
         id_tipo: 14,
         id_estado: 1,
         id_actividad: Number(id.id),
@@ -86,7 +104,7 @@ const PresupuestoForm = () => {
       alert('Error al llamar a la API');
     }
   };
-  
+
   const formik = useFormik({
     initialValues: {
       solicitante: '',
@@ -99,8 +117,20 @@ const PresupuestoForm = () => {
     },
   });
 
+  const validationSchemaSubcategoria = yup.object({
+    id_subcategoria: yup.number()
+      .required('Seleccione una subcategoria'),
+  });
+
+  const formikSubcategoria = useFormik({
+    initialValues: {
+      id_subcategoria: 0,
+    },
+    validationSchema: validationSchemaSubcategoria
+  });
+
   const addItem = () => {
-    setItems([...items, { unidades: '', descripcion: '', costoUnitario: '', total: '' }]);
+    setItems([...items, { subcategoria: '', unidades: '', descripcion: '', costoUnitario: '', total: '' }]);
   };
 
   const removeItem = (index) => {
@@ -111,14 +141,21 @@ const PresupuestoForm = () => {
   const handleItemChange = (index, field, value) => {
     const updatedItems = [...items];
     updatedItems[index][field] = value;
-  
+
+    //Guardar solo el id de la subcategoria
+    if (field === 'subcategoria') {
+      updatedItems[index].subcategoria = value ? value.id : null;
+    } else {
+      updatedItems[index][field] = value;
+    }
+
     // Calcular el total si los campos necesarios están presentes
     if (field === 'unidades' || field === 'costoUnitario') {
       const unidades = parseFloat(updatedItems[index].unidades) || 0;
       const costoUnitario = parseFloat(updatedItems[index].costoUnitario) || 0;
       updatedItems[index].total = (unidades * costoUnitario).toFixed(2);
     }
-  
+
     setItems(updatedItems);
   };
 
@@ -133,6 +170,7 @@ const PresupuestoForm = () => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Subcategoría</TableCell>
               <TableCell>Unidades</TableCell>
               <TableCell>Descripción</TableCell>
               <TableCell>Costo unitario</TableCell>
@@ -142,7 +180,31 @@ const PresupuestoForm = () => {
           <TableBody>
             {items.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>
+                <TableCell style={{ width: '20%' }}>
+                  <Autocomplete
+                    id="id_subcategoria"
+                    options={subcategorias.filter(
+                      (option) => !items.some((item) => item.subcategoria === option.id)
+                    )}
+                    getOptionLabel={(option) => option?.nombre || ''}
+                    value={subcategorias.find((s) => s.id === items[index].subcategoria) || null}
+                    onChange={(event, newValue) => {
+                      formikSubcategoria.setFieldValue('id_subcategoria', newValue ? newValue.id : null);
+                      handleItemChange(index, 'subcategoria', newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        error={formikSubcategoria.touched.id_subcategoria && Boolean(formikSubcategoria.errors.id_subcategoria)}
+                        helperText={formikSubcategoria.touched.id_subcategoria && formikSubcategoria.errors.id_subcategoria}
+                        onBlur={formikSubcategoria.handleBlur}
+                      />
+                    )}
+                    fullWidth
+                  />
+                </TableCell>
+                <TableCell style={{ width: '10%' }}>
                   <TextField
                     type="number"
                     value={item.unidades}
@@ -150,14 +212,14 @@ const PresupuestoForm = () => {
                     onChange={(e) => handleItemChange(index, 'unidades', e.target.value)}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell style={{ width: '30%' }}>
                   <TextField
                     style={{ width: '100%' }}
                     value={item.descripcion}
                     onChange={(e) => handleItemChange(index, 'descripcion', e.target.value)}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell style={{ width: '15%' }}>
                   <TextField
                     style={{ width: '100%' }}
                     type="number"
@@ -165,8 +227,8 @@ const PresupuestoForm = () => {
                     onChange={(e) => handleItemChange(index, 'costoUnitario', e.target.value)}
                   />
                 </TableCell>
-                <TableCell>Q{item.total}</TableCell>
-                <TableCell>
+                <TableCell style={{ width: '10%' }}>Q{item.total}</TableCell>
+                <TableCell style={{ width: '15%' }}>
                   <Button
                     variant="contained"
                     color="error"

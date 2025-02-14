@@ -48,6 +48,7 @@ const LineasEstrategicasEditar = Loadable(lazy(()=> import ('../views/pages/Line
 const Rubro = Loadable (lazy(()=> import('../views/pages/Rubros/rubros')));
 const RubroCrear = Loadable(lazy(()=> import ('../views/pages/Rubros/rubroCrear')));
 const RubroEditar = Loadable(lazy(()=> import ('../views/pages/Rubros/rubroEditar')));
+const AnticipoActividades = Loadable(lazy(()=> import ('../views/pages/AnticipoDeGastos/SeleccionActividades')));
 // authentication
 const Login = Loadable(lazy(() => import('../views/authentication/auth1/Login')));
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
@@ -98,6 +99,7 @@ const Router = [
       { path: '/rubros', element: <Rubro /> },
       { path: '/rubros/nueva', element: <RubroCrear /> },
       { path: '/rubros/cambios/:id', element: <RubroEditar /> },
+      { path: '/anticipo-gastos', element: <AnticipoActividades /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },

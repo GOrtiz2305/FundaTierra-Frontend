@@ -1,14 +1,13 @@
 import {
-  Alert,
   Button,
   Select,
-  Typography
   Typography,
   Grid,
   FormControl,
   OutlinedInput,
   Chip,
-  InputLabel
+  InputLabel,
+  MenuItem
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useFormik } from 'formik';
@@ -18,7 +17,7 @@ import * as yup from 'yup';
 import { URL } from "../../../../config";
 import ParentCard from '../../shared/ParentCard';
 import CustomTextField from '../theme-elements/CustomTextField';
-import { id } from 'date-fns/locale';
+import { Link } from 'react-router-dom';
 
 const ActividadesOrdinaryForm = () => {
   const [proyectos, setProyectos] = useState([]);

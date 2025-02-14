@@ -38,6 +38,7 @@ import { URL } from '../../../../../config';
 import DownloadCard from 'src/components/shared/DownloadCard';
 import CustomTextField from '../../../forms/theme-elements/CustomTextField';
 import CustomSelect from '../../../forms/theme-elements/CustomSelect';
+import { Link } from 'react-router-dom';
 
 const columnHelper = createColumnHelper();
 
@@ -113,7 +114,8 @@ const TablePersonas = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleEdit(row.original.id)}
+            component = {Link}
+            to={`/personas/editar/${row.original.id}`}
             startIcon={<IconPencil />}
           >
             Editar

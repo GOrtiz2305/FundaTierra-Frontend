@@ -2,6 +2,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography }
 import React, { useState } from 'react';
 import RubrosPaginationTable from '../../../components/react-tables/Rubros/tablaRubros';
 import RubrosDesactivadoPaginationTable from '../../../components/react-tables/Rubros/tablaRubrosDesactivados';
+import { Link } from 'react-router-dom';
+
 const Rubros = () => {
     const [openModal2, setOpenModal2] = useState(false);
 
@@ -13,7 +15,6 @@ const Rubros = () => {
         setOpenModal2(false);
         window.location.reload();
     };
-
 
     return (
         <div>
@@ -28,7 +29,8 @@ const Rubros = () => {
             <Button
                 variant="contained"
                 color="primary"
-                href='/rubros/nueva'
+                component={Link}
+                to='/rubros/nueva'
                 sx={{ marginBottom: '5px' }}
             >
                 Nuevo
@@ -40,7 +42,7 @@ const Rubros = () => {
             >
                 Ver Rubros Desactivados
             </Button>
-
+            <br /><br />
             <Dialog open={openModal2} onClose={handleCloseModal2} fullWidth maxWidth="md">
                 <DialogTitle>Rubros Desactivados</DialogTitle>
                 <DialogContent>

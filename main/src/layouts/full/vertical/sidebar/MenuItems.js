@@ -8,6 +8,8 @@ import {
   IconUserPlus,
   IconLine,
   IconList,
+  IconClipboardData,
+  IconFileAnalytics,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -86,6 +88,24 @@ const Menuitems = [
     title: 'Actividades',
     icon:   IconNotes,
     href: '/actividades',
+    chipColor: 'secondary',
+  },
+  {
+    navlabel: true,
+    subheader: 'Reportes y Finanzas',
+  },
+  {
+    id: uniqueId(),
+    title: 'Anticipo de Gastos',
+    icon: IconFileAnalytics,
+    href: '/anticipo-gastos',
+    chipColor: 'secondary',
+  },
+    {
+    id: uniqueId(),
+    title: 'Reportes',
+    icon:   IconClipboardData,
+    href: '/',
     chipColor: 'secondary',
   },
 ];

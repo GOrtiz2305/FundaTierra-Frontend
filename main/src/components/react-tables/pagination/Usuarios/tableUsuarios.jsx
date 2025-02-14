@@ -32,6 +32,7 @@ import { URL } from '../../../../../config';
 import DownloadCard from 'src/components/shared/DownloadCard';
 import CustomTextField from '../../../forms/theme-elements/CustomTextField';
 import CustomSelect from '../../../forms/theme-elements/CustomSelect';
+import { Link } from 'react-router-dom';
 
 const columnHelper = createColumnHelper();
 
@@ -51,10 +52,6 @@ const UsuariosPaginationTable = () => {
         };
         fetchUsuarios();
     }, []);
-
-    const handleEdit = (id) => {
-        navigate(`/usuarios/editar/${id}`);
-    };
 
     const handleDelete = async (usuario) => {
         try {
@@ -114,7 +111,8 @@ const UsuariosPaginationTable = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => handleEdit(row.original.id)}
+                        component = {Link}
+                        to={`/usuarios/editar/${row.original.id}`}
                         startIcon={<IconPencil />}
                     >
                         Editar

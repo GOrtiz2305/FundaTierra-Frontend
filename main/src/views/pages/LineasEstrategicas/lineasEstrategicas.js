@@ -2,6 +2,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography }
 import React, { useState } from 'react';
 import LineasPaginationTable from '../../../components/react-tables/LineasEstrategicas/tablaLineas';
 import LineasDesactivadoPaginationTable from '../../../components/react-tables/LineasEstrategicas/tablaLineasDesactivado';
+import { Link } from 'react-router-dom';
+
 const LineasEstategicas = () => {
     const [openModal2, setOpenModal2] = useState(false);
 
@@ -28,7 +30,8 @@ const LineasEstategicas = () => {
             <Button
                 variant="contained"
                 color="primary"
-                href='/lineasEstrategicas/nueva'
+                component={Link}
+                to='/lineasEstrategicas/nueva'
                 sx={{ marginBottom: '5px' }}
             >
                 Nuevo

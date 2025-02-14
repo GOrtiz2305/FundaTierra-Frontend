@@ -31,7 +31,7 @@ import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import DownloadCard from 'src/components/shared/DownloadCard';
 import { URL } from "../../../../config";
-
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const columnHelper = createColumnHelper();
@@ -53,10 +53,6 @@ const CooperantePaginationTable = () => {
         };
         fetchLineas();
     }, []);
-
-    const handleEdit = (id) => {
-        navigate(`/cooperante/cambios/${id}`);
-    };
 
     const handleDelete = async (row) => {
         try {
@@ -108,7 +104,7 @@ const CooperantePaginationTable = () => {
                 </Typography>
             ),
         }),
-        
+
         {
             id: 'acciones',
             header: () => 'Acciones',
@@ -117,7 +113,8 @@ const CooperantePaginationTable = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => handleEdit(row.original.id)}
+                        component={Link}
+                        to={`/cooperante/cambios/${row.original.id}`}
                         startIcon={<IconPencil width={18} />}
                     >
                         Editar

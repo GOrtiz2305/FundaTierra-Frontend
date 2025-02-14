@@ -31,7 +31,7 @@ import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import CustomTextField from 'src/components/forms/theme-elements/CustomTextField';
 import DownloadCard from 'src/components/shared/DownloadCard';
 import { URL } from "../../../../config";
-
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const columnHelper = createColumnHelper();
@@ -53,10 +53,6 @@ const RubrosPaginationTable = () => {
         };
         fetchLineas();
     }, []);
-
-    const handleEdit = (id) => {
-        navigate(`/rubros/cambios/${id}`);
-    };
 
     const handleDelete = async (row) => {
         try {
@@ -117,7 +113,8 @@ const RubrosPaginationTable = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => handleEdit(row.original.id)}
+                        component = { Link }
+                        to = {`/rubros/cambios/${row.original.id}`}
                         startIcon={<IconPencil width={18} />}
                     >
                         Editar
@@ -178,7 +175,7 @@ const RubrosPaginationTable = () => {
     };
 
     return (
-        <DownloadCard title="Cooperantes" onDownload={handleDownload}>
+        <DownloadCard title="Rubros" onDownload={handleDownload}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box>

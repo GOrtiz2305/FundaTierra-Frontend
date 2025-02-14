@@ -2,6 +2,8 @@ import { Button, Typography, Dialog, DialogActions, DialogContent, DialogTitle }
 import React, { useState } from 'react';
 import UsuariosPaginationTable from '../../../components/react-tables/pagination/Usuarios/tableUsuarios';
 import UsuariosDesactivados from '../../../components/react-tables/pagination/Usuarios/tableUsuariosDesactivados';
+import { Link } from 'react-router-dom';
+
 const Usuarios = () => {
     const [openModal, setOpenModal] = useState(false);
 
@@ -27,7 +29,8 @@ const Usuarios = () => {
             <Button
                 variant="contained"
                 color="primary"
-                href='/usuarios/crear'
+                component={Link}
+                to='/usuarios/crear'
                 sx={{ marginBottom: '5px' }}
             >
                 Nuevo

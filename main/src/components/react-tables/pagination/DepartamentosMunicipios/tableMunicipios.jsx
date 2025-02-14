@@ -16,6 +16,7 @@ import {
     Typography
 } from '@mui/material';
 import { Stack } from '@mui/system';
+import { Link } from 'react-router-dom';
 import {
     createColumnHelper,
     flexRender,
@@ -52,10 +53,6 @@ const MunicipiosPaginationTable = () => {
         fetchMunicipios();
     }, []);
 
-    const handleEdit = (id) => {
-        navigate(`/DepartamentosMunicipios/editarMunicipios/${id}`);
-    };
-
     const handleDelete = async (row) => {
         try {
             await axios.put(`${URL}municipios/eliminar/${row.id}`);
@@ -85,7 +82,7 @@ const MunicipiosPaginationTable = () => {
         columnHelper.accessor('estado', {
             header: () => 'Estado',
             meta: {
-                filterVariant: 'checkbox', // 'checkbox' | 'radio' | 'select' | 'multiselect'
+                filterVariant: 'checkbox',
             },
             cell: info => (
                 <Chip
@@ -106,7 +103,8 @@ const MunicipiosPaginationTable = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => handleEdit(row.original.id)}
+                        component = {Link}
+                        to={`/DepartamentosMunicipios/editarMunicipios/${row.original.id}`}
                         startIcon={<IconPencil width={18} />}
                     >
                         Editar

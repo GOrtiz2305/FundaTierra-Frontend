@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   Grid,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -12,11 +13,13 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
-import { URL } from '../../../../config';
-import ParentCard from '../../shared/ParentCard';
+import { URL } from '../../../../../config';
+import ParentCard from '../../../shared/ParentCard';
+import CustomSelect from '../../theme-elements/CustomSelect';
 
 const VerPresupuestoForm = ({ id }) => {
 
+  const [subcategorias, setSubcategorias] = useState([]);
   const [presupuesto, setPresupuesto] = useState({
     id: 0,
     solicitante: '',
@@ -49,6 +52,21 @@ const VerPresupuestoForm = ({ id }) => {
       }
     };
 
+    const fetchSubcategorias = async () => {
+      try {
+        const response = await fetch(`${URL}subcategorias`);
+        if (response.ok) {
+          const data = await response.json();
+          setSubcategorias(data);
+        } else {
+          console.error('Error al obtener las subcategorias');
+        }
+      } catch (error) {
+        console.error('Error al llamar a la API:', error);
+      }
+    };
+
+    fetchSubcategorias();
     fetchPresupuesto();
   }, [id]);
 
@@ -58,6 +76,7 @@ const VerPresupuestoForm = ({ id }) => {
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell>Subcategoria</TableCell>
             <TableCell>Unidades</TableCell>
             <TableCell>Descripción</TableCell>
             <TableCell>Costo Unitario</TableCell>
@@ -68,27 +87,50 @@ const VerPresupuestoForm = ({ id }) => {
           {presupuesto.contenido.puntos_presupuesto && presupuesto.contenido.puntos_presupuesto.length > 0 ? (
             presupuesto.contenido.puntos_presupuesto.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>
+                <TableCell style={{ width: '20%' }}>
+                  <CustomSelect
+                    id="subcategoria"
+                    name="subcategoria"
+                    value={item.subcategoria}
+                    disabled
+                    fullWidth
+                    variant="outlined"
+                  >
+                    {subcategorias.map((subcategoria) => (
+                      <MenuItem key={subcategoria.id} value={subcategoria.id}>
+                        {subcategoria.nombre}
+                      </MenuItem>
+                    ))}
+                  </CustomSelect>
+                </TableCell>
+                <TableCell style={{ width: '15%' }}>
                   <TextField
                     type="number"
                     value={item.unidades}
                     style={{ width: '100%' }}
+                    InputProps={{ readOnly: true }}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell style={{ width: '35%' }}>
                   <TextField
                     style={{ width: '100%' }}
                     value={item.descripcion}
+                    InputProps={{ readOnly: true }}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell style={{ width: '15%' }}>
                   <TextField
                     style={{ width: '100%' }}
                     type="number"
                     value={item.costoUnitario}
+                    InputProps={{ readOnly: true }}
                   />
                 </TableCell>
-                <TableCell>Q{item.total}</TableCell>
+                <TableCell
+                  style={{ width: '15%' }}
+                  InputProps={{ readOnly: true }}>
+                  Q{item.total}
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -117,6 +159,7 @@ const VerPresupuestoForm = ({ id }) => {
             variant="outlined"
             value={presupuesto.contenido.solicitante}
             fullWidth
+            InputProps={{ readOnly: true }}
           />
         </Grid>
         <Grid item lg={6} md={12}>
@@ -127,6 +170,7 @@ const VerPresupuestoForm = ({ id }) => {
             variant="outlined"
             value={presupuesto.contenido.autorizador}
             fullWidth
+            InputProps={{ readOnly: true }}
           />
         </Grid>
       </Grid>
@@ -139,7 +183,7 @@ const VerPresupuestoForm = ({ id }) => {
         rows={4}
         variant="outlined"
         value={presupuesto.contenido.observaciones}
-        disabled
+        InputProps={{ readOnly: true }}
         fullWidth
       />
       <br />

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ActividadesPaginationTable from '../../../components/react-tables/pagination/tablaActividades';
 import ActividadesPaginationTable2 from '../../../components/react-tables/pagination/tablaActividadesPendientes';
 import ActividadesPaginationTable3 from '../../../components/react-tables/pagination/tablaActividadesFinalizadas';
+import { Link } from 'react-router-dom';
 
 const Actividades = () => {
 
@@ -14,7 +15,7 @@ const Actividades = () => {
 
     return (
         <div>
-            <Button variant="contained" color="primary" href='/actividades/nueva'>
+            <Button variant="contained" color="primary" component={Link} to='/actividades/nueva'>
                 Nuevo
             </Button>
             <br /> <br />
